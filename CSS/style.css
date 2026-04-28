@@ -300,6 +300,7 @@ body.light-scene #hint { color: var(--c1); }
   padding: 2rem 1.8rem; overflow: hidden;
   cursor: none; opacity: 0; transform: translateY(32px);
   transition: opacity .5s ease, transform .5s ease;
+  display: block; text-decoration: none; color: var(--c2);
 }
 .p-card.in { opacity: 1; transform: translateY(0); }
 .p-card::after {

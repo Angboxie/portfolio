@@ -6,306 +6,301 @@
   <title>Essentially Australia — Angbo Xie</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black:  #0a0a0a;
-      --white:  #f0ede6;
-      --acid:   #d4ff00;
-      --red:    #ff2020;
-      --dim:    #1a1a1a;
-      --mono:   'IBM Plex Mono', monospace;
-      --display:'Bebas Neue', sans-serif;
+      --porcelain: #FDFDF5;
+      --evergreen: #233A23;
+      --sage:      #C8C9A8;
+      --carbon:    #232323;
+      --warm:      #f5f0e8;
+      --serif:     'Crimson Text', Georgia, serif;
+      --ui:        'Outfit', sans-serif;
+      --disp:      'Bebas Neue', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
-
     body {
-      background: var(--black);
-      color: var(--white);
-      font-family: var(--mono);
+      background: var(--porcelain);
+      color: var(--carbon);
+      font-family: var(--ui);
       cursor: none;
       overflow-x: hidden;
     }
 
-    /* CURSOR */
     #cursor {
       position: fixed; width: 10px; height: 10px;
-      background: var(--acid); border-radius: 0;
+      background: var(--evergreen); border-radius: 50%;
       pointer-events: none; z-index: 9999;
       top: 0; left: 0; transform: translate(-50%,-50%);
-      transition: width .14s, height .14s;
-      mix-blend-mode: difference;
+      transition: width .16s, height .16s;
     }
-    #cursor.grow { width: 48px; height: 48px; }
+    #cursor.grow { width: 48px; height: 48px; background: var(--sage); }
 
     /* NAV */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.4rem 4vw;
-      border-bottom: 1px solid rgba(240,237,230,.07);
-      background: rgba(10,10,10,.92);
+      padding: 1.2rem 5vw;
+      background: rgba(253,253,245,.95);
+      border-bottom: 1px solid rgba(35,58,35,.1);
       backdrop-filter: blur(8px);
     }
     .nav-back {
-      font-family: var(--mono); font-size: 9px;
-      letter-spacing: .25em; text-transform: uppercase;
-      color: var(--white); text-decoration: none; opacity: .5;
-      transition: opacity .2s, color .2s; cursor: none;
+      font-family: var(--ui); font-size: 10px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--carbon); text-decoration: none;
+      opacity: .4; transition: opacity .2s; cursor: none;
     }
-    .nav-back:hover { opacity: 1; color: var(--acid); }
-    .nav-title {
-      font-family: var(--display); font-size: 18px;
-      letter-spacing: .1em; opacity: .2;
+    .nav-back:hover { opacity: 1; }
+    .nav-logo {
+      font-family: var(--serif); font-size: 18px; font-style: italic;
+      letter-spacing: .05em; opacity: .3; color: var(--evergreen);
     }
-    .nav-proto {
-      font-family: var(--mono); font-size: 9px;
-      letter-spacing: .2em; text-transform: uppercase;
-      color: var(--black); background: var(--acid);
-      padding: .4rem .9rem; text-decoration: none;
-      opacity: .9; transition: opacity .2s; cursor: none;
+    .nav-cta {
+      font-family: var(--ui); font-size: 10px; letter-spacing: .18em;
+      text-transform: uppercase; text-decoration: none;
+      background: var(--evergreen); color: var(--porcelain);
+      padding: .45rem 1.1rem; cursor: none;
+      transition: opacity .2s; opacity: .9;
     }
-    .nav-proto:hover { opacity: 1; }
+    .nav-cta:hover { opacity: 1; }
 
     /* HERO */
     .hero {
       min-height: 100vh;
-      display: flex; flex-direction: column;
-      justify-content: flex-end;
-      padding: 5rem 6vw 6rem;
-      border-bottom: 1px solid rgba(240,237,230,.07);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 8rem 6vw 5rem;
+      background: var(--evergreen);
       position: relative; overflow: hidden;
     }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, var(--black) 100%);
-      z-index: 1;
+    .hero-circle {
+      position: absolute;
+      width: clamp(300px, 50vw, 700px);
+      height: clamp(300px, 50vw, 700px);
+      border-radius: 50%;
+      border: 1px solid rgba(200,201,168,.15);
+      top: 50%; right: 8vw;
+      transform: translateY(-50%);
+      pointer-events: none;
     }
-    .hero-label {
-      font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
-      color: var(--acid); opacity: .7; margin-bottom: 1.2rem;
-      position: relative; z-index: 2;
+    .hero-circle-inner {
+      position: absolute; inset: 15%;
+      border-radius: 50%;
+      border: 1px solid rgba(200,201,168,.1);
+    }
+    .hero-kicker {
+      font-family: var(--ui); font-size: 10px; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--sage); opacity: .7;
+      margin-bottom: 1.5rem; display: block;
     }
     .hero-title {
-      font-family: var(--display);
-      font-size: clamp(64px, 12vw, 170px);
-      line-height: .88; letter-spacing: .02em;
-      position: relative; z-index: 2;
+      font-family: var(--serif);
+      font-size: clamp(52px, 9vw, 130px);
+      line-height: 1; letter-spacing: -.01em;
+      color: var(--porcelain);
+      margin-bottom: 1rem;
     }
-    .hero-title .outline {
-      -webkit-text-stroke: 2px var(--white); color: transparent;
+    .hero-title em { font-style: italic; color: var(--sage); }
+    .hero-sub {
+      font-family: var(--serif); font-size: clamp(18px, 2vw, 26px);
+      font-style: italic; color: var(--sage); opacity: .7;
+      margin-bottom: 3rem; max-width: 500px; line-height: 1.5;
     }
     .hero-meta {
-      display: flex; gap: 3rem; flex-wrap: wrap;
-      margin-top: 3rem; position: relative; z-index: 2;
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(200,201,168,.2);
+      padding-top: 2rem;
     }
-    .hero-meta-item { }
-    .hero-meta-label {
-      font-size: 9px; letter-spacing: .25em; text-transform: uppercase;
-      opacity: .35; display: block; margin-bottom: .4rem;
+    .hero-meta-item {
+      padding-right: 3rem;
+      border-right: 1px solid rgba(200,201,168,.15);
+      margin-right: 3rem;
     }
-    .hero-meta-val {
-      font-size: 12px; letter-spacing: .1em; opacity: .8;
+    .hero-meta-item:last-child { border-right: none; }
+    .hm-label {
+      font-family: var(--ui); font-size: 9px; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--sage); opacity: .5;
+      display: block; margin-bottom: .4rem;
     }
+    .hm-val { font-family: var(--ui); font-size: 12px; color: var(--porcelain); opacity: .75; letter-spacing: .03em; }
 
     /* SECTIONS */
-    section {
-      padding: 6rem 6vw;
-      border-bottom: 1px solid rgba(240,237,230,.06);
-    }
-    section.bg-dim { background: var(--dim); }
-    section.bg-acid { background: var(--acid); color: var(--black); }
+    section { padding: 6rem 6vw; border-bottom: 1px solid rgba(35,58,35,.08); }
+    section.bg-warm   { background: var(--warm); }
+    section.bg-green  { background: var(--evergreen); color: var(--porcelain); border-color: rgba(200,201,168,.1); }
+    section.bg-sage   { background: var(--sage); color: var(--carbon); border-color: rgba(35,35,35,.1); }
+    section.bg-carbon { background: var(--carbon); color: var(--porcelain); border-color: rgba(255,255,255,.06); }
 
-    .section-label {
-      font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
-      color: var(--acid); opacity: .7; margin-bottom: 1.6rem; display: block;
+    .s-label {
+      font-family: var(--ui); font-size: 9px; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--evergreen); opacity: .5;
+      margin-bottom: 1.4rem; display: block;
     }
-    .bg-acid .section-label { color: var(--black); opacity: .5; }
+    .bg-green .s-label, .bg-carbon .s-label { color: var(--sage); opacity: .6; }
+    .bg-sage .s-label { color: var(--carbon); opacity: .45; }
 
-    .section-title {
-      font-family: var(--display);
-      font-size: clamp(40px, 6vw, 85px);
-      line-height: .92; letter-spacing: .02em;
-      margin-bottom: 3rem;
+    .s-title {
+      font-family: var(--serif);
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 1; letter-spacing: -.01em;
+      margin-bottom: 2.5rem;
     }
+    .s-title em { font-style: italic; }
 
-    /* GRID LAYOUTS */
-    .two-col {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4vw;
-      align-items: start;
-    }
-    .three-col {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
-      background: rgba(240,237,230,.07); margin-top: 2rem;
-    }
-    .four-col {
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
-      background: rgba(240,237,230,.07); margin-top: 2rem;
-    }
-
-    /* STAT CARD */
-    .stat-card {
-      background: var(--black); padding: 2rem 1.6rem;
-    }
-    .bg-dim .stat-card { background: var(--dim); }
-    .stat-num {
-      font-family: var(--display);
-      font-size: clamp(40px, 5vw, 70px);
-      color: var(--acid); line-height: 1;
-      display: block; margin-bottom: .5rem;
-    }
-    .stat-label {
-      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
-      opacity: .4; line-height: 1.6;
-    }
+    /* LAYOUT */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: start; }
+    .three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(35,58,35,.08); }
+    .bg-green .three-col { background: rgba(200,201,168,.1); }
+    .four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(35,58,35,.08); margin-top: 2.5rem; }
 
     /* BODY TEXT */
-    .body-text {
-      font-size: clamp(12px, 1.1vw, 15px); font-weight: 300;
-      line-height: 2; opacity: .55; max-width: 560px;
+    .body-p {
+      font-family: var(--serif); font-size: clamp(15px,1.3vw,19px);
+      line-height: 1.85; opacity: .65; max-width: 540px;
     }
-    .body-text + .body-text { margin-top: 1.2rem; }
+    .body-p + .body-p { margin-top: 1rem; }
+    .bg-green .body-p, .bg-carbon .body-p { color: var(--porcelain); opacity: .55; }
+
+    /* STAT CELLS */
+    .stat-cell { background: var(--porcelain); padding: 2.5rem 2rem; }
+    .bg-green .stat-cell { background: rgba(255,255,255,.04); }
+    .bg-warm .stat-cell  { background: var(--warm); }
+    .stat-n {
+      font-family: var(--serif); font-size: clamp(44px, 5.5vw, 68px);
+      font-weight: 600; color: var(--evergreen); line-height: 1;
+      display: block; margin-bottom: .4rem;
+    }
+    .bg-green .stat-n { color: var(--sage); }
+    .stat-l {
+      font-family: var(--ui); font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; opacity: .38; line-height: 1.7;
+    }
 
     /* QUOTE */
-    .quote-block {
-      border-left: 2px solid var(--acid);
-      padding: 1.2rem 1.6rem; margin: 2rem 0;
+    .pull-quote {
+      font-family: var(--serif); font-size: clamp(22px, 3vw, 36px);
+      font-style: italic; line-height: 1.35;
+      border-left: 2px solid var(--evergreen);
+      padding-left: 1.5rem; margin: 2.5rem 0;
+      max-width: 500px;
     }
-    .bg-acid .quote-block { border-left-color: var(--black); }
-    .quote-text {
-      font-family: var(--display);
-      font-size: clamp(24px, 3vw, 42px);
-      line-height: 1.1; letter-spacing: .02em;
-    }
-    .quote-source {
-      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
-      opacity: .4; margin-top: .8rem; display: block;
-    }
-
-    /* PROCESS STEPS */
-    .process-list { margin-top: 2rem; list-style: none; }
-    .process-list li {
-      display: flex; align-items: flex-start; gap: 2rem;
-      padding: 1.6rem 0;
-      border-bottom: 1px solid rgba(240,237,230,.07);
-    }
-    .process-num {
-      font-family: var(--display); font-size: 32px;
-      color: var(--acid); opacity: .6; flex-shrink: 0; line-height: 1;
-      width: 48px;
-    }
-    .process-content { }
-    .process-title {
-      font-family: var(--display); font-size: clamp(20px, 2.2vw, 30px);
-      letter-spacing: .03em; margin-bottom: .5rem;
-    }
-    .process-desc {
-      font-size: 11px; font-weight: 300; line-height: 1.9; opacity: .45;
+    .bg-green .pull-quote { border-left-color: var(--sage); color: var(--porcelain); }
+    .bg-sage .pull-quote  { border-left-color: var(--carbon); }
+    .pull-src {
+      font-family: var(--ui); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; opacity: .4; margin-top: .7rem; display: block;
     }
 
-    /* FINDING CARD */
+    /* FINDING CARDS */
     .finding-grid {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 1px; background: rgba(240,237,230,.07); margin-top: 2rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: rgba(35,58,35,.08); margin-top: 2rem;
     }
-    .finding-card {
-      background: var(--black); padding: 1.8rem 1.6rem;
+    .finding-card { background: var(--porcelain); padding: 1.8rem 1.6rem; }
+    .bg-warm .finding-card { background: var(--warm); }
+    .finding-card.bad  { border-top: 2px solid #b83232; }
+    .finding-card.good { border-top: 2px solid var(--evergreen); }
+    .finding-h {
+      font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--evergreen); opacity: .6;
+      margin-bottom: .5rem; display: block;
     }
-    .finding-heuristic {
-      font-family: var(--display); font-size: 11px;
-      letter-spacing: .1em; color: var(--acid);
-      margin-bottom: .6rem; display: block;
-    }
+    .finding-card.bad .finding-h { color: #b83232; }
     .finding-title {
-      font-family: var(--display); font-size: clamp(18px, 2vw, 26px);
-      letter-spacing: .03em; margin-bottom: .6rem;
+      font-family: var(--serif); font-size: clamp(17px,1.8vw,22px);
+      font-weight: 600; margin-bottom: .5rem;
     }
-    .finding-desc {
-      font-size: 10px; font-weight: 300; line-height: 1.8; opacity: .38;
-    }
-    .finding-card.bad  { border-top: 2px solid var(--red); }
-    .finding-card.good { border-top: 2px solid var(--acid); }
+    .finding-desc { font-family: var(--ui); font-size: 11px; opacity: .38; line-height: 1.7; }
 
-    /* OUTCOME ROW */
+    /* PROCESS */
+    .proc { list-style: none; margin-top: 2rem; }
+    .proc li {
+      display: grid; grid-template-columns: 52px 1fr;
+      gap: 1.5rem; padding: 1.8rem 0;
+      border-bottom: 1px solid rgba(35,58,35,.08);
+      align-items: start;
+    }
+    .bg-green .proc li { border-color: rgba(200,201,168,.1); }
+    .proc-n {
+      font-family: var(--serif); font-size: 36px; font-style: italic;
+      color: var(--evergreen); opacity: .25; line-height: 1;
+    }
+    .bg-green .proc-n { color: var(--sage); opacity: .35; }
+    .proc-title {
+      font-family: var(--serif); font-size: clamp(17px,1.8vw,22px);
+      font-weight: 600; margin-bottom: .4rem;
+    }
+    .proc-desc { font-family: var(--ui); font-size: 12px; opacity: .45; line-height: 1.8; }
+
+    /* OUTCOME */
+    .outcome-table { max-width: 680px; margin-top: 2rem; }
     .outcome-row {
-      display: flex; align-items: baseline;
-      justify-content: space-between;
-      padding: 1.2rem 0;
-      border-bottom: 1px solid rgba(10,10,10,.15);
-      gap: 2rem;
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 1rem 0; border-bottom: 1px solid rgba(200,201,168,.25); gap: 2rem;
     }
     .outcome-label {
-      font-family: var(--display); font-size: clamp(22px, 2.8vw, 38px);
-      letter-spacing: .03em;
+      font-family: var(--serif); font-size: clamp(20px,2.5vw,32px); font-weight: 600;
     }
     .outcome-val {
-      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
-      opacity: .5; flex-shrink: 0;
+      font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; opacity: .45; flex-shrink: 0;
+      color: var(--sage);
     }
 
-    /* TAG ROW */
-    .tag-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.8rem; }
+    /* TAGS */
+    .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.6rem; }
     .tag {
-      font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
-      border: 1px solid rgba(240,237,230,.14);
-      padding: .28rem .75rem; opacity: .4;
+      font-family: var(--ui); font-size: 9px; letter-spacing: .1em;
+      text-transform: uppercase; border: 1px solid rgba(35,58,35,.18);
+      padding: .28rem .75rem; opacity: .5;
       transition: opacity .2s, border-color .2s;
     }
-    .tag:hover { opacity: 1; border-color: var(--acid); }
-    .bg-acid .tag { border-color: rgba(10,10,10,.2); }
+    .tag:hover { opacity: 1; border-color: var(--evergreen); }
+    .bg-green .tag { border-color: rgba(200,201,168,.2); color: var(--porcelain); }
 
     /* FIGMA EMBED */
     .figma-wrap {
       width: 100%; aspect-ratio: 16/9;
-      border: 1px solid rgba(240,237,230,.08);
+      border: 1px solid rgba(35,58,35,.1);
       margin-top: 2rem; overflow: hidden;
     }
     .figma-wrap iframe { width: 100%; height: 100%; border: none; }
 
     /* CTA */
-    .cta-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 2.5rem; }
-    .cta-primary {
-      font-family: var(--mono); font-size: 10px; letter-spacing: .22em;
+    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem; }
+    .btn {
+      font-family: var(--ui); font-size: 10px; letter-spacing: .2em;
       text-transform: uppercase; text-decoration: none;
-      background: var(--acid); color: var(--black);
-      padding: .7rem 1.4rem;
-      transition: opacity .2s; cursor: none; opacity: .9;
+      padding: .7rem 1.4rem; cursor: none; transition: all .18s;
     }
-    .cta-primary:hover { opacity: 1; }
-    .cta-secondary {
-      font-family: var(--mono); font-size: 10px; letter-spacing: .22em;
-      text-transform: uppercase; text-decoration: none;
-      border: 1px solid rgba(240,237,230,.25); color: var(--white);
-      padding: .7rem 1.4rem;
-      transition: opacity .2s, border-color .2s; cursor: none; opacity: .5;
-    }
-    .cta-secondary:hover { opacity: 1; border-color: var(--acid); color: var(--acid); }
+    .btn-green { background: var(--evergreen); color: var(--porcelain); }
+    .btn-green:hover { opacity: .85; }
+    .btn-outline-green { border: 1px solid rgba(35,58,35,.25); color: var(--carbon); }
+    .btn-outline-green:hover { border-color: var(--evergreen); }
+    .btn-outline-light { border: 1px solid rgba(200,201,168,.3); color: var(--porcelain); }
+    .btn-outline-light:hover { border-color: var(--sage); color: var(--sage); }
 
     /* FOOTER */
     footer {
-      padding: 3rem 6vw;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
-      border-top: 1px solid rgba(240,237,230,.06);
+      padding: 3rem 6vw; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+      background: var(--porcelain); border-top: 1px solid rgba(35,58,35,.08);
     }
-    .footer-copy {
-      font-size: 9px; letter-spacing: .2em; text-transform: uppercase; opacity: .2;
-    }
-    .footer-next {
-      font-family: var(--display); font-size: 22px; letter-spacing: .05em;
-      text-decoration: none; color: var(--white); opacity: .35;
+    .foot-copy { font-family: var(--ui); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; opacity: .2; }
+    .foot-link {
+      font-family: var(--serif); font-size: 20px; font-style: italic;
+      text-decoration: none; color: var(--carbon); opacity: .35;
       transition: opacity .2s, color .2s; cursor: none;
     }
-    .footer-next:hover { opacity: 1; color: var(--acid); }
+    .foot-link:hover { opacity: 1; color: var(--evergreen); }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .two-col, .finding-grid { grid-template-columns: 1fr; }
-      .three-col, .four-col   { grid-template-columns: repeat(2,1fr); }
+      .three-col, .four-col { grid-template-columns: repeat(2,1fr); }
+      .hero-meta { flex-direction: column; gap: 1.5rem; }
+      .hero-meta-item { border-right: none; padding-right: 0; margin-right: 0; }
       body { cursor: auto; }
       #cursor { display: none; }
     }
@@ -315,40 +310,36 @@
   </style>
 </head>
 <body>
-
 <div id="cursor"></div>
 
-<!-- NAV -->
 <nav>
   <a class="nav-back" href="../index.html">&#8592; Back</a>
-  <div class="nav-title">ANGBO XIE</div>
-  <a class="nav-proto" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">View Prototype &#8599;</a>
+  <div class="nav-logo">Angbo Xie</div>
+  <a class="nav-cta" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">View Prototype &#8599;</a>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-bg"></div>
-  <span class="hero-label">Case Study — 01</span>
-  <h1 class="hero-title">
-    ESSENTIALLY<br>
-    <span class="outline">AUSTRALIA</span>
-  </h1>
+  <div class="hero-circle"><div class="hero-circle-inner"></div></div>
+  <span class="hero-kicker">Case Study 01 &mdash; UX Audit + Full Redesign &mdash; 2026</span>
+  <h1 class="hero-title">Essentially<br><em>Australia.</em></h1>
+  <p class="hero-sub">From friction to guided experience. Byron Bay's native essential oils, redesigned from the ground up.</p>
   <div class="hero-meta">
     <div class="hero-meta-item">
-      <span class="hero-meta-label">Role</span>
-      <span class="hero-meta-val">UX Researcher + Designer</span>
+      <span class="hm-label">Role</span>
+      <span class="hm-val">UX Researcher + Designer</span>
     </div>
     <div class="hero-meta-item">
-      <span class="hero-meta-label">Type</span>
-      <span class="hero-meta-val">UX Audit + Full Redesign</span>
+      <span class="hm-label">Tools</span>
+      <span class="hm-val">Figma · WCAG · Nielsen's</span>
     </div>
     <div class="hero-meta-item">
-      <span class="hero-meta-label">Year</span>
-      <span class="hero-meta-val">2025</span>
+      <span class="hm-label">Type</span>
+      <span class="hm-val">UX Audit + Full Redesign</span>
     </div>
     <div class="hero-meta-item">
-      <span class="hero-meta-label">Tools</span>
-      <span class="hero-meta-val">Figma · WCAG · Nielsen's</span>
+      <span class="hm-label">Year</span>
+      <span class="hm-val">2025</span>
     </div>
   </div>
 </div>
@@ -357,13 +348,9 @@
 <section>
   <div class="two-col">
     <div>
-      <span class="section-label">Overview</span>
-      <h2 class="section-title">FROM<br>FRICTION<br>TO GUIDED<br><span style="color:var(--acid)">EXPERIENCE.</span></h2>
-    </div>
-    <div>
-      <p class="body-text">Essentially Australia is a Byron Bay native essential oils brand, Est. 2012, with 38+ oils. Their existing WordPress e-commerce site had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers say — "I'm actually gonna suffer."</p>
-      <p class="body-text" style="margin-top:1.2rem">I conducted a full UX audit across four competing Australian essential oil sites, identified Essentially Australia as the highest-friction villain site, and redesigned the entire purchase experience from the ground up.</p>
-      <div class="tag-row">
+      <span class="s-label">Overview</span>
+      <h2 class="s-title">From friction<br>to <em>guided<br>experience.</em></h2>
+      <div class="tags">
         <span class="tag">UX Audit</span>
         <span class="tag">Visual Forensics</span>
         <span class="tag">Nielsen's Heuristics</span>
@@ -373,64 +360,69 @@
         <span class="tag">Usability Testing</span>
       </div>
     </div>
+    <div style="padding-top:.5rem">
+      <p class="body-p">Essentially Australia is a Byron Bay native essential oils brand, Est. 2012, with 38+ oils sourced from Australian botanical ingredients. Their WordPress e-commerce site had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers say — "I'm actually gonna suffer."</p>
+      <p class="body-p">I conducted a full UX audit across four competing Australian essential oil sites, identified Essentially Australia as the highest-friction villain, and redesigned the entire purchase experience from the ground up — mobile and desktop.</p>
+      <div class="pull-quote">
+        "I'm actually gonna suffer."
+        <span class="pull-src">User quote — Cognitive Walkthrough</span>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- STATS -->
-<section class="bg-dim">
-  <span class="section-label">By The Numbers</span>
+<section class="bg-warm">
+  <span class="s-label">By The Numbers</span>
   <div class="four-col">
-    <div class="stat-card">
-      <span class="stat-num">4</span>
-      <span class="stat-label">Sites audited across visual forensics & Nielsen's heuristics</span>
+    <div class="stat-cell">
+      <span class="stat-n">4</span>
+      <span class="stat-l">Sites audited across visual forensics & Nielsen's</span>
     </div>
-    <div class="stat-card">
-      <span class="stat-num">8→4</span>
-      <span class="stat-label">Purchase path steps reduced by half</span>
+    <div class="stat-cell">
+      <span class="stat-n">8→4</span>
+      <span class="stat-l">Purchase path steps — cut in half</span>
     </div>
-    <div class="stat-card">
-      <span class="stat-num">2.85:1</span>
-      <span class="stat-label">Original site contrast ratio — fails WCAG AA entirely</span>
+    <div class="stat-cell">
+      <span class="stat-n">2.85:1</span>
+      <span class="stat-l">Original contrast ratio — fails WCAG AA entirely</span>
     </div>
-    <div class="stat-card">
-      <span class="stat-num">AAA</span>
-      <span class="stat-label">Redesign contrast verified — Carbon on Porcelain</span>
+    <div class="stat-cell">
+      <span class="stat-n">AAA</span>
+      <span class="stat-l">Redesign contrast — Carbon on Porcelain verified</span>
     </div>
   </div>
 </section>
 
 <!-- PROBLEM -->
 <section>
-  <span class="section-label">The Problem</span>
+  <span class="s-label">The Problem</span>
   <div class="two-col">
     <div>
-      <h2 class="section-title">FRICTION<br>EVERY<br>STEP.</h2>
-      <div class="quote-block">
-        <div class="quote-text">"I'm actually gonna suffer."</div>
-        <span class="quote-source">User quote — Cognitive Walkthrough</span>
-      </div>
+      <h2 class="s-title">Friction<br><em>every<br>step.</em></h2>
+      <p class="body-p">The original site failed at every stage of the purchase journey — from the hero that showed a lighthouse instead of a product, to a cart that silently accepted wrong orders without any feedback.</p>
     </div>
     <div>
-      <div class="finding-grid" style="margin-top:0">
+      <div class="finding-grid">
         <div class="finding-card bad">
-          <span class="finding-heuristic">H2 — Real World Match</span>
+          <span class="finding-h">H2 — Real World Match</span>
           <div class="finding-title">Broken IA</div>
-          <div class="finding-desc">Navigation groups dissimilar content with no hierarchy. Oils, gift vouchers, oracle cards — all equal weight.</div>
+          <div class="finding-desc">Oils, gift vouchers, oracle cards — all equal weight. No hierarchy, no logic.</div>
         </div>
         <div class="finding-card bad">
-          <span class="finding-heuristic">H1 — System Status</span>
+          <span class="finding-h">H1 — System Status</span>
           <div class="finding-title">Silent Cart</div>
           <div class="finding-desc">Cart accepted items with zero feedback. Users repeated actions assuming failure.</div>
         </div>
         <div class="finding-card bad">
-          <span class="finding-heuristic">H5 — Error Prevention</span>
+          <span class="finding-h">H5 — Error Prevention</span>
           <div class="finding-title">Manual Cart Update</div>
-          <div class="finding-desc">Quantity changes required manual "Update Cart" click. Users checked out wrong orders.</div>
+          <div class="finding-desc">Quantity changes required a manual click. Users checked out wrong orders.</div>
         </div>
         <div class="finding-card bad">
-          <span class="finding-heuristic">H8 — Aesthetic</span>
+          <span class="finding-h">H8 — Aesthetic</span>
           <div class="finding-title">Zero Hero Intent</div>
-          <div class="finding-desc">Hero showed a lighthouse. No product, no CTA, no value proposition. Immediate mismatch.</div>
+          <div class="finding-desc">Hero showed a lighthouse. No product, no CTA, no value. Immediate mismatch.</div>
         </div>
       </div>
     </div>
@@ -438,147 +430,146 @@
 </section>
 
 <!-- PROCESS -->
-<section class="bg-dim">
-  <span class="section-label">Process</span>
-  <h2 class="section-title">HOW I<br>GOT THERE.</h2>
-  <ul class="process-list">
+<section class="bg-green">
+  <span class="s-label">Process</span>
+  <h2 class="s-title" style="color:var(--porcelain)">How I<br><em>got there.</em></h2>
+  <ul class="proc">
     <li>
-      <span class="process-num">01</span>
-      <div class="process-content">
-        <div class="process-title">UX Audit — Visual Forensics</div>
-        <div class="process-desc">Analysed 4 Australian essential oil sites across 7 elements — typography, grid, visual hierarchy, colour & brand, WCAG, dark patterns, and responsive breaks. Used DevTools to verify contrast ratios and font sizes.</div>
+      <span class="proc-n">01</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">UX Audit — Visual Forensics</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Analysed 4 Australian essential oil sites across 7 elements — typography, grid, visual hierarchy, colour, WCAG, dark patterns, responsive breaks. Verified contrast ratios in DevTools.</div>
       </div>
     </li>
     <li>
-      <span class="process-num">02</span>
-      <div class="process-content">
-        <div class="process-title">Nielsen's Heuristics + Cognitive Walkthrough</div>
-        <div class="process-desc">Applied 6 heuristics across all 4 sites. Ran a think-aloud cognitive walkthrough on Essentially Australia — "Find a food grade pepper oil, check sizes, add to cart." Recorded 5 key friction moments tied directly to heuristic violations.</div>
+      <span class="proc-n">02</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">Nielsen's Heuristics + Cognitive Walkthrough</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Applied 6 heuristics across all 4 sites. Ran a think-aloud cognitive walkthrough — "Find a food grade pepper oil, check sizes, add to cart." 5 key friction moments recorded.</div>
       </div>
     </li>
     <li>
-      <span class="process-num">03</span>
-      <div class="process-content">
-        <div class="process-title">Moodboard + Art Direction</div>
-        <div class="process-desc">Developed 3 art directions — Botanical (chosen), Brutalist (rejected), Swiss Grid (rejected). Palette extracted from Byron Bay's volcanic hinterland. Colour does navigation work: Uplift, Calm, Restore, Ground.</div>
+      <span class="proc-n">03</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">Moodboard + Art Direction</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Developed 3 art directions — Botanical (chosen), Brutalist (rejected), Swiss Grid (rejected). Palette extracted from Byron Bay's volcanic hinterland. Colour does navigation work: Uplift, Calm, Restore, Ground.</div>
       </div>
     </li>
     <li>
-      <span class="process-num">04</span>
-      <div class="process-content">
-        <div class="process-title">Wireframes — Dual Path IA</div>
-        <div class="process-desc">Designed two purchase paths — Browse (feeling-first) and Search (keyword). Sketched 5 layout directions before committing. Wireframes covered full flow: Hero → Product List → Filter → Product Detail → Cart → Checkout.</div>
+      <span class="proc-n">04</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">Wireframes — Dual Path IA</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Designed two purchase paths — Browse (feeling-first) and Search (keyword). 5 layout directions sketched before committing. Full flow: Hero → Product List → Filter → Product Detail → Cart → Checkout.</div>
       </div>
     </li>
     <li>
-      <span class="process-num">05</span>
-      <div class="process-content">
-        <div class="process-title">Hi-Fi Prototype — Mobile + Desktop</div>
-        <div class="process-desc">Built fully interactive Figma prototypes at 390×844 (mobile) and 1440×1024 (desktop). Complete annotated purchase flow with system feedback, feeling-category navigation, and WCAG AA compliant typography.</div>
+      <span class="proc-n">05</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">Hi-Fi Prototype — Mobile + Desktop</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Fully interactive Figma prototypes at 390×844 (mobile) and 1440×1024 (desktop). Complete purchase flow with system feedback, feeling-category navigation, WCAG AA typography.</div>
       </div>
     </li>
     <li>
-      <span class="process-num">06</span>
-      <div class="process-content">
-        <div class="process-title">Usability Testing + Iteration</div>
-        <div class="process-desc">Think-aloud testing with a UX Designer (3+ years experience). 3 tasks completed. 1 friction point found — Food Grade filter buried. Iterated: promoted to standalone chip in "Best For" group. Design validated.</div>
+      <span class="proc-n">06</span>
+      <div>
+        <div class="proc-title" style="color:var(--porcelain)">Usability Testing + Iteration</div>
+        <div class="proc-desc" style="color:var(--porcelain)">Think-aloud with a UX Designer (3+ years). 3 tasks completed. 1 friction found — Food Grade filter buried. Iterated: promoted to standalone chip. Design validated.</div>
       </div>
     </li>
   </ul>
 </section>
 
 <!-- SOLUTION -->
-<section>
-  <span class="section-label">The Solution</span>
+<section class="bg-warm">
+  <span class="s-label">The Solution</span>
   <div class="two-col">
     <div>
-      <h2 class="section-title">EMOTION<br>FIRST<br><span style="color:var(--acid)">DESIGN.</span></h2>
-      <p class="body-text">The redesign centres on feeling-first navigation — users shop by how they want to feel, not by botanical names they don't know. Four categories: Uplift, Calm, Restore, Ground. Colour does the navigational work before the label is read.</p>
-      <p class="body-text" style="margin-top:1.2rem">Purchase path reduced from 8 steps to 4. Cart gives immediate visual feedback. Size selection updates price inside the CTA in real time. Free shipping progress bar changes behaviour — users add a second product from proximity to reward, not browse intent.</p>
+      <h2 class="s-title">Emotion<br><em>first<br>design.</em></h2>
+      <p class="body-p">The redesign centres on feeling-first navigation — users shop by how they want to feel, not botanical names they don't know. Four categories: Uplift, Calm, Restore, Ground.</p>
+      <p class="body-p">Colour does the navigational work before the label is read. Purchase path reduced from 8 to 4 steps. Cart gives immediate visual feedback. Size selection updates price in real time.</p>
     </div>
     <div>
-      <div class="finding-grid" style="margin-top:0">
+      <div class="finding-grid">
         <div class="finding-card good">
-          <span class="finding-heuristic">H6 — Recognition</span>
+          <span class="finding-h">H6 — Recognition</span>
           <div class="finding-title">Feeling-First IA</div>
-          <div class="finding-desc">Colour dots read before labels. Expert user defaulted to feeling nav over search bar. No vocabulary gap.</div>
+          <div class="finding-desc">Colour dots read before labels. Expert user defaulted to feeling nav over search. No vocabulary gap.</div>
         </div>
         <div class="finding-card good">
-          <span class="finding-heuristic">H1 — System Status</span>
+          <span class="finding-h">H1 — System Status</span>
           <div class="finding-title">"Successfully Added!"</div>
-          <div class="finding-desc">CTA replaces button on add. Cart increments. Duplicates prevented. User always knows what happened.</div>
+          <div class="finding-desc">CTA replaces button on add. Cart increments. Duplicates prevented.</div>
         </div>
         <div class="finding-card good">
-          <span class="finding-heuristic">H5 — Error Prevention</span>
+          <span class="finding-h">H5 — Error Prevention</span>
           <div class="finding-title">Live Price Sync</div>
-          <div class="finding-desc">25ml selected → button reads $38.95. Selection and cost always in sync. No manual calculation.</div>
+          <div class="finding-desc">25ml selected → button reads $38.95. Selection and cost always in sync.</div>
         </div>
         <div class="finding-card good">
-          <span class="finding-heuristic">GenAI Feature</span>
+          <span class="finding-h">GenAI Feature</span>
           <div class="finding-title">Scent Memory</div>
-          <div class="finding-desc">Conversational AI maps emotional input to product recommendations. No botanical knowledge required.</div>
+          <div class="finding-desc">Conversational AI maps emotional input to product. No botanical knowledge required.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROTOTYPE EMBED -->
-<section class="bg-dim">
-  <span class="section-label">Prototype</span>
-  <h2 class="section-title">SEE IT<br>IN ACTION.</h2>
+<!-- PROTOTYPE -->
+<section>
+  <span class="s-label">Prototype</span>
+  <h2 class="s-title">See it<br><em>in action.</em></h2>
   <div class="figma-wrap">
-    <iframe
-      src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456"
-      allowfullscreen>
-    </iframe>
+    <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456" allowfullscreen></iframe>
   </div>
   <div class="cta-row">
-    <a class="cta-primary" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank">Open Mobile Prototype &#8599;</a>
-    <a class="cta-secondary" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">Open Desktop Prototype &#8599;</a>
+    <a class="btn btn-green" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank">Mobile Prototype &#8599;</a>
+    <a class="btn btn-outline-green" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">Desktop Prototype &#8599;</a>
   </div>
 </section>
 
 <!-- OUTCOMES -->
-<section class="bg-acid">
-  <span class="section-label">Outcomes</span>
-  <h2 class="section-title" style="color:var(--black)">WHAT<br>CHANGED.</h2>
-  <div style="max-width:700px">
+<section class="bg-green">
+  <span class="s-label">Outcomes</span>
+  <h2 class="s-title" style="color:var(--porcelain)">What<br><em>changed.</em></h2>
+  <div class="outcome-table">
     <div class="outcome-row">
-      <span class="outcome-label">Purchase Path</span>
+      <span class="outcome-label" style="color:var(--porcelain)">Purchase Path</span>
       <span class="outcome-val">8 steps → 4 steps</span>
     </div>
     <div class="outcome-row">
-      <span class="outcome-label">WCAG Compliance</span>
+      <span class="outcome-label" style="color:var(--porcelain)">WCAG Compliance</span>
       <span class="outcome-val">Fail → AA Verified</span>
     </div>
     <div class="outcome-row">
-      <span class="outcome-label">Usability Testing</span>
+      <span class="outcome-label" style="color:var(--porcelain)">Usability Testing</span>
       <span class="outcome-val">3/3 Tasks Completed</span>
     </div>
     <div class="outcome-row">
-      <span class="outcome-label">Friction Points Found</span>
-      <span class="outcome-val">1 Identified + Resolved</span>
+      <span class="outcome-label" style="color:var(--porcelain)">Friction Points</span>
+      <span class="outcome-val">1 Found + Resolved</span>
     </div>
     <div class="outcome-row">
-      <span class="outcome-label">Feeling-First IA</span>
-      <span class="outcome-val">Validated by Expert User</span>
+      <span class="outcome-label" style="color:var(--porcelain)">Feeling-First IA</span>
+      <span class="outcome-val">Validated by Expert</span>
     </div>
     <div class="outcome-row">
-      <span class="outcome-label">GenAI Feature</span>
+      <span class="outcome-label" style="color:var(--porcelain)">GenAI Feature</span>
       <span class="outcome-val">Scent Memory Proposed</span>
     </div>
   </div>
-  <div class="quote-block" style="margin-top:3rem;border-left-color:var(--black)">
-    <div class="quote-text" style="color:var(--black)">"Emotion-first IA proved more effective than initially anticipated."</div>
-    <span class="quote-source" style="color:var(--black)">Critical Analysis — Reflection</span>
+  <div class="pull-quote" style="margin-top:3rem">
+    "Emotion-first IA proved more effective than initially anticipated."
+    <span class="pull-src">Critical Analysis — Reflection</span>
+  </div>
+  <div class="cta-row">
+    <a class="btn btn-outline-light" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank">View Prototype &#8599;</a>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <span class="footer-copy">&copy; 2025 Angbo Xie</span>
-  <a class="footer-next" href="casepop.html">Next Project: Casepop AU &#8594;</a>
+  <span class="foot-copy">&copy; 2025 Angbo Xie</span>
+  <a class="foot-link" href="casepop.html">Next: Casepop AU &#8594;</a>
 </footer>
 
 <script>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tactibrawl — Angbo Xie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f0ede6;
+      --dim:    #111111;
+      --gold:   #e8a020;
+      --teal:   #3bbfcf;
+      --green:  #1a3320;
+      --mono:   'IBM Plex Mono', monospace;
+      --sans:   'Inter', sans-serif;
+      --disp:   'Bebas Neue', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: var(--sans); cursor: none; overflow-x: hidden; }
+
+    /* CURSOR */
+    #cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 0;
+      pointer-events: none; z-index: 9999;
+      top: 0; left: 0; transform: translate(-50%,-50%);
+      transition: width .14s, height .14s;
+      mix-blend-mode: difference;
+    }
+    #cursor.grow { width: 48px; height: 48px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4vw;
+      background: rgba(10,10,10,.92);
+      border-bottom: 1px solid rgba(232,160,32,.12);
+      backdrop-filter: blur(8px);
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--white); text-decoration: none;
+      opacity: .4; transition: opacity .2s; cursor: none;
+    }
+    .nav-back:hover { opacity: 1; color: var(--gold); }
+    .nav-logo { font-family: var(--disp); font-size: 18px; letter-spacing: .1em; opacity: .2; color: var(--white); }
+    .nav-cta {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; text-decoration: none;
+      background: var(--gold); color: var(--black);
+      padding: .45rem 1rem; cursor: none;
+      transition: background .18s;
+    }
+    .nav-cta:hover { background: var(--teal); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 8rem 6vw 5rem;
+      background: var(--green);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute; font-family: var(--disp);
+      font-size: 38vw; line-height: 1; letter-spacing: -.02em;
+      color: rgba(232,160,32,.04); right: -4vw; bottom: -10vh;
+      pointer-events: none; user-select: none;
+    }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .35em;
+      text-transform: uppercase; color: var(--gold); opacity: .7;
+      margin-bottom: 1.5rem; display: block;
+    }
+    .hero-title {
+      font-family: var(--disp);
+      font-size: clamp(72px, 14vw, 200px);
+      line-height: .85; letter-spacing: .01em;
+      color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title em { font-style: normal; color: var(--gold); }
+    .hero-sub {
+      font-family: var(--mono); font-size: clamp(11px, .95vw, 13px);
+      color: var(--white); opacity: .45; line-height: 2;
+      max-width: 480px; margin-bottom: 3rem;
+      border-left: 1px solid var(--gold); padding-left: 1.1rem;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid rgba(232,160,32,.18);
+      padding-top: 2rem;
+    }
+    .hero-meta-item {
+      padding-right: 3rem;
+      border-right: 1px solid rgba(232,160,32,.12);
+      margin-right: 3rem;
+    }
+    .hero-meta-item:last-child { border-right: none; }
+    .hm-label {
+      font-family: var(--mono); font-size: 8px; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--gold); opacity: .55;
+      display: block; margin-bottom: .4rem;
+    }
+    .hm-val { font-family: var(--mono); font-size: 11px; color: var(--white); opacity: .7; letter-spacing: .05em; }
+
+    /* TICKER */
+    .ticker {
+      overflow: hidden; white-space: nowrap;
+      background: var(--gold); padding: .7rem 0;
+    }
+    .ticker-track {
+      display: inline-flex; gap: 2.5rem;
+      animation: tick 16s linear infinite;
+    }
+    .ticker-item { font-family: var(--disp); font-size: 16px; letter-spacing: .1em; color: var(--black); }
+    .ticker-item.dot { opacity: .5; }
+    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* SECTIONS */
+    section { padding: 6rem 6vw; border-bottom: 1px solid rgba(232,160,32,.08); }
+    section.dark  { background: var(--dim); border-color: rgba(232,160,32,.06); }
+    section.green { background: var(--green); border-color: rgba(232,160,32,.12); }
+    section.gold  { background: var(--gold); color: var(--black); border-color: rgba(10,10,10,.1); }
+
+    .s-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .35em;
+      text-transform: uppercase; color: var(--gold); opacity: .7;
+      margin-bottom: 1.4rem; display: block;
+    }
+    .green .s-label { color: var(--gold); opacity: .65; }
+    .gold  .s-label { color: var(--black); opacity: .45; }
+
+    .s-title {
+      font-family: var(--disp); font-size: clamp(44px,7vw,100px);
+      line-height: .88; letter-spacing: .01em; margin-bottom: 2.5rem;
+    }
+    .gold .s-title { color: var(--black); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: start; }
+    .three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(232,160,32,.08); }
+    .green .three-col { background: rgba(232,160,32,.12); }
+
+    .body-p {
+      font-size: clamp(13px,1.1vw,16px); line-height: 1.85; opacity: .55; max-width: 520px;
+    }
+    .body-p + .body-p { margin-top: 1rem; }
+
+    /* SCREEN SHOWCASE */
+    .screens {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; background: rgba(232,160,32,.06);
+      margin-top: 3rem;
+    }
+    .screen-block {
+      position: relative; overflow: hidden;
+      aspect-ratio: 16/10;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.4rem;
+    }
+    .screen-block.wide { grid-column: span 2; }
+    .screen-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .screen-block > *:not(.screen-bg) { position: relative; z-index: 1; }
+    .screen-tag {
+      font-family: var(--mono); font-size: 8px; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--gold); opacity: .7;
+      margin-bottom: .3rem; display: block;
+    }
+    .screen-label {
+      font-family: var(--disp); font-size: clamp(20px,2.5vw,34px);
+      color: var(--white); line-height: 1; letter-spacing: .03em;
+    }
+
+    /* SCREEN colour palettes from game screenshots */
+    .s-splash   { background: linear-gradient(160deg,#0d2010 0%,#1a3a10 50%,#0a1208 100%); }
+    .s-loading  { background: linear-gradient(160deg,#0a1a10 0%,#152810 100%); }
+    .s-menu     { background: linear-gradient(160deg,#1a2e3a 0%,#0d1e28 100%); }
+    .s-heroes   { background: linear-gradient(135deg,#1a1500 0%,#2e2200 100%); }
+    .s-tutorial { background: linear-gradient(160deg,#1a1400 0%,#2a200a 100%); }
+    .s-battle   { background: linear-gradient(160deg,#0d1a08 0%,#152208 100%); }
+
+    /* pixel grid decoration */
+    .px-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,160,32,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,160,32,.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    /* STAT STRIP */
+    .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(232,160,32,.1); margin-top: 2.5rem; }
+    .gold .stat-strip { background: rgba(10,10,10,.1); }
+    .stat-cell { padding: 2.5rem 2rem; background: var(--dim); }
+    .gold  .stat-cell { background: rgba(10,10,10,.06); }
+    .green .stat-cell { background: rgba(10,10,10,.3); }
+    .stat-n { font-family: var(--disp); font-size: clamp(48px,6vw,78px); line-height: 1; color: var(--gold); display: block; margin-bottom: .4rem; }
+    .gold .stat-n { color: var(--black); }
+    .stat-l { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .35; line-height: 1.7; }
+    .gold .stat-l { opacity: .45; }
+
+    /* ROLE CARDS */
+    .role-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(232,160,32,.08); margin-top: 2rem; }
+    .role-card { background: var(--black); padding: 1.8rem 1.6rem; border-top: 2px solid transparent; transition: border-color .2s; }
+    .role-card.tank   { border-top-color: #e8a020; }
+    .role-card.ranger { border-top-color: #3bbfcf; }
+    .role-card.mage   { border-top-color: #9b59b6; }
+    .rc-class { font-family: var(--mono); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; opacity: .45; display: block; margin-bottom: .5rem; }
+    .rc-name  { font-family: var(--disp); font-size: clamp(28px,3vw,42px); letter-spacing: .02em; display: block; margin-bottom: .7rem; }
+    .rc-stats { font-family: var(--mono); font-size: 10px; letter-spacing: .05em; opacity: .4; line-height: 2.1; }
+    .rc-stats span { color: var(--gold); opacity: 1; }
+
+    /* PROCESS */
+    .proc { list-style: none; margin-top: 2rem; }
+    .proc li {
+      display: grid; grid-template-columns: 56px 1fr;
+      gap: 1.5rem; padding: 1.8rem 0;
+      border-bottom: 1px solid rgba(232,160,32,.08);
+      align-items: start;
+    }
+    .proc-n { font-family: var(--disp); font-size: 40px; line-height: 1; color: var(--gold); opacity: .2; }
+    .proc-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; margin-bottom: .4rem; }
+    .proc-desc { font-size: 12px; line-height: 1.85; opacity: .4; }
+
+    /* OUTCOME TABLE */
+    .outcome-table { margin-top: 2rem; max-width: 680px; }
+    .outcome-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 1rem 0; border-bottom: 1px solid rgba(232,160,32,.12); gap: 2rem;
+    }
+    .outcome-label { font-family: var(--disp); font-size: clamp(22px,3vw,38px); letter-spacing: .01em; }
+    .outcome-val { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); opacity: .6; flex-shrink: 0; }
+
+    /* TAGS */
+    .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.6rem; }
+    .tag {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+      border: 1px solid rgba(232,160,32,.18); padding: .28rem .75rem; opacity: .45;
+      transition: opacity .2s, border-color .2s, color .2s;
+    }
+    .tag:hover { opacity: 1; border-color: var(--gold); color: var(--gold); }
+
+    /* CTA */
+    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem; }
+    .btn {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
+      text-transform: uppercase; text-decoration: none;
+      padding: .7rem 1.4rem; cursor: none; transition: all .18s;
+    }
+    .btn-gold { background: var(--gold); color: var(--black); }
+    .btn-gold:hover { background: var(--teal); }
+    .btn-outline { border: 1px solid rgba(232,160,32,.3); color: var(--white); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* FOOTER */
+    footer {
+      padding: 3rem 6vw; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+      background: var(--black); border-top: 1px solid rgba(232,160,32,.08);
+    }
+    .foot-copy { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; opacity: .18; }
+    .foot-link {
+      font-family: var(--disp); font-size: 22px; letter-spacing: .04em;
+      text-decoration: none; color: var(--white); opacity: .28;
+      transition: opacity .2s, color .2s; cursor: none;
+    }
+    .foot-link:hover { opacity: 1; color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .two-col, .three-col, .role-grid { grid-template-columns: 1fr; }
+      .screens { grid-template-columns: 1fr; }
+      .screen-block.wide { grid-column: span 1; }
+      .stat-strip { grid-template-columns: 1fr; }
+      .hero-meta { flex-direction: column; gap: 1.5rem; }
+      .hero-meta-item { border-right: none; padding-right: 0; margin-right: 0; }
+      body { cursor: auto; }
+      #cursor { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+
+<nav>
+  <a class="nav-back" href="../index.html">&#8592; Back</a>
+  <div class="nav-logo">ANGBO XIE</div>
+  <a class="nav-cta" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank">Play Prototype &#8599;</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-text">TB</div>
+  <span class="hero-kicker">Case Study 03 &mdash; Game UI + Design &mdash; 2024</span>
+  <h1 class="hero-title">TACTI<em>BRAWL</em><br><span style="font-size:.55em;opacity:.7">GAME UI &amp; DESIGN</span></h1>
+  <p class="hero-sub">A pixel-art tactical brawler built in Figma. Place your heroes, outsmart your opponent, claim the arena.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hm-label">Role</span>
+      <span class="hm-val">Game UI Designer</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hm-label">Tools</span>
+      <span class="hm-val">Figma · Pixel Art</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hm-label">Type</span>
+      <span class="hm-val">Game UI + Design</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hm-label">Year</span>
+      <span class="hm-val">2024</span>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">PIXEL ART FANTASY</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">TURN-BASED TACTICS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">HAND-DRAWN CHARACTERS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">AI-GEN ENVIRONMENTS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">FULL FIGMA PROTOTYPE</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">PIXEL ART FANTASY</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">TURN-BASED TACTICS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">HAND-DRAWN CHARACTERS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">AI-GEN ENVIRONMENTS</span>
+    <span class="ticker-item dot">/</span>
+    <span class="ticker-item">FULL FIGMA PROTOTYPE</span>
+    <span class="ticker-item dot">/</span>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="two-col">
+    <div>
+      <span class="s-label">Overview</span>
+      <h2 class="s-title">PLACE.<br>BATTLE.<br>WIN.</h2>
+      <div class="tags">
+        <span class="tag">Figma</span>
+        <span class="tag">Game UI</span>
+        <span class="tag">Pixel Art</span>
+        <span class="tag">Prototyping</span>
+        <span class="tag">UX Flow</span>
+        <span class="tag">Character Design</span>
+        <span class="tag">Environment Design</span>
+        <span class="tag">AI-Assisted Art</span>
+      </div>
+    </div>
+    <div style="padding-top:.5rem">
+      <p class="body-p">Tactibrawl is a pixel-art tactical brawler where two players place heroes on a grid and battle for arena supremacy. The design challenge: make turn-based tactics feel exciting, readable, and accessible without losing the fantasy depth.</p>
+      <p class="body-p">I designed the full game UI in Figma — from the splash screen and loading sequence through to hero selection, the tutorial system, and the battle arena. The characters were hand-drawn in pixel art style. Environments were AI-generated and art-directed to match the fantasy aesthetic.</p>
+      <p class="body-p">The whole game experience was prototyped as an interactive Figma file — fully playable, with transitions and tutorial dialogue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section class="dark">
+  <span class="s-label">Screens</span>
+  <h2 class="s-title">THE FULL<br>EXPERIENCE.</h2>
+  <div class="screens">
+    <!-- SPLASH -->
+    <div class="screen-block wide s-splash">
+      <div class="px-grid"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem">
+        <div style="font-family:var(--disp);font-size:clamp(52px,7vw,90px);color:var(--gold);letter-spacing:.03em;text-shadow:0 0 40px rgba(232,160,32,.3)">Tactibrawl</div>
+        <div style="background:rgba(59,191,207,.15);border:2px solid var(--teal);padding:.6rem 2.5rem;font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--teal)">PLAY</div>
+      </div>
+      <span class="screen-tag">01 — Splash</span>
+      <span class="screen-label">MAIN MENU</span>
+    </div>
+    <!-- LOADING -->
+    <div class="screen-block s-loading">
+      <div class="px-grid"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:flex-start;padding:2rem">
+        <div style="font-family:var(--disp);font-size:clamp(20px,3vw,36px);color:var(--gold);letter-spacing:.04em">PREPARING<br>THE ARENA...</div>
+      </div>
+      <span class="screen-tag">02 — Load</span>
+      <span class="screen-label">ARENA PREP</span>
+    </div>
+    <!-- MAIN MENU -->
+    <div class="screen-block s-menu">
+      <div class="px-grid"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:flex-start;padding:2rem;gap:1rem">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(59,191,207,.3);padding:.8rem 1rem;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--white);opacity:.7">
+          Player 1<br>Lvl. 1<br><div style="width:80px;height:6px;background:var(--gold);margin-top:.4rem;border-radius:2px"></div>
+        </div>
+      </div>
+      <div style="position:absolute;right:1.5rem;bottom:3rem;display:flex;flex-direction:column;gap:.8rem;align-items:flex-end">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--white);opacity:.6">Heroes</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--white);opacity:.6">Strategy</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--gold)">Tutorial</div>
+      </div>
+      <span class="screen-tag">03 — Hub</span>
+      <span class="screen-label">PLAYER HUB</span>
+    </div>
+    <!-- HERO SELECT -->
+    <div class="screen-block s-heroes">
+      <div class="px-grid"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+        <div style="background:rgba(240,220,180,.08);border:2px solid rgba(232,160,32,.4);padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--white);opacity:.8">Class: Tank</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--white);opacity:.6">HP: 6</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--white);opacity:.6">DMG: 1</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--white);opacity:.4;margin-top:.3rem">Attacks and soaks<br>damage</div>
+        </div>
+      </div>
+      <span class="screen-tag">04 — Select</span>
+      <span class="screen-label">HERO SELECT</span>
+    </div>
+    <!-- TUTORIAL -->
+    <div class="screen-block wide s-tutorial">
+      <div class="px-grid"></div>
+      <div style="position:absolute;bottom:1.5rem;left:1.5rem;right:1.5rem;background:rgba(245,240,220,.92);padding:1rem 1.2rem;border-radius:2px">
+        <div style="font-family:var(--mono);font-size:10px;color:#2a1a00;font-weight:600;margin-bottom:.4rem">Sola</div>
+        <div style="font-family:var(--mono);font-size:10px;color:#2a1a00;line-height:1.6;opacity:.75">After you place them on the grid, you can start battle with another player!</div>
+        <div style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.7rem">
+          <div style="background:rgba(232,160,32,.18);border:1px solid var(--gold);padding:.25rem .8rem;font-family:var(--mono);font-size:8px;color:#2a1a00">Previous</div>
+          <div style="background:rgba(100,180,80,.3);border:1px solid #6ab450;padding:.25rem .8rem;font-family:var(--mono);font-size:8px;color:#2a1a00">Next</div>
+        </div>
+      </div>
+      <span class="screen-tag">05 — Tutorial</span>
+      <span class="screen-label">SOLA'S GUIDE</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="green">
+  <span class="s-label">By The Numbers</span>
+  <div class="stat-strip">
+    <div class="stat-cell">
+      <span class="stat-n">6</span>
+      <span class="stat-l">Screens designed — splash to arena</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-n">3</span>
+      <span class="stat-l">Hero classes — Tank, Ranger, Mage</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-n">100%</span>
+      <span class="stat-l">Prototyped — fully interactive in Figma</span>
+    </div>
+  </div>
+</section>
+
+<!-- HERO CLASSES -->
+<section>
+  <span class="s-label">Hero Roster</span>
+  <h2 class="s-title">KNOW YOUR<br>WARRIORS.</h2>
+  <div class="role-grid">
+    <div class="role-card tank">
+      <span class="rc-class">Class 01</span>
+      <span class="rc-name">TANK</span>
+      <div class="rc-stats">
+        HP &nbsp;&nbsp;<span>6</span><br>
+        DMG <span>1</span><br>
+        Role Attacks + soaks damage
+      </div>
+    </div>
+    <div class="role-card ranger">
+      <span class="rc-class">Class 02</span>
+      <span class="rc-name">RANGER</span>
+      <div class="rc-stats">
+        HP &nbsp;&nbsp;<span>3</span><br>
+        DMG <span>3</span><br>
+        Role Long range striker
+      </div>
+    </div>
+    <div class="role-card mage">
+      <span class="rc-class">Class 03</span>
+      <span class="rc-name">MAGE</span>
+      <div class="rc-stats">
+        HP &nbsp;&nbsp;<span>2</span><br>
+        DMG <span>4</span><br>
+        Role High damage, fragile
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="dark">
+  <span class="s-label">Process</span>
+  <h2 class="s-title">HOW THE<br>GAME WAS<br>BUILT.</h2>
+  <ul class="proc">
+    <li>
+      <span class="proc-n">01</span>
+      <div>
+        <div class="proc-title">Game Concept + UX Flow</div>
+        <div class="proc-desc">Mapped the full game flow from title screen to battle end. Defined the core loop: splash → hero select → tutorial → place on grid → battle. Every screen had a clear purpose and transition.</div>
+      </div>
+    </li>
+    <li>
+      <span class="proc-n">02</span>
+      <div>
+        <div class="proc-title">Art Direction — Pixel Fantasy</div>
+        <div class="proc-desc">Established the visual language: pixel art characters on AI-generated painterly environments. Gold as the primary accent — matches the game's fantasy register without going generic RPG.</div>
+      </div>
+    </li>
+    <li>
+      <span class="proc-n">03</span>
+      <div>
+        <div class="proc-title">Character Design — Hand-Drawn Pixel Art</div>
+        <div class="proc-desc">Characters were hand-drawn in pixel art style — Tank, Ranger, Mage, and Sola the guide. Each character needed distinct silhouettes readable at small sizes on the battle grid.</div>
+      </div>
+    </li>
+    <li>
+      <span class="proc-n">04</span>
+      <div>
+        <div class="proc-title">Environment Design — AI-Assisted</div>
+        <div class="proc-desc">Backgrounds were AI-generated and heavily art-directed: deep forest arena, waterfall canyon, indoor training room. Each scene was selected and refined to match the pixel art tone without clashing.</div>
+      </div>
+    </li>
+    <li>
+      <span class="proc-n">05</span>
+      <div>
+        <div class="proc-title">Tutorial System — Sola</div>
+        <div class="proc-desc">Designed a dialogue-driven tutorial with Sola as the guide character. Multi-expression sprite sheet (neutral, surprised, happy, stern) reacts to tutorial context. Dialogue boxes styled as classic RPG parchment.</div>
+      </div>
+    </li>
+    <li>
+      <span class="proc-n">06</span>
+      <div>
+        <div class="proc-title">Full Prototype in Figma</div>
+        <div class="proc-desc">Every screen wired up with transitions. Fully interactive — click through the full game experience from title to battle without needing to build it in code first.</div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- OUTCOMES -->
+<section class="green">
+  <span class="s-label">Outcomes</span>
+  <h2 class="s-title" style="color:var(--white)">WHAT WAS<br>DELIVERED.</h2>
+  <div class="outcome-table">
+    <div class="outcome-row" style="border-color:rgba(232,160,32,.15)">
+      <span class="outcome-label" style="color:var(--white)">Game UI</span>
+      <span class="outcome-val">Full Screen-by-Screen</span>
+    </div>
+    <div class="outcome-row" style="border-color:rgba(232,160,32,.15)">
+      <span class="outcome-label" style="color:var(--white)">Characters</span>
+      <span class="outcome-val">Hand-Drawn Pixel Art</span>
+    </div>
+    <div class="outcome-row" style="border-color:rgba(232,160,32,.15)">
+      <span class="outcome-label" style="color:var(--white)">Environments</span>
+      <span class="outcome-val">AI-Gen + Art Directed</span>
+    </div>
+    <div class="outcome-row" style="border-color:rgba(232,160,32,.15)">
+      <span class="outcome-label" style="color:var(--white)">Tutorial</span>
+      <span class="outcome-val">Sola Dialogue System</span>
+    </div>
+    <div class="outcome-row" style="border-color:rgba(232,160,32,.15)">
+      <span class="outcome-label" style="color:var(--white)">Prototype</span>
+      <span class="outcome-val">Fully Interactive</span>
+    </div>
+  </div>
+  <div class="cta-row">
+    <a class="btn btn-gold" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank">Play the Prototype &#8599;</a>
+  </div>
+</section>
+
+<footer>
+  <a class="foot-link" href="casepop.html">&#8592; Casepop AU</a>
+  <span class="foot-copy">&copy; 2025 Angbo Xie</span>
+  <a class="foot-link" href="../index.html">Portfolio &#8599;</a>
+</footer>
+
+<script>
+  var cur = document.getElementById('cursor');
+  var mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
+  document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; });
+  (function loop(){
+    cx+=(mx-cx)*.13; cy+=(my-cy)*.13;
+    cur.style.left=cx+'px'; cur.style.top=cy+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('mouseenter',function(){ cur.classList.add('grow'); });
+    a.addEventListener('mouseleave',function(){ cur.classList.remove('grow'); });
+  });
+</script>
+</body>
+</html>

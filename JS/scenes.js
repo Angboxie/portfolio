@@ -127,24 +127,24 @@ window.SCENES = [
       <div class="bg-num">VI</div>
       <span class="eyebrow fu" data-d="20">Chapter IV &mdash; Works</span>
       <div class="p-grid">
-        <div class="p-card" onclick="window.open('projects/essentially-australia.html','_blank')">
+        <a class="p-card" href="projects/essentially-australia.html" target="_blank">
           <span class="p-card-num">01</span>
           <span class="p-card-name">Essentially Australia</span>
           <span class="p-card-meta">UX Audit + Full Redesign &mdash; 2025</span>
           <span class="p-card-arrow">&#8599;</span>
-        </div>
-        <div class="p-card" onclick="window.open('https://casepopau.com','_blank')">
+        </a>
+        <a class="p-card" href="projects/casepop.html" target="_blank">
           <span class="p-card-num">02</span>
           <span class="p-card-name">Casepop AU</span>
           <span class="p-card-meta">E-Commerce &mdash; 2024</span>
           <span class="p-card-arrow">&#8599;</span>
-        </div>
-        <div class="p-card" onclick="window.open('https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2','_blank')">
+        </a>
+        <a class="p-card" href="projects/tactibrawl.html" target="_blank">
           <span class="p-card-num">03</span>
           <span class="p-card-name">Tactibrawl</span>
           <span class="p-card-meta">Game UI + Design &mdash; 2024</span>
           <span class="p-card-arrow">&#8599;</span>
-        </div>
+        </a>
         <div class="p-card" style="opacity:.35;pointer-events:none">
           <span class="p-card-num">04</span>
           <span class="p-card-name">Coming Soon.</span>
