@@ -11,7 +11,7 @@ window.SCENES = [
   { light: false, build: function(){ return `
     <div class="scene jend" data-id="title">
       <div class="bg-num">AX</div>
-      <span class="eyebrow fu" data-d="50">UI/UX Designer &mdash; Melbourne AU &mdash; 2026 and going</span>
+      <span class="eyebrow fu" data-d="50">UI/UX Designer &mdash; Melbourne AU &mdash; 2025</span>
       <span class="mega sh-white" style="font-size:clamp(86px,15.5vw,225px)">${ww('ANGBO',0,55)}</span>
       <span class="mega" style="font-size:clamp(86px,15.5vw,225px)">
         <span class="word"><span class="wi ol-white sh-white" data-d="130">XIE</span></span><span class="word"><span class="wi t-acid sh-acid" data-d="200" style="font-size:clamp(96px,17.5vw,248px)">.</span></span>
@@ -127,29 +127,28 @@ window.SCENES = [
       <div class="bg-num">VI</div>
       <span class="eyebrow fu" data-d="20">Chapter IV &mdash; Works</span>
       <div class="p-grid">
-        <div class="p-card" onclick="window.open('https://yourlink.com/alpha','_blank')">
+        <div class="p-card" onclick="window.open('https://yourlink.com/essentially','_blank')">
           <span class="p-card-num">01</span>
-          <span class="p-card-name">Project Alpha</span>
-          <span class="p-card-meta">Mobile App &mdash; 2024</span>
+          <span class="p-card-name">Essentially Australia</span>
+          <span class="p-card-meta">UX Audit + Full Redesign &mdash; 2025</span>
           <span class="p-card-arrow">&#8599;</span>
         </div>
-        <div class="p-card" onclick="window.open('https://yourlink.com/beta','_blank')">
+        <div class="p-card" onclick="window.open('https://casepopau.com','_blank')">
           <span class="p-card-num">02</span>
-          <span class="p-card-name">Project Beta</span>
-          <span class="p-card-meta">Web Platform &mdash; 2024</span>
+          <span class="p-card-name">Casepop AU</span>
+          <span class="p-card-meta">E-Commerce &mdash; 2024</span>
           <span class="p-card-arrow">&#8599;</span>
         </div>
-        <div class="p-card" onclick="window.open('https://yourlink.com/gamma','_blank')">
+        <div class="p-card" onclick="window.open('https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2','_blank')">
           <span class="p-card-num">03</span>
-          <span class="p-card-name">Project Gamma</span>
-          <span class="p-card-meta">Design System &mdash; 2023</span>
+          <span class="p-card-name">Tactibrawl</span>
+          <span class="p-card-meta">Game UI + Design &mdash; 2024</span>
           <span class="p-card-arrow">&#8599;</span>
         </div>
-        <div class="p-card" onclick="window.open('https://yourlink.com/delta','_blank')">
+        <div class="p-card" style="opacity:.35;pointer-events:none">
           <span class="p-card-num">04</span>
-          <span class="p-card-name">Project Delta</span>
-          <span class="p-card-meta">Brand + UI &mdash; 2023</span>
-          <span class="p-card-arrow">&#8599;</span>
+          <span class="p-card-name">Coming Soon.</span>
+          <span class="p-card-meta">Something's brewing &mdash; 2025</span>
         </div>
       </div>
     </div>`; }
@@ -169,7 +168,7 @@ window.SCENES = [
       </div>
       <div class="split-r split-r-dim">
         <p class="body-p sl" data-d="80">I'm Angbo &mdash; a UI/UX designer based in Melbourne who grew up obsessing over game cutscenes, ancient texts, and the 1px decisions that separate good from unforgettable.</p>
-        <p class="body-p sl" data-d="170">My design language lives somewhere between a boss fight HUD and Renaissance: precise, weird, and impossible to just simply ignore. I don't just make things look good. I make them feel like they breathe.</p>
+        <p class="body-p sl" data-d="170">My design language lives somewhere between a boss-fight HUD and a scripture verse &mdash; precise, weird, and impossible to ignore. I don't just make things look good. I make them feel like they breathe.</p>
         <p class="body-p sl" data-d="250">Available for freelance and full-time. Probably overthinking a micro-interaction right now.</p>
         <div class="tag-row fu" data-d="330">
           <span class="tag">Figma</span><span class="tag">Protopie</span><span class="tag">After Effects</span><span class="tag">Framer</span><span class="tag">Webflow</span><span class="tag">HTML/CSS</span><span class="tag">Game UI</span><span class="tag">Typography</span>

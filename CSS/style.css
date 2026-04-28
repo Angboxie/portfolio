@@ -20,6 +20,12 @@ html, body {
   user-select: none;
 }
 
+@media (max-width: 900px) {
+  html, body { cursor: auto; }
+  #cursor { display: none; }
+  .tm-item, #btn-prev, #btn-next, #btn-top, .p-card, .clinks a { cursor: pointer; }
+}
+
 /* ── CURSOR ── */
 #cursor {
   position: fixed; width: 10px; height: 10px;
@@ -379,3 +385,79 @@ body.light-scene #hint { color: var(--c1); }
   text-transform: uppercase; opacity: .13; margin-top: 2rem; display: block;
 }
 .bg-acid .footnote { color: var(--c1); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — TABLET & MOBILE
+   ══════════════════════════════════════════ */
+
+/* ── TABLET ≤ 900px ── */
+@media (max-width: 900px) {
+  .mega    { font-size: clamp(52px, 10vw, 100px); }
+  .mega-sm { font-size: clamp(36px, 7vw,  80px); }
+
+  /* split becomes stacked */
+  .split { flex-direction: column !important; }
+  .split-l, .split-r {
+    flex: none; width: 100%;
+    padding: 3rem 5vw 2rem;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(240,237,230,.08);
+  }
+  .split-r { padding-bottom: 6rem; }
+
+  .s-grid { grid-template-columns: repeat(2,1fr); }
+  .p-grid { grid-template-columns: repeat(2,1fr); }
+}
+
+/* ── MOBILE ≤ 600px ── */
+@media (max-width: 600px) {
+  /* hide name, shrink counter */
+  #hud-left { display: none; }
+  #hud-right { font-size: 8px; right: 1.2rem; }
+
+  /* menu: smaller text, less padding */
+  #top-menu { max-width: calc(100vw - 2rem); }
+  .tm-item  { font-size: 8px; letter-spacing: .1em; padding: .4rem .5rem; }
+
+  /* buttons closer together */
+  #btn-prev { right: calc(50% + 2px); }
+  #btn-next { left:  calc(50% + 2px); }
+  #btn-prev, #btn-next, #btn-top { font-size: 8px; padding: .5rem .8rem; }
+  #btn-top  { right: 1rem; }
+
+  #hint { font-size: 8px; letter-spacing: .18em; }
+
+  /* scene padding */
+  .scene { padding: 5rem 5vw 7.5rem; }
+  .split-l, .split-r { padding: 3rem 5vw 1.5rem; }
+  .split-r { padding-bottom: 5rem; }
+
+  /* type scale */
+  .mega    { font-size: clamp(44px, 13vw, 80px); }
+  .mega-sm { font-size: clamp(30px,  9vw, 56px); }
+
+  /* single column grids */
+  .s-grid { grid-template-columns: 1fr 1fr; }
+  .p-grid { grid-template-columns: 1fr; }
+  .p-card { padding: 1.5rem 1.2rem; }
+  .p-card-name { font-size: clamp(26px, 7vw, 40px); }
+
+  /* contact links wrap nicely */
+  .clinks { gap: 1rem; }
+  .clinks a { font-size: 10px; }
+
+  /* subtext */
+  .subtext { font-size: 11px; }
+
+  /* tags */
+  .tag { font-size: 8px; padding: .22rem .6rem; }
+
+  /* raw box */
+  .raw-box { font-size: 9px; padding: 1.2rem; }
+
+  /* body copy */
+  .body-p { font-size: 11px; max-width: 100%; }
+
+  /* bg number — tone down on small screens */
+  .bg-num { font-size: 55vw; opacity: .015; }
+}
