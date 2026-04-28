@@ -89,7 +89,7 @@ window.SCENES = [
         <div class="s-cell"><span class="s-num">02</span><span class="s-name">Motion &amp; Animation</span><span class="s-desc">Fancy but never gratuitous. Game-engine energy.</span></div>
         <div class="s-cell"><span class="s-num">03</span><span class="s-name">UX Strategy</span><span class="s-desc">Empathy first. Obsessive iteration. Ship.</span></div>
         <div class="s-cell"><span class="s-num">04</span><span class="s-name">Design Systems</span><span class="s-desc">Consistency is a love language. Fluent.</span></div>
-        <div class="s-cell"><span class="s-num">05</span><span class="s-name">Prototyping</span><span class="s-desc">Show, don't tell. Interactive, always.</span></div>
+        <div class="s-cell"><span class="s-num">05</span><span class="s-name">Prototyping</span>  <span class="s-desc">Show, don't tell. Interactive, always.</span></div>
         <div class="s-cell"><span class="s-num">06</span><span class="s-name">User Research</span><span class="s-desc">Real humans, real pain. I listen first.</span></div>
       </div>
     </div>`; }
@@ -108,14 +108,14 @@ window.SCENES = [
       </span>
       <div class="mq-wrap fu" data-d="430">
         <div class="mq-track">
-          <span>Mobile App</span><span class="dot">/</span>
-          <span>Web Platform</span><span class="dot">/</span>
-          <span>Design System</span><span class="dot">/</span>
-          <span>Brand + UI</span><span class="dot">/</span>
-          <span>Mobile App</span><span class="dot">/</span>
-          <span>Web Platform</span><span class="dot">/</span>
-          <span>Design System</span><span class="dot">/</span>
-          <span>Brand + UI</span><span class="dot">/</span>
+          <span>UX Audit</span><span class="dot">/</span>
+          <span>E-Commerce</span><span class="dot">/</span>
+          <span>Game UI</span><span class="dot">/</span>
+          <span>Full Redesign</span><span class="dot">/</span>
+          <span>UX Audit</span><span class="dot">/</span>
+          <span>E-Commerce</span><span class="dot">/</span>
+          <span>Game UI</span><span class="dot">/</span>
+          <span>Full Redesign</span><span class="dot">/</span>
         </div>
       </div>
     </div>`; }
@@ -127,7 +127,7 @@ window.SCENES = [
       <div class="bg-num">VI</div>
       <span class="eyebrow fu" data-d="20">Chapter IV &mdash; Works</span>
       <div class="p-grid">
-        <div class="p-card" onclick="window.open('https://yourlink.com/essentially','_blank')">
+        <div class="p-card" onclick="window.open('projects/essentially-australia.html','_blank')">
           <span class="p-card-num">01</span>
           <span class="p-card-name">Essentially Australia</span>
           <span class="p-card-meta">UX Audit + Full Redesign &mdash; 2025</span>
@@ -192,7 +192,7 @@ window.SCENES = [
         <a href="mailto:xie109714@gmail.com" target="_blank">Email &#8599;</a>
         <a href="https://au.linkedin.com/in/angboxie" target="_blank">LinkedIn &#8599;</a>
         <a href="https://instagram.com/xieangbo" target="_blank">Instagram &#8599;</a>
-        <a href="../Assets/resume.pdf" target="_blank">Resume &#8595;</a>
+        <a href="Assets/resume.pdf" target="_blank">Resume &#8595;</a>
       </div>
       <span class="footnote fu" data-d="880">&copy; 2025 Angbo Xie &mdash; All rights reserved</span>
     </div>`; }
