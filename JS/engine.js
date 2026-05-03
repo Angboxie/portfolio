@@ -132,6 +132,9 @@
       setTimeout(function(){ c.classList.add('in'); },120+i*90);
     });
     bindDot(el);
+    
+    /* spotlight */
+    if (el.querySelector('#sp-wrap')) { setTimeout(window.runSpotlight, 80); }
   }
 
   /* ── HUD ── */
