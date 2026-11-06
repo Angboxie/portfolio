@@ -1,38 +1,10 @@
 /* ==========================================================================
-   Symbiote infection layer — liquid cursor and section drips. Loads after core.js on every page.
+   Symbiote infection layer — section drips. Loads after core.js on every page.
    ========================================================================== */
 (() => {
   const { gsap, ScrollTrigger, AX } = window;
   const html = document.documentElement;
   const rnd = (a, b) => a + Math.random() * (b - a);
-
-  /* ---------- liquid cursor ---------- */
-  if (AX.fine && !AX.reduce) {
-    const wrap = document.createElement('div');
-    wrap.className = 'goo-cursor'; wrap.setAttribute('aria-hidden', 'true');
-    const N = 9;
-    const dots = Array.from({ length: N }, (_, i) => {
-      const d = document.createElement('i');
-      const s = 26 - i * 2.2;
-      d.style.width = d.style.height = s + 'px';
-      d.style.margin = -s / 2 + 'px 0 0 ' + -s / 2 + 'px';
-      wrap.appendChild(d);
-      return { el: d, x: AX.mouse.x, y: AX.mouse.y };
-    });
-    document.body.appendChild(wrap);
-    let grow = 1;
-    gsap.ticker.add(() => {
-      const target = html.classList.contains('cur-label') ? 0 : html.classList.contains('cur-hover') ? 1.9 : html.classList.contains('cur-down') ? 0.6 : 1;
-      grow += (target - grow) * 0.15;
-      let px = AX.mouse.x, py = AX.mouse.y;
-      dots.forEach((d, i) => {
-        const k = i === 0 ? 0.5 : 0.38;
-        d.x += (px - d.x) * k; d.y += (py - d.y) * k;
-        d.el.style.transform = `translate3d(${d.x}px,${d.y}px,0) scale(${i === 0 ? grow : grow * (1 - i * 0.04)})`;
-        px = d.x; py = d.y;
-      });
-    });
-  }
 
   /* ---------- drips helper: AX.drips(host, { color, count, max }) → set(progress) ---------- */
   AX.drips = (host, o = {}) => {
@@ -74,7 +46,7 @@
     }
     return getComputedStyle(document.body).backgroundColor;
   };
-  if (!AX.reduce) {
+  if (!AX.reduce && !document.body.hasAttribute('data-no-drips')) {
     const blocks = [...document.querySelectorAll('main > *')].filter((el) => el.offsetHeight > 40 && !el.hasAttribute('data-no-drip'));
     for (let i = 1; i < blocks.length; i++) {
       const prev = effBg(blocks[i - 1]), cur = effBg(blocks[i]);

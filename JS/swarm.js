@@ -130,7 +130,15 @@
     const perm = Array.from({ length: N }, (_, i) => i);
     for (let i = N - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [perm[i], perm[j]] = [perm[j], perm[i]]; }
 
+    // a second, independent shuffle decides which droplets join which group when two shapes share the liquid
+    const sel = new Float32Array(N);
+    { const s = Array.from({ length: N }, (_, i) => i); for (let i = N - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [s[i], s[j]] = [s[j], s[i]]; } s.forEach((v, i) => { sel[v] = i / N; }); }
     const buf = () => ({ x: new Float32Array(N), y: new Float32Array(N), r: new Float32Array(N) });
+    /* split the liquid: a `frac` share of droplets takes shape B, the rest keep shape A */
+    const combine = (out, A, B, frac) => {
+      for (let i = 0; i < N; i++) { const S = sel[i] < frac ? B : A; out.x[i] = S.x[i]; out.y[i] = S.y[i]; out.r[i] = S.r[i]; }
+      return out;
+    };
     const mix = (out, A, B, k) => {
       if (k <= 0) { out.x.set(A.x); out.y.set(A.y); out.r.set(A.r); return out; }
       if (k >= 1) { out.x.set(B.x); out.y.set(B.y); out.r.set(B.r); return out; }
@@ -301,13 +309,63 @@
         }
         return o;
       },
-      /* reroutes the last `count` droplets into a chain reaching from the blob toward a point */
-      tendril(o, t, { cx, cy, R, tx, ty, amt = 1, count = 40 }) {
+      /* an accretion disc: spiral arms that stream inward around a dense core */
+      vortex(o, t, { cx, cy, R, spin = 0, arms = 3, flow = 0.2, tilt = 0.6 }) {
+        const pr = Math.min(R * 0.1, 56) + 3;
+        for (let i = 0; i < N; i++) {
+          const a = sa[i], b = sb[i], c = sc[i];
+          if (c < 0.2) {                                 // the core
+            const rr = R * 0.15 * Math.sqrt(a), th = b * TAU + spin * 1.5;
+            o.x[i] = cx + Math.cos(th) * rr; o.y[i] = cy + Math.sin(th) * rr;
+            o.r[i] = R * 0.1 + 3;
+            continue;
+          }
+          const u = (((a - t * flow) % 1) + 1) % 1;      // falls inward, then re-enters at the rim
+          const arm = perm[i] % arms;
+          const th = (arm / arms) * TAU + u * 4.2 - spin;
+          const rr = R * (0.14 + 0.86 * u);
+          const w = R * 0.055 * (0.35 + u) * (b - 0.5) * 2;
+          const px = Math.cos(th) * rr - Math.sin(th) * w, py = Math.sin(th) * rr + Math.cos(th) * w;
+          o.x[i] = cx + px; o.y[i] = cy + py * tilt;
+          const fade = Math.min(1, u / 0.08) * Math.min(1, (1 - u) / 0.12);
+          o.r[i] = pr * (0.35 + 0.8 * u) * fade + 0.5;
+        }
+        return o;
+      },
+      /* inside the creature: walls line every edge of the screen, squeezing in slow waves,
+         with strands of liquid hanging between them */
+      gut(o, t, { W: w, H: h, thick = 36 }) {
+        const per = 2 * (w + h), SN = 9;
+        for (let i = 0; i < N; i++) {
+          const c = sc[i];
+          if (c > 0.92) {                                // strands
+            const k = perm[i] % SN, f = sa[i], top = k % 2 === 0;
+            const len = thick * (1.4 + 2.2 * Math.pow(Math.sin(t * 0.7 + k * 1.9), 2));
+            const sx = w * ((k + 0.5) / SN) + Math.sin(k * 3.7) * w * 0.03 + Math.sin(t * 1.1 + k + f * 2) * 6 * f;
+            o.x[i] = sx; o.y[i] = top ? thick * 0.4 + f * len : h - thick * 0.4 - f * len;
+            o.r[i] = thick * 0.5 * (1 - f * 0.65) + 3;
+            continue;
+          }
+          const s = (sa[i] * per + t * 24) % per;
+          let x, y, nx, ny;
+          if (s < w) { x = s; y = 0; nx = 0; ny = 1; }
+          else if (s < w + h) { x = w; y = s - w; nx = -1; ny = 0; }
+          else if (s < 2 * w + h) { x = w - (s - w - h); y = h; nx = 0; ny = -1; }
+          else { x = 0; y = h - (s - 2 * w - h); nx = 1; ny = 0; }
+          const wave = 0.5 + 0.5 * Math.sin(s * 0.009 - t * 2.1);
+          const d = thick * (0.3 + 0.9 * wave) * sb[i];
+          o.x[i] = x + nx * d; o.y[i] = y + ny * d;
+          o.r[i] = thick * (0.45 + 0.4 * wave) + 2;
+        }
+        return o;
+      },
+      /* reroutes `count` droplets (from the end, skipping `from`) into a chain reaching from the blob toward a point */
+      tendril(o, t, { cx, cy, R, tx, ty, amt = 1, count = 40, from = 0 }) {
         if (amt < 0.01) return o;
         const dx = tx - cx, dy = ty - cy, d = Math.hypot(dx, dy) || 1;
         const len = Math.min(d, R * 2.6) * amt, ux = dx / d, uy = dy / d;
         for (let j = 0; j < count; j++) {
-          const i = N - 1 - j, f = (j + 1) / count;
+          const i = N - 1 - from - j, f = (j + 1) / count;
           const sway = Math.sin(t * 3 + f * 6) * 14 * f;
           o.x[i] = cx + ux * len * (0.3 + 0.7 * f) - uy * sway;
           o.y[i] = cy + uy * len * (0.3 + 0.7 * f) + ux * sway;
@@ -368,6 +426,6 @@
 
     resize();
     addEventListener('resize', resize);
-    return { N, F, buf, mix, step, snap, render, splash, word, mood, THREE, get W() { return W; }, get H() { return H; } };
+    return { N, F, buf, mix, combine, step, snap, render, splash, word, mood, THREE, get W() { return W; }, get H() { return H; } };
   };
 })();

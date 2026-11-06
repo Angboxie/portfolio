@@ -18,11 +18,14 @@
 
   gsap.registerPlugin(ScrollTrigger);
   gsap.defaults({ ease: 'expo.out' });
+  // phones resize the viewport as the URL bar slides; don't re-measure every pin for that
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  AX.hoverEl = null;
 
   /* ---------- smooth scroll ---------- */
   var lenis = null;
   if (!reduce && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 1, touchMultiplier: 1.4 });
+    lenis = new Lenis({ lerp: 0.07, wheelMultiplier: 0.8, touchMultiplier: 1.2 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
@@ -36,7 +39,40 @@
   });
   AX.velocity = function () { return lenis ? lenis.velocity : nativeVel; };
 
+  /* ---------- story stops ----------
+     Pages register scroll positions that matter (AX.stop(fn, holdMs) → fn returns a y).
+     Fly past one too fast and the page settles on it briefly so the moment plays,
+     on wheel, trackpad and touch alike. Slow scrolling passes straight through. */
+  var stopFns = [], stopYs = [], holdUntil = 0, navUntil = 0, prevStopY = scrollY;
+  function measureStops() {
+    stopYs = stopFns.map(function (f) { return { y: Math.round(f.fn()), hold: f.hold }; }).filter(function (s) { return isFinite(s.y) && s.y > 0; });
+  }
+  AX.stop = function (fn, hold) { stopFns.push({ fn: fn, hold: hold || 520 }); measureStops(); };
+  ScrollTrigger.addEventListener('refresh', measureStops);
+  if (!reduce) gsap.ticker.add(function () {
+    var y = scrollY, now = performance.now();
+    if (now < holdUntil || now < navUntil || html.classList.contains('menu-open')) { prevStopY = y; return; }
+    var dy = y - prevStopY;
+    if (Math.abs(dy) > 7) {
+      for (var i = 0; i < stopYs.length; i++) {
+        var s = stopYs[i].y, hold = stopYs[i].hold;
+        if ((prevStopY < s && y >= s) || (prevStopY > s && y <= s)) {
+          holdUntil = now + hold;
+          if (lenis) {
+            lenis.scrollTo(s, { immediate: true, force: true });
+            lenis.stop();
+            setTimeout(function () { if (!html.classList.contains('menu-open')) lenis.start(); }, hold);
+          } else scrollTo(0, s);
+          y = s;
+          break;
+        }
+      }
+    }
+    prevStopY = y;
+  });
+
   AX.scrollTo = function (target, opts) {
+    navUntil = performance.now() + ((opts && opts.immediate) ? 200 : 2200);
     var el = typeof target === 'string' ? document.querySelector(target) : target;
     if (lenis) {
       lenis.scrollTo(el != null ? el : target, Object.assign({ duration: 1.8, easing: function (t) { return 1 - Math.pow(1 - t, 4); } }, opts || {}));
@@ -55,29 +91,55 @@
   }, { passive: true });
 
   /* ---------- cursor ---------- */
+  /* A targeting reticle: one pixel at the pointer, four brackets that lock
+     onto whatever you hover and name it. */
   if (fine) {
     html.classList.add('has-cursor');
-    var dot = document.createElement('div'); dot.className = 'cursor';
-    var ring = document.createElement('div'); ring.className = 'cursor-ring';
-    var label = document.createElement('span'); ring.appendChild(label);
-    document.body.append(dot, ring);
-    var rx = AX.mouse.x, ry = AX.mouse.y;
+    var cur = document.createElement('div'); cur.className = 'reticle'; cur.setAttribute('aria-hidden', 'true');
+    cur.innerHTML = '<b class="rt-px"></b><span class="rt-box"><i></i><i></i><i></i><i></i></span><span class="rt-lb"></span>';
+    document.body.appendChild(cur);
+    var px = cur.querySelector('.rt-px'), box = cur.querySelector('.rt-box'), lb = cur.querySelector('.rt-lb');
+    var bx = AX.mouse.x, by = AX.mouse.y, bw = 30, bh = 30, lock = null, down = false, shown = '';
+    var labelFor = function (el) {
+      if (el.hasAttribute('data-cursor')) return el.getAttribute('data-cursor');
+      var h = el.getAttribute('href') || '';
+      if (/^mailto:/.test(h)) return 'Mail';
+      if (/\.pdf$/i.test(h)) return 'Get';
+      if (el.target === '_blank') return 'Open';
+      if (h.charAt(0) === '#') return 'Go';
+      if (el.tagName === 'A') return 'View';
+      return '';
+    };
     gsap.ticker.add(function () {
-      var m = AX.mouse;
-      rx += (m.x - rx) * 0.16; ry += (m.y - ry) * 0.16;
-      dot.style.transform = 'translate3d(' + m.x + 'px,' + m.y + 'px,0)';
-      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+      var m = AX.mouse, t = performance.now() / 1000;
+      var tx, ty, tw, th;
+      if (lock && lock.isConnected) {
+        var r = lock.getBoundingClientRect();
+        // big targets get a tight box around the pointer instead of the whole element
+        if (r.width < 520 && r.height < 260) { tx = r.left + r.width / 2; ty = r.top + r.height / 2; tw = r.width + 14; th = r.height + 10; }
+        else { tx = m.x; ty = m.y; tw = th = 64; }
+      } else {
+        var s = 26 + Math.sin(t * 2.4) * 3;
+        tx = m.x; ty = m.y; tw = th = s;
+      }
+      if (down) { tw *= 0.7; th *= 0.7; }
+      bx += (tx - bx) * 0.24; by += (ty - by) * 0.24; bw += (tw - bw) * 0.2; bh += (th - bh) * 0.2;
+      px.style.transform = 'translate3d(' + m.x + 'px,' + m.y + 'px,0)';
+      box.style.transform = 'translate3d(' + (bx - bw / 2) + 'px,' + (by - bh / 2) + 'px,0)';
+      box.style.width = bw + 'px'; box.style.height = bh + 'px';
+      lb.style.transform = 'translate3d(' + (bx + bw / 2 + 6) + 'px,' + (by + bh / 2 + 4) + 'px,0)';
     });
     document.addEventListener('pointerover', function (e) {
       var t = e.target instanceof Element ? e.target : null;
-      var lab = t && t.closest('[data-cursor]');
-      var hov = t && t.closest('a, button, [data-hover], input, label');
-      html.classList.toggle('cur-label', !!lab);
-      html.classList.toggle('cur-hover', !lab && !!hov);
-      if (lab) label.textContent = lab.getAttribute('data-cursor');
+      var el = t && t.closest('a, button, [data-cursor], [data-hover], input, label');
+      lock = el; AX.hoverEl = el;
+      var txt = el ? labelFor(el) : '';
+      html.classList.toggle('cur-hover', !!el);
+      html.classList.toggle('cur-label', !!txt);
+      if (txt !== shown) { lb.textContent = txt; shown = txt; }
     });
-    document.addEventListener('pointerdown', function () { html.classList.add('cur-down'); });
-    document.addEventListener('pointerup', function () { html.classList.remove('cur-down'); });
+    document.addEventListener('pointerdown', function () { down = true; html.classList.add('cur-down'); });
+    document.addEventListener('pointerup', function () { down = false; html.classList.remove('cur-down'); });
     document.addEventListener('mouseleave', function () { html.classList.add('cur-hidden'); });
     document.addEventListener('mouseenter', function () { html.classList.remove('cur-hidden'); });
   }

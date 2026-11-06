@@ -24,13 +24,10 @@
     if (rail) gsap.to(rail, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: proc.querySelector('.c-steps'), start: 'top 62%', end: 'bottom 62%', scrub: true } });
   });
 
-  /* outcomes: draw lines + slide rows in */
+  /* outcomes: rows fade up one after another; nothing is ever left clipped mid-way */
   document.querySelectorAll('.c-out').forEach(function (list) {
     if (AX.reduce) return;
-    var rows = list.querySelectorAll('li');
-    rows.forEach(function (r) { r.style.setProperty('--s', 0); });
-    gsap.from(list.querySelectorAll('.ol, .ov'), { yPercent: 110, opacity: 0, duration: 1.2, stagger: .05, scrollTrigger: { trigger: list, start: 'top 85%' } });
-    gsap.to(rows, { '--s': 1, duration: 1.4, ease: 'expo.inOut', stagger: .08, scrollTrigger: { trigger: list, start: 'top 85%' } });
+    gsap.from(list.querySelectorAll('li'), { y: 24, opacity: 0, duration: 1, stagger: .07, clearProps: 'transform,opacity', scrollTrigger: { trigger: list, start: 'top 85%' } });
   });
 
   /* flip cards: tap to flip on touch / keyboard */

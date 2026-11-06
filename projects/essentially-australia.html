@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
   <title>Essentially Australia / Angbo Xie</title>
   <meta name="description" content="UX audit and full redesign of Essentially Australia, a Byron Bay essential oils brand. Case study by Angbo Xie."/>
@@ -10,7 +10,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4ff00'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='28' text-anchor='middle' fill='%2309090b'%3EAX%3C/text%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Dela+Gothic+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../CSS/base.css"/>
   <link rel="stylesheet" href="../CSS/infect.css"/>
   <link rel="stylesheet" href="../CSS/case.css"/>
@@ -22,111 +22,86 @@
   </script>
   <style>
     :root {
-      --porcelain: #fdfdf5; --evergreen: #233a23; --sage: #c8c9a8; --carbon: #232323; --warm: #f5f0e8;
-      --bg: var(--porcelain); --fg: var(--carbon);
-      --accent: #c8c9a8; --accent-ink: #232323; --curtain: #233a23;
-      --dark: #233a23; --dark-fg: #fdfdf5; --alt: #f5f0e8;
-      --f-head: 'Instrument Serif', Georgia, serif; --f-display: 'Outfit', system-ui, sans-serif;
-      --line: rgba(35,35,35,.12);
-      --tint: #233a23;
+      --bg: #fdfdf5; --fg: #232323; --alt: #f5f0e8;
+      --accent: #233a23; --accent-ink: #fdfdf5; --curtain: #233a23;
+      --dark: #233a23; --dark-fg: #fdfdf5; --dark-accent: #c8c9a8;
+      --line: rgba(35,35,35,.14);
+      --tint: #8fb3c9;
     }
-    .c-sec:not(.dark) { --accent: #233a23; --accent-ink: #fdfdf5; }
-    .c-sec:not(.dark) .c-title em { color: #4f7a4f; }
+    .menu { --accent: #c8c9a8; --accent-ink: #232323; }
 
-    /* hero */
+    /* hero: the brand's evergreen, tinted by the feeling you pick */
     .hero {
       position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
-      background: radial-gradient(90% 80% at 72% 45%, color-mix(in srgb, var(--tint) 55%, #233a23), #172617 75%);
-      color: var(--porcelain); padding: 110px var(--gutter) 36px;
+      background: color-mix(in srgb, var(--tint) 22%, #233a23); color: #fdfdf5;
+      --fg: #fdfdf5; --accent: #c8c9a8; --line: rgba(253,253,245,.2);
+      padding: 110px var(--gutter) 36px;
       display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); grid-template-rows: 1fr auto; gap: 3vh 4vw;
-      --line: rgba(200,201,168,.2);
     }
     .hero-copy { align-self: end; position: relative; z-index: 2; }
-    .kicker { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); opacity: .85; margin-bottom: 2rem; display: block; }
-    .hero h1 { font-family: var(--f-head); font-weight: 400; font-size: clamp(64px, 10.5vw, 196px); line-height: .86; letter-spacing: -.035em; }
-    .hero h1 em { color: var(--sage); }
-    .hero-sub { font-family: var(--f-head); font-style: italic; font-size: clamp(20px, 2vw, 30px); line-height: 1.3; color: var(--sage); max-width: 26ch; margin-top: 2.4rem; }
     .stage { position: relative; min-height: 50vh; }
     #drop { position: absolute; inset: -12vh -6vw -6vh -6vw; width: calc(100% + 12vw); height: calc(100% + 18vh); touch-action: pan-y; }
     .feel { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; text-align: center; }
-    .feel-q { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-bottom: 1rem; }
+    .feel-q { margin-bottom: 1rem; }
     .feel-chips { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
     .chip {
-      display: inline-flex; align-items: center; gap: .55rem; padding: .7rem 1.1rem; border-radius: 100px;
-      border: 1px solid rgba(253,253,245,.25); font-size: 14px; letter-spacing: .02em;
-      transition: background .4s, color .4s, border-color .4s, transform .4s var(--ease-out);
+      display: inline-flex; align-items: center; gap: .6rem; padding: .65rem .95rem;
+      border: 1px solid rgba(253,253,245,.35); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+      transition: background .3s, color .3s, border-color .3s;
     }
-    .chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 14px var(--c); }
-    .chip:hover { transform: translateY(-3px); }
-    .chip[aria-pressed="true"] { background: var(--porcelain); color: var(--carbon); border-color: var(--porcelain); }
+    .chip i { width: 8px; height: 8px; background: var(--c); }
+    .chip[aria-pressed="true"] { background: #fdfdf5; color: #232323; border-color: #fdfdf5; }
     .hero .c-meta { grid-column: 1 / -1; position: relative; z-index: 2; }
 
-    /* quote */
-    .quote { font-family: var(--f-head); font-style: italic; font-size: clamp(36px, 4.6vw, 80px); line-height: 1; letter-spacing: -.02em; margin-top: 5vh; color: #4f7a4f; }
-    .quote small { display: block; font-family: var(--f-mono); font-style: normal; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--carbon); opacity: .55; margin-top: 1.2rem; }
-
     /* purchase path */
-    #path { background: var(--dark); color: var(--dark-fg); --line: rgba(200,201,168,.2); }
+    #path { background: var(--dark); color: var(--dark-fg); --fg: var(--dark-fg); --accent: #c8c9a8; --line: rgba(253,253,245,.2); }
     .path { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 var(--gutter); overflow: hidden; }
     .path-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 8vh; }
-    .path-count { font-family: var(--f-head); font-size: clamp(80px, 14vw, 260px); line-height: .8; letter-spacing: -.05em; color: var(--sage); font-variant-numeric: tabular-nums; }
-    .path-count small { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; color: var(--porcelain); opacity: .6; display: block; text-transform: uppercase; margin-top: 1rem; }
+    .path-count { font-family: var(--f-head); font-weight: 900; font-size: clamp(110px, 16vw, 300px); line-height: .8; color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+    .path-count small { display: block; margin-top: 1rem; font-family: var(--f-body); font-weight: 400; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--fg); }
     .path-row { position: relative; height: 92px; }
     .pstep {
       position: absolute; top: 0; height: 92px; display: flex; flex-direction: column; justify-content: space-between;
-      padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(200,201,168,.3); background: rgba(253,253,245,.04);
-      font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+      padding: 12px 14px; border: 1px solid var(--line); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
     }
-    .pstep b { font-family: var(--f-head); font-weight: 400; font-size: 30px; letter-spacing: 0; text-transform: none; }
-    .pstep.keep { border-color: var(--sage); }
-    .path-note { margin-top: 6vh; font-size: 18px; opacity: .75; max-width: 54ch; }
+    .pstep b { font-family: var(--f-head); font-weight: 900; font-size: 34px; line-height: 1; }
+    .pstep.keep { border-color: var(--accent); }
+    .path-note { margin-top: 6vh; font-size: 14px; max-width: 54ch; }
 
-    /* contrast slider */
-    .contrast { position: relative; border-radius: 24px; overflow: hidden; height: min(62vh, 560px); user-select: none; touch-action: pan-y; margin-top: 6vh; border: 1px solid var(--line); }
+    /* contrast: before / after */
+    .contrast { position: relative; overflow: hidden; height: min(62vh, 560px); user-select: none; touch-action: pan-y; margin-top: 6vh; border: 1px solid var(--line); }
     .cside { position: absolute; inset: 0; background: #fdfdf5; padding: 5vh 4vw; display: flex; flex-direction: column; justify-content: space-between; }
-    .cside .ct { font-family: var(--f-head); font-size: clamp(40px, 6vw, 110px); line-height: .9; letter-spacing: -.03em; }
-    .cside p { font-size: clamp(16px, 1.3vw, 20px); line-height: 1.55; max-width: 44ch; }
-    .cside .badge-r { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: .5rem .8rem; border-radius: 100px; align-self: flex-start; }
+    .cside .ct { font-family: var(--f-head); font-weight: 900; text-transform: uppercase; font-size: clamp(52px, 7.4vw, 140px); line-height: .84; }
+    .cside p { font-size: 14px; line-height: 1.7; max-width: 44ch; margin-top: 1.4rem; }
+    .badge-r { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; padding: .45rem .7rem; align-self: flex-start; }
     .c-old { color: #979797; }
     .c-old .badge-r { background: #b83232; color: #fff; }
     .c-new { color: #232323; clip-path: inset(0 0 0 var(--split, 50%)); align-items: flex-end; text-align: right; }
     .c-new .badge-r { background: #233a23; color: #fdfdf5; align-self: flex-end; }
-    .c-handle { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 2px; background: #233a23; transform: translateX(-1px); }
-    .c-handle span {
-      position: absolute; top: 50%; left: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%;
-      background: #233a23; color: #fdfdf5; display: grid; place-items: center; font-size: 18px; letter-spacing: -.1em;
-    }
+    .c-handle { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 1px; background: #232323; }
+    .c-handle span { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; background: #232323; color: #fdfdf5; display: grid; place-items: center; font-size: 14px; }
 
-    /* flip faces */
-    .flip-front { background: #fdfdf5; border: 1px solid var(--line); border-top: 3px solid #b83232; }
-    .flip-front .flip-h { color: #b83232; }
-    .flip-back { background: #233a23; color: #fdfdf5; }
-    .flip-back .flip-h { color: var(--sage); }
-
-    /* prototype device */
-    .device-wrap { perspective: 1800px; margin-top: 6vh; }
-    .device { border-radius: 22px; overflow: hidden; background: #172617; aspect-ratio: 16 / 9; box-shadow: 0 60px 120px -30px rgba(35,58,35,.55); transform-origin: 50% 100%; border: 10px solid #172617; }
+    /* prototype */
+    .device { margin-top: 6vh; aspect-ratio: 16 / 9; background: #172617; }
+    .shot-xl img { display: block; width: 100%; height: auto; }
+    .shot-cap { display: flex; justify-content: space-between; gap: 2rem; margin-top: 1rem; }
+    @media (max-width: 760px) { .shot-cap { flex-direction: column; gap: .4rem; } }
     .device iframe { width: 100%; height: 100%; border: 0; display: block; background: #172617; }
-
-    .pill { --fg: var(--carbon); }
-    .dark .pill { --fg: #fdfdf5; }
-    .next { background: var(--porcelain); }
-    .next .next-title { font-family: var(--f-head); font-weight: 400; text-transform: none; letter-spacing: -.03em; }
-    .next:hover .next-title { color: #ff4d8d; font-style: italic; }
-    .next-bar::after { background: #ff4d8d; }
-    .menu { --accent: #c8c9a8; --accent-ink: #232323; }
 
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: 96px; }
       .stage { min-height: 56vh; order: -1; }
       .hero-copy { align-self: start; }
-      .path { height: auto; padding: 14vh var(--gutter); }
+      .path { height: auto; padding: 12vh var(--gutter); }
+      .path-head { flex-direction: column; align-items: flex-start; }
+      .path-count { text-align: left; }
       .path-row { display: flex; flex-wrap: wrap; gap: 8px; height: auto; }
       .pstep { position: relative; width: calc(25% - 6px) !important; left: auto !important; height: 80px; }
+      .device { aspect-ratio: 4 / 5; }
     }
   </style>
 </head>
-<body>
+<body data-no-drips>
 
 <svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
   <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
@@ -164,15 +139,15 @@
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-copy">
-      <span class="kicker" data-reveal data-delay=".5">Case Study 01 / UX Audit + Full Redesign / 2025</span>
+      <span class="kicker" data-reveal data-delay=".5">Case study 01 / UX audit + full redesign / 2025</span>
       <h1 data-split data-delay=".55" data-stagger=".08">Essentially <em>Australia.</em></h1>
-      <p class="hero-sub" data-reveal data-delay=".9">From friction to guided experience. Byron Bay&rsquo;s native essential oils, redesigned from the ground up.</p>
+      <p class="hero-sub" data-reveal data-delay=".9">A Byron Bay essential oils store with a broken purchase path. Audited against four competitors, then redesigned around how people want to feel.</p>
     </div>
 
     <div class="stage">
       <canvas id="drop" aria-label="Interactive 3D oil droplet coloured by feeling." role="img"></canvas>
       <div class="feel" data-reveal data-delay="1.1">
-        <p class="feel-q">How do you want to feel?</p>
+        <p class="feel-q mono">Shop by feeling</p>
         <div class="feel-chips" role="group" aria-label="Feelings">
           <button class="chip" style="--c:#e9b949" data-feel="#e9b949" aria-pressed="false"><i></i>Uplift</button>
           <button class="chip" style="--c:#8fb3c9" data-feel="#8fb3c9" aria-pressed="true"><i></i>Calm</button>
@@ -183,169 +158,156 @@
     </div>
 
     <dl class="c-meta" data-reveal data-delay="1.2">
-      <div><dt>Role</dt><dd>UX Researcher + Designer</dd></div>
-      <div><dt>Tools</dt><dd>Figma &middot; WCAG &middot; Nielsen&rsquo;s</dd></div>
-      <div><dt>Type</dt><dd>UX Audit + Full Redesign</dd></div>
+      <div><dt>Role</dt><dd>UX researcher + designer</dd></div>
+      <div><dt>Tools</dt><dd>Figma / WCAG / Nielsen&rsquo;s</dd></div>
+      <div><dt>Type</dt><dd>UX audit + full redesign</dd></div>
       <div><dt>Year</dt><dd>2025</dd></div>
     </dl>
   </section>
 
-  <!-- OVERVIEW -->
+  <!-- 01 OVERVIEW -->
   <section class="c-sec" id="overview">
     <div class="c-two">
       <div>
-        <span class="c-label">Overview</span>
-        <h2 class="c-title" data-split>From friction to <em>guided experience.</em></h2>
+        <span class="c-label">01 / Overview</span>
+        <h2 class="c-title" data-split>From friction to <em>guided.</em></h2>
         <div class="c-tags" data-reveal>
-          <span>UX Audit</span><span>Visual Forensics</span><span>Nielsen&rsquo;s Heuristics</span><span>WCAG AA</span>
-          <span>Wireframing</span><span>Hi-Fi Prototype</span><span>Usability Testing</span>
+          <span>UX audit</span><span>Visual forensics</span><span>Nielsen&rsquo;s heuristics</span><span>WCAG AA</span><span>Wireframing</span><span>Hi-fi prototype</span><span>Usability testing</span>
         </div>
       </div>
       <div class="c-body">
-        <p data-reveal>Essentially Australia is a Byron Bay native essential oils brand, Est. 2012, with 38+ oils sourced from Australian botanical ingredients. Their WordPress e-commerce site had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers say: &ldquo;I&rsquo;m actually gonna suffer.&rdquo;</p>
-        <p data-reveal>I conducted a full UX audit across four competing Australian essential oil sites, identified Essentially Australia as the highest-friction villain, and redesigned the entire purchase experience from the ground up, on mobile and desktop.</p>
-        <p class="quote" data-split>&ldquo;I&rsquo;m actually gonna suffer.&rdquo;</p>
-        <p class="quote" style="margin-top:0"><small>User quote / Cognitive Walkthrough</small></p>
+        <p data-reveal>Essentially Australia is a Byron Bay native essential oils brand, est. 2012, with 38+ oils sourced from Australian botanical ingredients. Their WordPress store had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers give up.</p>
+        <p data-reveal>I audited four competing Australian essential oil sites, identified Essentially Australia as the highest-friction one, and redesigned the entire purchase experience on mobile and desktop.</p>
+        <blockquote class="c-quote" data-reveal><p>&ldquo;I&rsquo;m actually gonna suffer.&rdquo;</p><cite>Tester / Cognitive walkthrough</cite></blockquote>
       </div>
     </div>
   </section>
 
-  <!-- NUMBERS -->
+  <!-- 02 THE REDESIGN -->
+  <section class="c-sec" id="redesign" style="padding-top:0">
+    <span class="c-label">02 / The redesign</span>
+    <figure class="shot-xl c-frame" data-reveal><img src="../Assets/ea-home-desktop.jpg" alt="Redesigned Essentially Australia desktop homepage: the headline Breathe, a Zest Myrtle oil bottle, Shop now and Explore the range buttons, and a nav with Shop, Our Story and Scent Memory" loading="lazy" decoding="async"/></figure>
+    <p class="shot-cap mono"><span>Desktop homepage / 1440 &times; 1024</span><span>Product first, one primary action, Scent Memory in the nav</span></p>
+  </section>
+
+  <!-- 03 NUMBERS -->
   <section class="c-sec alt" id="numbers">
-    <span class="c-label">By the numbers</span>
+    <span class="c-label">03 / Numbers</span>
     <div class="c-stats">
-      <div class="c-stat"><span class="num" data-count="4">4</span><span class="lab">Sites audited across visual forensics &amp; Nielsen&rsquo;s</span></div>
-      <div class="c-stat"><span class="num"><span id="pathNum">8</span>&rarr;4</span><span class="lab">Purchase path steps, cut in half</span></div>
-      <div class="c-stat"><span class="num" data-count="2.85" data-decimals="2" data-suffix=":1">2.85:1</span><span class="lab">Original contrast ratio. Fails WCAG AA entirely</span></div>
-      <div class="c-stat"><span class="num" data-scramble="AAA">AAA</span><span class="lab">Redesign contrast. Carbon on Porcelain, verified</span></div>
+      <div class="c-stat"><span class="num" data-count="4">4</span><span class="lab">Sites audited, visual forensics + heuristics</span></div>
+      <div class="c-stat"><span class="num"><span id="pathNum">8</span>&rarr;4</span><span class="lab">Steps to checkout</span></div>
+      <div class="c-stat"><span class="num" data-count="2.85" data-decimals="2" data-suffix=":1">2.85:1</span><span class="lab">Original contrast. Fails WCAG AA</span></div>
+      <div class="c-stat"><span class="num" data-scramble="AAA">AAA</span><span class="lab">Redesign contrast, verified</span></div>
     </div>
   </section>
 
-  <!-- PURCHASE PATH (pinned) -->
+  <!-- 03 PURCHASE PATH (pinned) -->
   <section class="dark" id="path">
     <div class="path">
       <div class="path-head">
         <div>
-          <span class="c-label">The purchase path</span>
-          <h2 class="c-title" style="font-size:clamp(44px,6vw,110px)">Eight steps, <em>then four.</em></h2>
+          <span class="c-label">04 / Purchase path</span>
+          <h2 class="c-title">Eight steps, <em>then four.</em></h2>
         </div>
-        <div class="path-count"><span id="pathBig">8</span><small>steps to checkout</small></div>
+        <div class="path-count"><span id="pathBig">8</span><small>Steps to checkout</small></div>
       </div>
       <div class="path-row" id="pathRow"></div>
-      <p class="path-note">The redesign collapses the original purchase path to half its length, with feedback on every action along the way.</p>
+      <p class="path-note">Half the steps, with feedback on every action that remains.</p>
     </div>
   </section>
 
-  <!-- PROBLEM → SOLUTION -->
+  <!-- 04 FINDINGS -->
   <section class="c-sec" id="problem">
     <div class="c-two">
       <div>
-        <span class="c-label">The problem &rarr; the solution</span>
-        <h2 class="c-title" data-split>Friction every step. <em>Emotion-first design.</em></h2>
-        <div class="c-body" style="margin-top:4vh">
-          <p data-reveal>The original site failed at every stage of the purchase journey, from the hero that showed a lighthouse instead of a product, to a cart that silently accepted wrong orders without any feedback.</p>
-          <p data-reveal>The redesign centres on feeling-first navigation. Users shop by how they want to feel, not botanical names they don&rsquo;t know. Four categories: Uplift, Calm, Restore, Ground. Colour does the navigational work before the label is read.</p>
-        </div>
+        <span class="c-label">05 / Findings</span>
+        <h2 class="c-title" data-split>Friction at every <em>step.</em></h2>
       </div>
-      <div class="flip-grid">
-        <div class="flip">
-          <div class="flip-face flip-front"><div class="flip-h"><span>H2 / Real World Match</span><span>Problem</span></div><div><div class="flip-t">Broken IA</div><div class="flip-d">Oils, gift vouchers, oracle cards: all equal weight. No hierarchy, no logic.</div></div></div>
-          <div class="flip-face flip-back"><div class="flip-h"><span>H6 / Recognition</span><span>Redesign</span></div><div><div class="flip-t">Feeling-First IA</div><div class="flip-d">Colour dots read before labels. Expert user defaulted to feeling nav over search. No vocabulary gap.</div></div></div>
-        </div>
-        <div class="flip">
-          <div class="flip-face flip-front"><div class="flip-h"><span>H1 / System Status</span><span>Problem</span></div><div><div class="flip-t">Silent Cart</div><div class="flip-d">Cart accepted items with zero feedback. Users repeated actions assuming failure.</div></div></div>
-          <div class="flip-face flip-back"><div class="flip-h"><span>H1 / System Status</span><span>Redesign</span></div><div><div class="flip-t">&ldquo;Successfully Added!&rdquo;</div><div class="flip-d">CTA replaces button on add. Cart increments. Duplicates prevented.</div></div></div>
-        </div>
-        <div class="flip">
-          <div class="flip-face flip-front"><div class="flip-h"><span>H5 / Error Prevention</span><span>Problem</span></div><div><div class="flip-t">Manual Cart Update</div><div class="flip-d">Quantity changes required a manual click. Users checked out wrong orders.</div></div></div>
-          <div class="flip-face flip-back"><div class="flip-h"><span>H5 / Error Prevention</span><span>Redesign</span></div><div><div class="flip-t">Live Price Sync</div><div class="flip-d">25ml selected &rarr; button reads $38.95. Selection and cost always in sync.</div></div></div>
-        </div>
-        <div class="flip">
-          <div class="flip-face flip-front"><div class="flip-h"><span>H8 / Aesthetic</span><span>Problem</span></div><div><div class="flip-t">Zero Hero Intent</div><div class="flip-d">Hero showed a lighthouse. No product, no CTA, no value. Immediate mismatch.</div></div></div>
-          <div class="flip-face flip-back"><div class="flip-h"><span>GenAI Feature</span><span>Redesign</span></div><div><div class="flip-t">Scent Memory</div><div class="flip-d">Conversational AI maps emotional input to product. No botanical knowledge required.</div></div></div>
-        </div>
+      <div class="c-body">
+        <p data-reveal>The original site failed at every stage of the purchase journey, from a hero that showed a lighthouse instead of a product, to a cart that silently accepted wrong orders.</p>
+        <p data-reveal>The redesign navigates by feeling, not by botanical names people don&rsquo;t know: Uplift, Calm, Restore, Ground. Colour is read before the label is.</p>
       </div>
+    </div>
+    <div class="c-pairs">
+      <div class="c-pair" data-reveal><span class="h">H2 / Real-world match</span><div><small>Problem</small><h3>Broken IA</h3><p>Oils, gift vouchers and oracle cards at equal weight. No hierarchy.</p></div><div class="now"><small>Redesign</small><h3>Feeling-first IA</h3><p>Colour dots read before labels. The expert tester chose feeling navigation over search.</p></div></div>
+      <div class="c-pair" data-reveal><span class="h">H1 / System status</span><div><small>Problem</small><h3>Silent cart</h3><p>Items added with zero feedback. Users repeated actions, assuming failure.</p></div><div class="now"><small>Redesign</small><h3>Confirmed add</h3><p>The button becomes &ldquo;Successfully added&rdquo;, the cart count increments, duplicates are prevented.</p></div></div>
+      <div class="c-pair" data-reveal><span class="h">H5 / Error prevention</span><div><small>Problem</small><h3>Manual cart update</h3><p>Quantity changes needed an extra click. Users checked out wrong orders.</p></div><div class="now"><small>Redesign</small><h3>Live price sync</h3><p>Pick 25ml and the button reads $38.95. Selection and cost always match.</p></div></div>
+      <div class="c-pair" data-reveal><span class="h">H8 / Aesthetic</span><div><small>Problem</small><h3>No hero intent</h3><p>A lighthouse. No product, no CTA, no value.</p></div><div class="now"><small>Redesign</small><h3>Scent Memory</h3><p>A conversational AI concept that maps how you feel to a product. No botanical knowledge needed.</p></div></div>
     </div>
   </section>
 
-  <!-- CONTRAST -->
+  <!-- 05 ACCESSIBILITY -->
   <section class="c-sec alt" id="contrast">
     <div class="c-two" style="align-items:end">
       <div>
-        <span class="c-label">Accessibility</span>
-        <h2 class="c-title" data-split>From 2.85:1 <em>to AAA.</em></h2>
+        <span class="c-label">06 / Accessibility</span>
+        <h2 class="c-title" data-split>2.85:1 <em>to AAA.</em></h2>
       </div>
-      <div class="c-body"><p data-reveal>The left side simulates the original 2.85:1 contrast ratio, which fails WCAG AA entirely. The right is the redesign: Carbon on Porcelain, verified AAA.</p></div>
+      <div class="c-body"><p data-reveal>Left: the original contrast, which fails WCAG AA. Right: the redesign, carbon on porcelain. Drag to compare.</p></div>
     </div>
     <div class="contrast" id="contrastBox" aria-label="Before and after contrast comparison">
       <div class="cside c-old">
-        <span class="badge-r">Before / 2.85:1 &middot; Fails AA</span>
+        <span class="badge-r">Before / 2.85:1 / Fails AA</span>
         <div><div class="ct">Find your<br>scent.</div><p>Native Australian essential oils, sourced from botanical ingredients in Byron Bay.</p></div>
       </div>
       <div class="cside c-new">
-        <span class="badge-r">After / Carbon on Porcelain &middot; AAA</span>
+        <span class="badge-r">After / Carbon on porcelain / AAA</span>
         <div><div class="ct">Find your<br>scent.</div><p style="margin-left:auto">Native Australian essential oils, sourced from botanical ingredients in Byron Bay.</p></div>
       </div>
-      <div class="c-handle"><span>&#8249;&#8250;</span></div>
+      <div class="c-handle"><span>&harr;</span></div>
     </div>
   </section>
 
-  <!-- PROCESS -->
+  <!-- 06 PROCESS -->
   <section class="c-sec dark" id="process">
     <div class="c-proc">
       <div class="c-proc-side">
-        <span class="c-label">Process</span>
-        <h2 class="c-title" data-split>How I <em>got there.</em></h2>
+        <span class="c-label">07 / Process</span>
+        <h2 class="c-title" data-split>Six <em>steps.</em></h2>
         <div class="c-proc-rail"><i></i></div>
         <span class="c-proc-big">01</span>
       </div>
       <ol class="c-steps">
-        <li class="c-step"><span class="n">01</span><div><h3>UX Audit / Visual Forensics</h3><p>Analysed 4 Australian essential oil sites across 7 elements: typography, grid, visual hierarchy, colour, WCAG, dark patterns, responsive breaks. Verified contrast ratios in DevTools.</p></div></li>
-        <li class="c-step"><span class="n">02</span><div><h3>Nielsen&rsquo;s Heuristics + Cognitive Walkthrough</h3><p>Applied 6 heuristics across all 4 sites. Ran a think-aloud cognitive walkthrough: &ldquo;Find a food grade pepper oil, check sizes, add to cart.&rdquo; 5 key friction moments recorded.</p></div></li>
-        <li class="c-step"><span class="n">03</span><div><h3>Moodboard + Art Direction</h3><p>Developed 3 art directions: Botanical (chosen), Brutalist (rejected), Swiss Grid (rejected). Palette extracted from Byron Bay&rsquo;s volcanic hinterland. Colour does navigation work: Uplift, Calm, Restore, Ground.</p></div></li>
-        <li class="c-step"><span class="n">04</span><div><h3>Wireframes / Dual Path IA</h3><p>Designed two purchase paths: Browse (feeling-first) and Search (keyword). 5 layout directions sketched before committing. Full flow: Hero &rarr; Product List &rarr; Filter &rarr; Product Detail &rarr; Cart &rarr; Checkout.</p></div></li>
-        <li class="c-step"><span class="n">05</span><div><h3>Hi-Fi Prototype / Mobile + Desktop</h3><p>Fully interactive Figma prototypes at 390&times;844 (mobile) and 1440&times;1024 (desktop). Complete purchase flow with system feedback, feeling-category navigation, WCAG AA typography.</p></div></li>
-        <li class="c-step"><span class="n">06</span><div><h3>Usability Testing + Iteration</h3><p>Think-aloud with a UX Designer (3+ years). 3 tasks completed. 1 friction found: Food Grade filter buried. Iterated: promoted to standalone chip. Design validated.</p></div></li>
+        <li class="c-step"><span class="n">01</span><div><h3>UX audit / visual forensics</h3><p>Analysed 4 Australian essential oil sites across 7 elements: typography, grid, visual hierarchy, colour, WCAG, dark patterns, responsive breaks. Verified contrast ratios in DevTools.</p></div></li>
+        <li class="c-step"><span class="n">02</span><div><h3>Heuristics + cognitive walkthrough</h3><p>Applied 6 of Nielsen&rsquo;s heuristics across all 4 sites. Ran a think-aloud walkthrough: &ldquo;Find a food grade pepper oil, check sizes, add to cart.&rdquo; 5 friction moments recorded.</p></div></li>
+        <li class="c-step"><span class="n">03</span><div><h3>Moodboard + art direction</h3><p>Three directions: Botanical (chosen), Brutalist, Swiss Grid. Palette taken from Byron Bay&rsquo;s volcanic hinterland. Colour carries the navigation: Uplift, Calm, Restore, Ground.</p></div></li>
+        <li class="c-step"><span class="n">04</span><div><h3>Wireframes / dual-path IA</h3><p>Two purchase paths: Browse (by feeling) and Search (by keyword). Five layouts sketched before committing. Hero &rarr; Product list &rarr; Filter &rarr; Product &rarr; Cart &rarr; Checkout.</p></div></li>
+        <li class="c-step"><span class="n">05</span><div><h3>Hi-fi prototype</h3><p>Interactive Figma prototypes at 390&times;844 and 1440&times;1024. Full purchase flow with system feedback, feeling navigation, WCAG AA type.</p></div></li>
+        <li class="c-step"><span class="n">06</span><div><h3>Usability testing + iteration</h3><p>Think-aloud with a UX designer (3+ years). 3 of 3 tasks completed. 1 friction found: the food grade filter was buried. Promoted it to its own chip.</p></div></li>
       </ol>
     </div>
   </section>
 
-  <!-- PROTOTYPE -->
+  <!-- 07 PROTOTYPE -->
   <section class="c-sec" id="prototype">
-    <span class="c-label">Prototype</span>
-    <h2 class="c-title" data-split>See it <em>in action.</em></h2>
-    <div class="device-wrap">
-      <div class="device">
-        <iframe title="Essentially Australia Figma prototype" loading="lazy" src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456" allowfullscreen></iframe>
-      </div>
+    <span class="c-label">08 / Prototype</span>
+    <h2 class="c-title" data-split>Mobile + <em>desktop.</em></h2>
+    <div class="device c-frame">
+      <iframe title="Essentially Australia Figma prototype" loading="lazy" src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456" allowfullscreen></iframe>
     </div>
     <div class="c-cta">
-      <a class="pill solid" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank" rel="noopener">Mobile prototype &#8599;</a>
-      <a class="pill" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">Desktop prototype &#8599;</a>
+      <a class="pill solid" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank" rel="noopener">Mobile prototype &#8599;</a>
+      <a class="pill" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">Desktop prototype &#8599;</a>
     </div>
   </section>
 
-  <!-- OUTCOMES -->
+  <!-- 08 OUTCOMES -->
   <section class="c-sec dark" id="outcomes">
-    <span class="c-label">Outcomes</span>
+    <span class="c-label">09 / Outcomes</span>
     <h2 class="c-title" data-split>What <em>changed.</em></h2>
     <ul class="c-out">
-      <li><span class="ol">Purchase Path</span><span class="ov">8 steps &rarr; 4 steps</span></li>
-      <li><span class="ol">WCAG Compliance</span><span class="ov">Fail &rarr; AA Verified</span></li>
-      <li><span class="ol">Usability Testing</span><span class="ov">3/3 Tasks Completed</span></li>
-      <li><span class="ol">Friction Points</span><span class="ov">1 Found + Resolved</span></li>
-      <li><span class="ol">Feeling-First IA</span><span class="ov">Validated by Expert</span></li>
-      <li><span class="ol">GenAI Feature</span><span class="ov">Scent Memory Proposed</span></li>
+      <li><span class="ol">Purchase path</span><span class="ov">8 steps &rarr; 4 steps</span></li>
+      <li><span class="ol">WCAG compliance</span><span class="ov">Fail &rarr; AA verified</span></li>
+      <li><span class="ol">Usability testing</span><span class="ov">3 / 3 tasks completed</span></li>
+      <li><span class="ol">Friction points</span><span class="ov">1 found, resolved</span></li>
+      <li><span class="ol">Feeling-first IA</span><span class="ov">Validated by expert</span></li>
+      <li><span class="ol">Scent Memory</span><span class="ov">GenAI feature proposed</span></li>
     </ul>
-    <p class="quote" style="color:var(--sage);max-width:22ch" data-split>&ldquo;Emotion-first IA proved more effective than initially anticipated.&rdquo;</p>
-    <p class="quote" style="margin-top:0"><small style="color:var(--porcelain)">Critical Analysis / Reflection</small></p>
-    <div class="c-cta">
-      <a class="pill" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank" rel="noopener">View prototype &#8599;</a>
-    </div>
+    <blockquote class="c-quote" data-reveal><p>&ldquo;Emotion-first IA proved more effective than initially anticipated.&rdquo;</p><cite>Reflection</cite></blockquote>
   </section>
 
   <a class="next" href="casepop.html">
-    <span class="next-label mono"><span>Next project / 02</span><span>E-Commerce / 2024</span></span>
+    <span class="next-label mono"><span>Next / 02</span><span>E-commerce / 2024</span></span>
     <span class="next-title">Casepop AU &rarr;</span>
     <div class="next-bar"></div>
   </a>

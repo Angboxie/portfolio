@@ -53,7 +53,8 @@
   /* wall cards */
   $$('.wcard').forEach((card) => {
     const cv = document.createElement('canvas'); card.prepend(cv);
-    paintCanvas(cv, +card.dataset.art, Math.round(card.clientWidth * 1.5) || 800, Math.round(card.clientHeight * 1.5) || 1000);
+    const w = Math.round(card.clientWidth * 1.5) || 600;
+    paintCanvas(cv, +card.dataset.art, w, w * 2);
   });
 
   /* swatches */
@@ -66,19 +67,6 @@
     b.addEventListener('click', () => { $$('.swap').forEach((x) => x.setAttribute('aria-pressed', x === b)); swapTo(i); });
     row.appendChild(b);
   });
-
-  /* stickers drift with the mouse */
-  const stickers = $$('.sticker');
-  if (AX.fine && !AX.reduce) {
-    gsap.ticker.add(() => stickers.forEach((s) => {
-      const d = +s.dataset.depth;
-      gsap.set(s, { x: AX.mouse.nx * d, y: -AX.mouse.ny * d });
-    }));
-  }
-  if (!AX.reduce) {
-    gsap.from('.sticker', { scale: 0, rotate: -30, duration: 1.2, ease: 'back.out(2)', stagger: 0.12, delay: 1 });
-    gsap.from('.disc', { scale: 0, duration: 1.6, ease: 'expo.out', delay: 0.4 });
-  }
 
   /* ---------- 3D phone case ---------- */
   async function initCase() {

@@ -6,17 +6,6 @@
 }
 .goo-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-/* ---------- liquid cursor trail ---------- */
-.goo-cursor { display: none; }
-@media (hover: hover) and (pointer: fine) {
-  html.has-cursor .cursor { display: none; }
-  .goo-cursor {
-    display: block; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
-    filter: url(#goo-c); mix-blend-mode: difference;
-  }
-  .goo-cursor i { position: absolute; left: 0; top: 0; border-radius: 50%; background: #fff; will-change: transform; }
-}
-
 /* ---------- page transition: liquid flood ---------- */
 .curtain { display: block; }
 .curtain .cl {
@@ -89,5 +78,5 @@ html[data-tr="shutter"] .curtain .sh { display: flex; flex-direction: column; }
 @keyframes sh-in { to { transform: scaleY(1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .goo-cursor, .drips, .splat { display: none !important; }
+  .drips, .splat { display: none !important; }
 }

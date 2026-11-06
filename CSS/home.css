@@ -352,3 +352,112 @@ html.bitten .hero-cap { color: var(--mood); }
 .wounds .crack { fill: none; stroke: rgba(236,235,230,.4); stroke-width: 1; stroke-linejoin: bevel; }
 .wounds .bruise { fill: var(--mood); opacity: .09; }
 html.bitten .chewed { display: inline-block; transform-origin: 50% 60%; }
+
+/* ==========================================================================
+   v6 / the story. Singularity → origin → hunger → the gulp → inside →
+   absorbed → the host → released. Plus the phone layout.
+   ========================================================================== */
+.story-l { color: var(--mood); margin-top: 2.6vh; max-width: 52ch; line-height: 1.6; transition: color 1s; }
+.contact .story-l { margin-top: 3vh; }
+
+/* the gulp: one line, centred, waiting to be eaten */
+.gulp { position: relative; }
+.gulp-pin { height: 100vh; height: 100svh; display: grid; place-items: center; padding: 0 var(--gutter); position: relative; }
+.gulp-a { display: grid; justify-items: center; gap: 2.4vh; text-align: center; }
+.gulp-n, .gulp-k { color: var(--fg); }
+.gulp-t {
+  font-family: var(--f-head); font-weight: 900; text-transform: uppercase; font-variation-settings: 'opsz' 72;
+  font-size: clamp(56px, 9vw, 170px); line-height: .84; max-width: 9ch;
+}
+.gulp-t em { display: block; font-family: var(--f-accent); font-weight: 400; font-style: normal; color: var(--mood); font-size: 1.15em; letter-spacing: -.03em; line-height: 1; }
+
+/* cinematic captions that sit above the liquid */
+#story {
+  position: fixed; inset: 0; z-index: 5; pointer-events: none; display: grid; place-content: center; justify-items: center;
+  gap: 2vh; text-align: center; padding: 0 var(--gutter); opacity: 0;
+}
+#story .st-t { font-family: var(--f-head); font-weight: 900; text-transform: uppercase; font-size: clamp(48px, 8vw, 150px); line-height: .86; color: var(--fg); max-width: 10ch; }
+#story .st-s { color: var(--mood); }
+
+/* singularity shockwave */
+#shock { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+#shock i {
+  position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; opacity: 0;
+}
+#shock i:nth-child(1) {
+  -webkit-backdrop-filter: invert(1) blur(1px); backdrop-filter: invert(1) blur(1px);
+  -webkit-mask: radial-gradient(circle, transparent 58%, #000 62%, #000 70%, transparent 74%);
+  mask: radial-gradient(circle, transparent 58%, #000 62%, #000 70%, transparent 74%);
+}
+#shock i:nth-child(2) { box-shadow: 0 0 0 2px var(--mood), 0 0 40px 6px var(--mood), inset 0 0 40px 2px var(--mood); }
+html.hero-free .hn { overflow: visible; }
+
+/* the serpent leaves a bite in every course it eats */
+.diet-list li.fed .dl-t { color: var(--mood); transition: color .6s; }
+
+/* ---------- phone ---------- */
+@supports (padding: env(safe-area-inset-top)) {
+  .nav { padding-top: max(22px, env(safe-area-inset-top)); }
+}
+@media (max-width: 760px) {
+  .panel { min-height: 100svh; }
+  .hero { padding-top: 84px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .hero-name { font-size: 44vw; }
+  .hn-1 { top: 11svh; } .hn-2 { bottom: 15svh; }
+  html.bitten .hn-2 { font-size: .46em; }
+  .hero-cap { top: 62%; }
+  .origin-pin { min-height: 100svh; padding: 10vh var(--gutter); }
+  .origin-text { font-size: 12.5vw; }
+  .h2 { font-size: 17vw; }
+  .h2 em { font-size: .66em; }
+  .dl-t { font-size: 9.5vw; }
+  .diet-list li { padding: 2vh 0; }
+  .gulp-t { font-size: 18vw; }
+  #story .st-t { font-size: 17vw; }
+  .contact-title { font-size: 21vw; }
+  .contact-title em { font-size: .54em; }
+  .ct-mail { font-size: 9.6vw; }
+  .ct-links { gap: 1.4rem 2rem; }
+  .contact .foot-row { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .about-copy .h2 { margin-bottom: 0; }
+  .about-bio { margin-top: 3vh; }
+  .about-stats { gap: 6vw; }
+  .about-cta .pill { padding: 14px 20px; }
+  .wt { margin-bottom: 9vh; }
+  .menu { padding-top: 96px; }
+}
+
+/* the singularity stretches letters far past the edge; keep them from widening the page */
+.hero { overflow-x: clip; overflow-y: visible; }
+
+/* ==========================================================================
+   v7 / Specimen File. The site is the field record of one living interface.
+   Text logs state (status, form, count) and never explains what you can see.
+   ========================================================================== */
+.nav-status { display: inline-flex; align-items: center; gap: .55rem; }
+.nav-status i { width: 7px; height: 7px; background: currentColor; animation: st-pulse 1.6s steps(2, jump-none) infinite; }
+.nav-status b { font-weight: 400; min-width: 9ch; }
+@keyframes st-pulse { 50% { opacity: .15; } }
+
+.origin-foot { display: flex; gap: 3.2rem; margin-top: 6vh; }
+.origin-foot dt { color: var(--fg); opacity: .5; margin-bottom: .5rem; }
+.origin-foot dd { color: var(--mood); font-weight: 700; font-size: 13px; transition: color 1s; }
+
+/* the host, now — and its early form pinned to the file */
+.ap-inner img { object-position: 56% 50%; }
+.ap-then {
+  position: absolute; z-index: 3; right: -7%; bottom: 13%; width: 36%;
+  padding: 6px 6px 0; background: var(--fg); rotate: 4deg;
+  box-shadow: 0 24px 50px -12px rgba(0,0,0,.8);
+}
+.ap-then img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.15); transition: filter .8s var(--ease-out); }
+.ap-then span { display: block; color: #050505; padding: 6px 2px 7px; font-size: 10px; }
+.about-photo:hover .ap-then img { filter: none; }
+@media (max-width: 760px) {
+  .ap-then { right: -2%; width: 40%; bottom: 10%; }
+  .nav-status b { min-width: 0; }
+}
+
+/* project covers are real screenshots of the work */
+.cover-shot { background: #111; }
+.cover-shot img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; }

@@ -1,4 +1,4 @@
-/* Tactibrawl — CRT hero, scroll score, swinging gallery, isometric placement demo, quest log */
+/* Tactibrawl: hero art, pixel symbiote, swinging gallery, isometric placement demo */
 (() => {
   const { gsap, ScrollTrigger, AX } = window;
   const $ = (s, c = document) => c.querySelector(s);
@@ -6,27 +6,13 @@
   const mm = gsap.matchMedia();
   const pad = (n, l = 2) => String(n).padStart(l, '0');
 
-  /* ---------- hero: parallax background, glitch title, intro ---------- */
+  /* ---------- hero: the background art drifts with the cursor ---------- */
   const bg = $('.hero-bg');
   if (!AX.reduce) {
     gsap.ticker.add(() => gsap.set(bg, { x: -AX.mouse.nx * 24, y: AX.mouse.ny * 16 }));
-    gsap.fromTo(bg, { scale: 1.25, filter: 'brightness(0) contrast(2)' }, { scale: 1, filter: 'brightness(1) contrast(1)', duration: 2.2, ease: 'steps(12)', delay: 0.3 });
+    gsap.fromTo(bg, { scale: 1.15, opacity: 0 }, { scale: 1, opacity: 1, duration: 2, ease: 'expo.out', delay: 0.2 });
     gsap.to('.hero-bg img', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.from('#title', { opacity: 0, scale: 1.6, duration: 0.9, ease: 'steps(6)', delay: 0.5 });
-    gsap.from('.hud', { y: -30, opacity: 0, duration: 0.8, ease: 'steps(5)', delay: 0.9 });
   }
-  const title = $('#title');
-  const glitch = () => {
-    title.classList.add('on');
-    setTimeout(() => title.classList.remove('on'), 90 + Math.random() * 120);
-  };
-  if (!AX.reduce) {
-    (function loop() { setTimeout(() => { glitch(); setTimeout(glitch, 140); loop(); }, 1800 + Math.random() * 2600); })();
-    title.addEventListener('pointerenter', glitch);
-  }
-  addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && scrollY < innerHeight * 0.5 && document.activeElement === document.body) AX.scrollTo('#overview');
-  });
 
   /* ---------- a pixel symbiote lurking in the forest ---------- */
   if (AX.liquid) {
@@ -40,13 +26,6 @@
       if (!AX.reduce) gsap.from(sym.group.scale, { x: 0.01, y: 0.01, z: 0.01, duration: 1.6, ease: 'elastic.out(1, .5)', delay: 1 });
     }).catch((e) => console.warn('pixel symbiote disabled:', e));
   }
-
-  /* ---------- score climbs as you scroll; stage follows the section ---------- */
-  const score = $('#score'), stage = $('#stage');
-  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (s) => { score.textContent = pad(Math.round(s.progress * 999999), 6); } });
-  ['#overview', '#screens', '#arena', '#roster', '#outcomes'].forEach((id, i) => {
-    ScrollTrigger.create({ trigger: id, start: 'top 50%', onEnter: () => { stage.textContent = '1-' + (i + 2); }, onLeaveBack: () => { stage.textContent = '1-' + (i + 1); } });
-  });
 
   /* ---------- screens: pinned horizontal gallery ---------- */
   const track = $('.gal-track');
@@ -115,15 +94,15 @@
 
   let selected = 'tank';
   const placed = {};
-  const say = (t) => { msg.textContent = '> ' + t; gsap.fromTo(msg, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'steps(4)' }); };
+  const say = (t) => { msg.textContent = t; gsap.fromTo(msg, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'steps(4)' }); };
   picks.forEach((p) => p.addEventListener('click', () => {
     selected = p.dataset.unit;
     picks.forEach((x) => x.setAttribute('aria-pressed', x === p));
-    say(`${selected.toUpperCase()} ready.`);
+    say(`${selected} ready.`);
   }));
   const place = (t) => {
     if (!t.classList.contains('grass')) {
-      if (t.classList.contains('enemy')) say('That is enemy territory!');
+      if (t.classList.contains('enemy')) say('Enemy territory.');
       return;
     }
     if (t.querySelector('.unit')) { say('Tile occupied.'); return; }
@@ -137,9 +116,9 @@
     if (left.length) {
       selected = left[0];
       picks.forEach((x) => x.setAttribute('aria-pressed', x.dataset.unit === selected));
-      say(`Placed! Next: ${selected.toUpperCase()}.`);
+      say(`Placed. Next: ${selected}.`);
     } else {
-      say('READY! All heroes deployed. FIGHT!');
+      say('All heroes deployed. Fight.');
       if (!AX.reduce) {
         gsap.fromTo(iso, { rotation: -45 }, { rotation: 315, duration: 1.6, ease: 'expo.inOut', onComplete: () => gsap.set(iso, { rotation: -45 }) });
         tiles.filter((x) => x.classList.contains('grass')).forEach((x, i) => gsap.fromTo(x, { background: '#c89b18' }, { background: '', duration: 0.6, delay: i * 0.02, ease: 'steps(3)', clearProps: 'background' }));
@@ -178,16 +157,4 @@
     });
   }
 
-  /* ---------- quest log ticks itself off ---------- */
-  const qs = $$('#quest li');
-  ScrollTrigger.create({
-    trigger: '#quest', start: 'top 70%', once: true,
-    onEnter: () => {
-      qs.forEach((li, i) => setTimeout(() => {
-        li.classList.add('done'); li.querySelector('.qbox').textContent = '✓';
-        if (!AX.reduce) gsap.fromTo(li, { x: 14 }, { x: 0, duration: 0.3, ease: 'steps(3)' });
-        if (i === qs.length - 1) setTimeout(() => $('#qDone').classList.add('on'), 300);
-      }, AX.reduce ? 0 : 350 * (i + 1)));
-    },
-  });
 })();

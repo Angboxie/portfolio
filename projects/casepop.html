@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
   <title>Casepop AU / Angbo Xie</title>
   <meta name="description" content="Casepop AU: an Australian phone case brand built for local artists. Co-founded and front-end built by Angbo Xie."/>
@@ -10,7 +10,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4ff00'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='28' text-anchor='middle' fill='%2309090b'%3EAX%3C/text%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Dela+Gothic+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../CSS/base.css"/>
   <link rel="stylesheet" href="../CSS/infect.css"/>
   <link rel="stylesheet" href="../CSS/case.css"/>
@@ -22,84 +22,40 @@
   </script>
   <style>
     :root {
-      --black: #0d0d0d; --white: #f5f5f0; --off: #e8e8e3; --pink: #ff4d8d;
-      --bg: var(--white); --fg: var(--black);
-      --accent: #ff4d8d; --accent-ink: #0d0d0d; --curtain: #ff4d8d;
-      --dark: #0d0d0d; --dark-fg: #f5f5f0; --alt: #e8e8e3;
-      --f-head: 'Archivo', system-ui, sans-serif; --head-weight: 900;
-      --line: rgba(13,13,13,.12);
+      --bg: #f5f5f0; --fg: #0d0d0d; --alt: #e8e8e3;
+      --accent: #e8306f; --accent-ink: #f5f5f0; --curtain: #ff4d8d;
+      --dark: #0d0d0d; --dark-fg: #f5f5f0; --dark-accent: #ff4d8d;
+      --line: rgba(13,13,13,.14);
     }
-    .c-title, .c-step h3, .c-out .ol, .flip-t { text-transform: uppercase; font-stretch: 112%; letter-spacing: -.045em; }
-    .c-title em { font-style: normal; }
+    .menu { --accent: #ff4d8d; --accent-ink: #0d0d0d; }
 
-    /* hero */
+    /* hero: copy on the left, the product on a flat block of brand pink */
     .hero {
       position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
-      padding: 100px var(--gutter) 32px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr auto; gap: 2vh 2vw;
+      padding: 100px var(--gutter) 32px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr auto; gap: 3vh 4vw;
     }
     .hero-copy { align-self: center; position: relative; z-index: 2; }
-    .kicker { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; display: block; margin-bottom: 2rem; }
-    .hero h1 { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(76px, 12.5vw, 240px); line-height: .8; letter-spacing: -.06em; }
-    .hero h1 .pk { color: var(--pink); }
-    .hero h1 .ol { color: transparent; -webkit-text-stroke: 2px var(--black); }
-    .hero-sub { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.45; max-width: 34ch; margin-top: 3vh; opacity: .8; }
-    .stage { position: relative; min-height: 60vh; }
-    .disc { position: absolute; left: 50%; top: 46%; width: min(36vw, 62vh); aspect-ratio: 1; border-radius: 50%; background: var(--pink); transform: translate(-50%, -50%); }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #case { position: absolute; inset: -8vh -4vw 0; width: calc(100% + 8vw); height: calc(100% + 8vh); touch-action: pan-y; }
-    .sticker {
-      position: absolute; z-index: 3; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
-      background: var(--black); color: var(--white); padding: .65rem 1rem; border-radius: 100px; pointer-events: none; white-space: nowrap;
-    }
-    .sticker.s1 { left: 2%; top: 12%; transform: rotate(-8deg); }
-    .sticker.s2 { right: 4%; top: 30%; transform: rotate(7deg); background: #ffd23f; color: var(--black); }
-    .sticker.s3 { left: 8%; bottom: 22%; transform: rotate(4deg); background: var(--white); color: var(--black); border: 1px solid var(--black); }
-    .swaps { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: .8rem; }
-    .swaps p { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
-    .swap-row { display: flex; gap: .6rem; }
-    .swap { width: 46px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; transition: transform .45s var(--ease-out), border-color .3s; box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+    .stage { position: relative; min-height: 60vh; background: #ff4d8d; }
+    #case { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
+    .swaps { position: absolute; left: 0; right: 0; bottom: 18px; z-index: 3; display: flex; justify-content: center; }
+    .swap-row { display: flex; gap: .5rem; }
+    .swap { width: 40px; height: 56px; overflow: hidden; border: 1px solid rgba(13,13,13,.3); transition: border-color .3s; }
     .swap canvas { width: 100%; height: 100%; display: block; }
-    .swap:hover { transform: translateY(-6px) rotate(-4deg); }
-    .swap[aria-pressed="true"] { border-color: var(--black); transform: translateY(-6px); }
+    .swap[aria-pressed="true"] { border: 2px solid #0d0d0d; }
     .hero .c-meta { grid-column: 1 / -1; }
 
-    /* ticker */
-    .ticker { background: var(--black); color: var(--white); padding: 1.1rem 0; width: 104%; margin-left: -2%; }
-    .ticker .marquee-track span { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(22px, 2.6vw, 40px); letter-spacing: -.03em; padding: 0 1.2rem; }
-    .ticker .marquee-track .star { color: var(--pink); }
-    .ticker-wrap { overflow: hidden; padding: 2vh 0; }
-    .ticker.t2 { background: var(--pink); color: var(--black); margin-top: -1.2rem; rotate: -2deg; }
-    .ticker.t2 .star { color: var(--white); }
-    .ticker.t1 { rotate: 1.5deg; position: relative; z-index: 2; }
-
-    /* art wall */
-    .wall { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; margin-top: 8vh; perspective: 1400px; }
-    .wcard { position: relative; border-radius: 22px; overflow: hidden; min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; color: var(--white); isolation: isolate; }
-    .wcard canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; transition: transform 1.2s var(--ease-out); }
-    .wcard:hover canvas { transform: scale(1.08) rotate(1deg); }
-    .wcard::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(0,0,0,.65), transparent 55%); }
-    .wcard .wt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-bottom: .6rem; }
-    .wcard .wl { font-weight: 900; font-stretch: 120%; text-transform: uppercase; font-size: clamp(28px, 3vw, 52px); line-height: .9; letter-spacing: -.04em; }
-
-    .c-stat .num { font-stretch: 125%; font-weight: 900; }
-    .dark .c-out .ol { color: var(--white); }
-    .dark .c-out li:hover .ol { color: var(--pink); }
-    .dark .pill { --fg: #f5f5f0; }
-    .next .next-title { font-weight: 900; }
-    .next:hover .next-title { color: #c89b18; }
-    .next-bar::after { background: #c89b18; }
+    .shot-xl { margin-top: 10vh; }
+    .shot-xl img { display: block; width: 100%; height: auto; }
+    .shot-cap { display: flex; justify-content: space-between; gap: 2rem; margin-top: 1rem; }
 
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; padding-top: 90px; }
       .stage { min-height: 62vh; order: -1; }
-      .disc { width: 70vw; }
-      .wall { grid-template-columns: 1fr; }
-      .wcard { min-height: 46vh; }
-      .sticker.s2 { right: 0; }
+      .shot-cap { flex-direction: column; gap: .4rem; }
     }
   </style>
 </head>
-<body>
+<body data-no-drips>
 
 <svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
   <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
@@ -136,114 +92,82 @@
 <main>
   <section class="hero" id="top">
     <div class="hero-copy">
-      <span class="kicker" data-reveal data-delay=".5">Case Study 02 / E-Commerce / 2024</span>
-      <h1 data-split data-delay=".55" data-stagger=".09">Case<span class="pk">pop</span><br><span class="ol">AU.</span></h1>
-      <p class="hero-sub" data-reveal data-delay=".9">An Australian phone case brand that puts independent local artists front and centre. Art in your pocket.</p>
+      <span class="kicker" data-reveal data-delay=".5">Case study 02 / E-commerce / 2024</span>
+      <h1 data-split data-delay=".55" data-stagger=".09">Casepop <em>AU.</em></h1>
+      <p class="hero-sub" data-reveal data-delay=".9">An Australian phone case brand built around independent local artists. I co-founded it and built the front end.</p>
     </div>
     <div class="stage">
-      <div class="disc" aria-hidden="true"></div>
-      <span class="sticker s1" data-depth="18">Not your basic case</span>
-      <span class="sticker s2" data-depth="-24">&#11088; Designed &amp; printed in AU</span>
-      <span class="sticker s3" data-depth="12">Crafted by local artists</span>
       <canvas id="case" role="img" aria-label="Interactive 3D phone case showing artist designs."></canvas>
       <div class="swaps" data-reveal data-delay="1.1">
         <div class="swap-row" role="group" aria-label="Case designs"></div>
       </div>
     </div>
     <dl class="c-meta" data-reveal data-delay="1.2">
-      <div><dt>Role</dt><dd>Co-Founder + Front End</dd></div>
-      <div><dt>Stack</dt><dd>Shopify + Custom Code</dd></div>
-      <div><dt>Status</dt><dd>Live / Ongoing</dd></div>
-      <div><dt>Community</dt><dd>1,500+ Followers</dd></div>
+      <div><dt>Role</dt><dd>Co-founder + front end</dd></div>
+      <div><dt>Stack</dt><dd>Shopify + custom code</dd></div>
+      <div><dt>Status</dt><dd>Live / ongoing</dd></div>
+      <div><dt>Community</dt><dd>1,500+ followers</dd></div>
     </dl>
   </section>
-
-  <div class="ticker-wrap" aria-hidden="true">
-    <div class="marquee ticker t1" data-speed="1.6" data-skew>
-      <div class="marquee-track">
-        <span>Crafted by local artists</span><span class="star">&#10022;</span>
-        <span>Designed &amp; printed in Australia</span><span class="star">&#10022;</span>
-        <span>Not your basic case</span><span class="star">&#10022;</span>
-        <span>1.5K+ community</span><span class="star">&#10022;</span>
-        <span>Real sales. Real people.</span><span class="star">&#10022;</span>
-      </div>
-    </div>
-    <div class="marquee ticker t2" data-speed="1.2" data-dir="right" data-skew>
-      <div class="marquee-track">
-        <span>Art in your pocket</span><span class="star">&#10022;</span>
-        <span>Shopify + custom code</span><span class="star">&#10022;</span>
-        <span>Zero paid ads</span><span class="star">&#10022;</span>
-      </div>
-    </div>
-  </div>
 
   <section class="c-sec" id="overview">
     <div class="c-two">
       <div>
-        <span class="c-label">Overview</span>
+        <span class="c-label">01 / Overview</span>
         <h2 class="c-title" data-split>Art in your <em>pocket.</em></h2>
         <div class="c-tags" data-reveal>
-          <span>Shopify</span><span>Liquid</span><span>HTML/CSS/JS</span><span>Brand Design</span><span>UGC Strategy</span><span>E-Commerce</span>
+          <span>Shopify</span><span>Liquid</span><span>HTML / CSS / JS</span><span>Brand design</span><span>UGC strategy</span><span>E-commerce</span>
         </div>
       </div>
       <div class="c-body">
-        <p data-reveal>The phone case market is flooded with corporate mass-production. We saw something different, where local Australian artists making incredible work with no platform built for them at scale. So we built one.</p>
-        <p data-reveal>Casepop AU puts independent creators front and centre. Every design ships from an Australian artist. We handle the store and growth. They get the spotlight.</p>
-        <p data-reveal>I co-founded the brand and owned all front-end work: custom coding on top of Shopify to build exactly what the brand needed, not what a template offered.</p>
+        <p data-reveal>The phone case market is flooded with mass production. Local Australian artists were making great work with no platform built to sell it at scale. So we built one.</p>
+        <p data-reveal>Every design comes from an Australian artist. We run the store and the growth; the artist gets the credit.</p>
+        <p data-reveal>I owned all front-end work: custom code on top of Shopify, built for what the brand needed rather than what a template offered.</p>
       </div>
     </div>
-    <div class="wall">
-      <div class="wcard" data-tilt="6" data-art="0"><span class="wt">Homepage</span><span class="wl">Crafted by<br>local artists</span></div>
-      <div class="wcard" data-tilt="6" data-art="2"><span class="wt">Collections</span><span class="wl">New<br>drops</span></div>
-      <div class="wcard" data-tilt="6" data-art="3"><span class="wt">Community</span><span class="wl">Meet the<br>creators</span></div>
-    </div>
-  </section>
-
-  <section class="c-sec dark" id="numbers">
-    <span class="c-label">By the numbers</span>
-    <div class="c-stats" style="--cols:3">
-      <div class="c-stat"><span class="num" data-count="1.5" data-decimals="1" data-suffix="K+">1.5K+</span><span class="lab">Instagram followers, zero paid ads</span></div>
-      <div class="c-stat"><span class="num">Real</span><span class="lab">Revenue from real Australian customers</span></div>
-      <div class="c-stat"><span class="num">Local</span><span class="lab">Artists only. Every design independent</span></div>
+    <figure class="shot-xl c-frame" data-reveal><img src="../Assets/cp-home.jpg" alt="The live Casepop AU storefront: nav with Phone cases, Artists and Collections, a shipping banner, and customers holding artist-designed cases" loading="lazy" decoding="async"/></figure>
+    <p class="shot-cap mono"><span>casepopau.com / live storefront</span><span>Customer photos lead; artists and collections sit in the main nav</span></p>
+      <div class="c-stat"><span class="num">$0</span><span class="lab">Spent on paid ads</span></div>
+      <div class="c-stat"><span class="num">Live</span><span class="lab">casepopau.com, still selling</span></div>
     </div>
   </section>
 
   <section class="c-sec alt" id="process">
     <div class="c-proc">
       <div class="c-proc-side">
-        <span class="c-label">Process</span>
-        <h2 class="c-title" data-split>How we <em>did it.</em></h2>
+        <span class="c-label">03 / Process</span>
+        <h2 class="c-title" data-split>Five <em>steps.</em></h2>
         <div class="c-proc-rail"><i></i></div>
         <span class="c-proc-big">01</span>
       </div>
       <ol class="c-steps">
-        <li class="c-step"><span class="n">01</span><div><h3>Brand Identity from Scratch</h3><p>Name, logo, colour system, tone of voice, all built from zero. Needed to feel youthful and community-led without overshadowing the artist work it was built to promote.</p></div></li>
-        <li class="c-step"><span class="n">02</span><div><h3>Shopify + Custom Front End</h3><p>Shopify as the commerce engine, then custom Liquid, HTML, CSS and JS on top. Overrode the template everywhere it got in the way: product pages, collection layouts, artist feature sections, the nav.</p></div></li>
-        <li class="c-step"><span class="n">03</span><div><h3>Artist Onboarding</h3><p>Built a simple submission and onboarding process for local creators. Multiple artists onboarded, each with their own collection and full attribution on site.</p></div></li>
-        <li class="c-step"><span class="n">04</span><div><h3>UGC + Organic Social</h3><p>Grew to 1.5K+ through UGC: real customers, real photos, real community. Zero paid ads. Built artist and customer relationships that fed back into product drops.</p></div></li>
-        <li class="c-step"><span class="n">05</span><div><h3>Ongoing Iteration</h3><p>Monitored behaviour and iterated continuously: tightening product pages, streamlining checkout, making artist stories more prominent across the purchase flow.</p></div></li>
+        <li class="c-step"><span class="n">01</span><div><h3>Brand identity from scratch</h3><p>Name, logo, colour system and tone of voice, built from zero. Youthful and community-led, without overshadowing the artwork it exists to sell.</p></div></li>
+        <li class="c-step"><span class="n">02</span><div><h3>Shopify + custom front end</h3><p>Shopify as the commerce engine, with custom Liquid, HTML, CSS and JS on top. Overrode the template wherever it got in the way: product pages, collections, artist features, the nav.</p></div></li>
+        <li class="c-step"><span class="n">03</span><div><h3>Artist onboarding</h3><p>A simple submission and onboarding process for local creators. Each artist gets their own collection and full attribution on site.</p></div></li>
+        <li class="c-step"><span class="n">04</span><div><h3>UGC + organic social</h3><p>Grew to 1.5K+ through customer photos and community, with no paid ads. Artist and customer relationships fed back into product drops.</p></div></li>
+        <li class="c-step"><span class="n">05</span><div><h3>Ongoing iteration</h3><p>Watching behaviour and iterating: tighter product pages, a shorter checkout, artist stories surfaced across the purchase flow.</p></div></li>
       </ol>
     </div>
   </section>
 
   <section class="c-sec dark" id="outcomes">
-    <span class="c-label">Outcomes</span>
-    <h2 class="c-title" data-split>What we <em>achieved.</em></h2>
+    <span class="c-label">04 / Outcomes</span>
+    <h2 class="c-title" data-split>What we <em>built.</em></h2>
     <ul class="c-out">
-      <li><span class="ol">Instagram</span><span class="ov">1,500+ Organic</span></li>
-      <li><span class="ol">Revenue</span><span class="ov">Live Sales</span></li>
-      <li><span class="ol">Artists</span><span class="ov">Multiple Creators</span></li>
-      <li><span class="ol">UGC</span><span class="ov">Ongoing Community</span></li>
+      <li><span class="ol">Instagram</span><span class="ov">1,500+ organic</span></li>
+      <li><span class="ol">Revenue</span><span class="ov">Live sales</span></li>
+      <li><span class="ol">Artists</span><span class="ov">Multiple creators onboarded</span></li>
+      <li><span class="ol">Community</span><span class="ov">Ongoing UGC</span></li>
       <li><span class="ol">Status</span><span class="ov">Live at casepopau.com</span></li>
     </ul>
     <div class="c-cta">
-      <a class="pill solid" data-magnetic=".25" href="https://casepopau.com" target="_blank" rel="noopener">Visit Casepop AU &#8599;</a>
-      <a class="pill" data-magnetic=".25" href="https://www.instagram.com/casepopau/" target="_blank" rel="noopener">Instagram &#8599;</a>
+      <a class="pill solid" href="https://casepopau.com" target="_blank" rel="noopener">Visit Casepop AU &#8599;</a>
+      <a class="pill" href="https://www.instagram.com/casepopau/" target="_blank" rel="noopener">Instagram &#8599;</a>
     </div>
   </section>
 
   <a class="next" href="tactibrawl.html">
-    <span class="next-label mono"><span>Next project / 03</span><span>Game UI / 2024</span></span>
+    <span class="next-label mono"><span>Next / 03</span><span>Game UI / 2024</span></span>
     <span class="next-title">Tactibrawl &rarr;</span>
     <div class="next-bar"></div>
   </a>
