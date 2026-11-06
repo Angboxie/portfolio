@@ -2,427 +2,377 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Tactibrawl — Angbo Xie</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
+  <title>Tactibrawl / Angbo Xie</title>
+  <meta name="description" content="Tactibrawl: a pixel-art tactical brawler designed and prototyped in Figma. Game UI case study by Angbo Xie."/>
+  <meta name="theme-color" content="#0a0a0a"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4ff00'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='28' text-anchor='middle' fill='%2309090b'%3EAX%3C/text%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Archivo:wdth,wght@62..125,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../CSS/base.css"/>
+  <link rel="stylesheet" href="../CSS/infect.css"/>
+  <link rel="stylesheet" href="../CSS/case.css"/>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black: #0a0a0a;
-      --off:   #e8e4d0;
-      --dim:   #111111;
-      --mid:   #181818;
-      --gold:  #c89b18;
-      --teal:  #2aa8b8;
-      --red:   #c83232;
-      --mono:  'IBM Plex Mono', monospace;
+      --black: #0a0a0a; --off: #e8e4d0; --dim: #111; --mid: #181818;
+      --gold: #c89b18; --teal: #2aa8b8; --red: #c83232; --purple: #c084fc;
+      --bg: var(--black); --fg: var(--off);
+      --accent: #c89b18; --accent-ink: #0a0a0a; --curtain: #c89b18;
+      --dark: #111; --dark-fg: #e8e4d0; --alt: #181818;
       --pixel: 'Press Start 2P', monospace;
-      --disp:  'Bebas Neue', sans-serif;
+      --f-head: 'Press Start 2P', monospace; --f-display: 'Archivo', system-ui, sans-serif;
+      --line: rgba(200,155,24,.16);
     }
+    body { background-image: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.18) 2px 4px); }
+    .c-title { font-size: clamp(22px, 3.6vw, 56px); line-height: 1.35; letter-spacing: 0; text-shadow: 4px 4px 0 rgba(0,0,0,.8); }
+    .c-title em { font-style: normal; }
+    .c-label { font-family: var(--pixel); font-size: 9px; color: var(--gold); opacity: .8; }
+    .c-label::before { width: 10px; height: 10px; background: var(--gold); }
+    .c-step h3 { font-size: clamp(11px, 1vw, 14px); line-height: 1.8; letter-spacing: 0; }
+    .c-step .n { font-family: var(--pixel); color: var(--gold); font-size: 11px; }
+    .c-proc-big { font-size: clamp(64px, 9vw, 150px); line-height: 1; text-shadow: 8px 8px 0 #000; }
+    .c-proc-rail { height: 8px; background: #222; border: 2px solid var(--gold); }
+    .c-stat .num { font-size: clamp(30px, 4.4vw, 68px); text-shadow: 5px 5px 0 #000; }
+    .c-tags span { border-radius: 0; border: 2px solid var(--line); font-family: var(--pixel); font-size: 8px; line-height: 1.6; }
+    .pill { border-radius: 0; font-family: var(--pixel); font-size: 9px; box-shadow: 5px 5px 0 #000; border-width: 2px; }
+    .pill::before { border-radius: 0; }
+    .pill:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 #000; }
+    .nav { font-family: var(--pixel); font-size: 9px; letter-spacing: 0; }
+    .px-box { border: 3px solid var(--gold); box-shadow: 6px 6px 0 #000, inset -3px -3px 0 rgba(0,0,0,.4); background: var(--dim); }
 
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--black);
-      color: var(--off);
-      font-family: var(--mono);
-      cursor: none;
-      overflow-x: hidden;
-      /* subtle scanline overlay for pixel feel */
-      background-image: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,.18) 2px,
-        rgba(0,0,0,.18) 4px
-      );
+    /* hero */
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 100px var(--gutter) 34px; border-bottom: 4px solid var(--gold); }
+    .hero-bg { position: absolute; inset: -5%; z-index: 0; }
+    .hero-bg img { position: absolute; left: 0; bottom: 0; width: 100%; height: 122%; object-fit: cover; object-position: 50% 100%; image-rendering: pixelated; }
+    .hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(120% 90% at 50% 30%, transparent 30%, rgba(0,0,0,.85) 100%), linear-gradient(to top, rgba(10,10,10,.95) 10%, transparent 60%); }
+    .hero::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.25) 2px 4px); animation: flick 4s steps(1) infinite; }
+    @keyframes flick { 0%, 96%, 100% { opacity: 1; } 97% { opacity: .6; } }
+    .hero > *:not(.hero-bg) { position: relative; z-index: 2; }
+    .hero > canvas.tb-sym { position: absolute; right: -4vw; top: 6vh; width: 62vw; height: 86vh; z-index: 2; pointer-events: none; }
+    @media (max-width: 900px) { .hero > canvas.tb-sym { right: -10vw; top: 10vh; width: 100vw; height: 55vh; } }
+    .hud { position: absolute !important; top: 92px; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; font-family: var(--pixel); font-size: 10px; line-height: 2; text-shadow: 2px 2px 0 #000; }
+    .hp { display: flex; gap: 3px; margin-top: 6px; }
+    .hp i { width: 14px; height: 10px; background: var(--red); box-shadow: inset -2px -2px 0 rgba(0,0,0,.35); }
+    .hp i.off { background: #333; }
+    .score b { color: var(--gold); font-weight: 400; }
+    .kicker { font-family: var(--pixel); font-size: 9px; color: var(--gold); line-height: 2; display: block; margin-bottom: 2rem; }
+    .hero h1 { font-family: var(--pixel); font-weight: 400; font-size: clamp(36px, 7.6vw, 130px); line-height: 1.1; letter-spacing: -.02em; }
+    .glitch { position: relative; display: inline-block; text-shadow: 6px 6px 0 #000; }
+    .glitch em { font-style: normal; color: var(--gold); }
+    .glitch::before, .glitch::after { content: attr(data-text); position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0; }
+    .glitch::before { color: #ff2d55; }
+    .glitch::after { color: #00e5ff; }
+    .glitch.on::before { opacity: .85; transform: translate(-6px, 0); clip-path: inset(10% 0 55% 0); }
+    .glitch.on::after { opacity: .85; transform: translate(6px, 0); clip-path: inset(60% 0 8% 0); }
+    .hero-sub { font-size: clamp(15px, 1.2vw, 18px); line-height: 1.7; max-width: 40ch; border-left: 4px solid var(--gold); padding-left: 1.2rem; margin: 2.5rem 0; opacity: .85; }
+    .start { display: inline-flex; align-items: center; gap: 1rem; font-family: var(--pixel); font-size: 12px; background: var(--gold); color: var(--black); padding: 1.1rem 1.5rem; box-shadow: 6px 6px 0 #000; border: 3px solid #a07810; width: max-content; margin-bottom: 3rem; transition: transform .1s, box-shadow .1s; }
+    .start:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 #000; }
+    .start .blink { animation: blink 1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .hero .c-meta { border-top: 3px solid var(--gold); }
+    .hero .c-meta dt { font-family: var(--pixel); font-size: 8px; color: var(--gold); opacity: 1; }
+
+    .ticker { background: var(--gold); color: var(--black); padding: .9rem 0; border-top: 3px solid #a07810; border-bottom: 3px solid #a07810; }
+    .ticker .marquee-track span { font-family: var(--pixel); font-size: 11px; padding: 0 1.5rem; }
+
+    /* screen gallery */
+    .gal-pin { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 100px 0 6vh; }
+    .gal-head { padding: 0 var(--gutter); margin-bottom: 5vh; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; }
+    .gal-track { display: flex; gap: 4vw; padding: 0 var(--gutter); width: max-content; }
+    .shot { --h: min(56vh, 38vw); flex-shrink: 0; width: calc(var(--h) * 1.55); transform-style: preserve-3d; }
+    .shot-frame { position: relative; height: var(--h); overflow: hidden; border: 4px solid var(--gold); box-shadow: 10px 10px 0 #000; background: #000; }
+    .shot-frame img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; transition: transform 1s var(--ease-out); }
+    .shot:hover .shot-frame img { transform: scale(1.06); }
+    .shot-frame::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.18) 2px 4px); pointer-events: none; }
+    .shot-cap { display: flex; justify-content: space-between; padding-top: 1.2rem; font-family: var(--pixel); font-size: 10px; line-height: 1.8; }
+    .shot-cap span:first-child { color: var(--gold); }
+
+    /* arena demo */
+    .arena-wrap { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 4vw; align-items: center; }
+    .picker { display: flex; flex-direction: column; gap: 10px; margin-top: 4vh; }
+    .pick { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; padding: 10px; border: 3px solid #333; background: var(--dim); text-align: left; box-shadow: 4px 4px 0 #000; transition: border-color .2s, transform .15s; }
+    .pick img { width: 56px; height: 72px; object-fit: cover; object-position: top; image-rendering: pixelated; }
+    .pick b { font-family: var(--pixel); font-weight: 400; font-size: 11px; display: block; margin-bottom: .5rem; }
+    .pick small { font-family: var(--f-mono); font-size: 11px; opacity: .7; }
+    .pick .st { font-family: var(--pixel); font-size: 8px; color: var(--gold); }
+    .pick[aria-pressed="true"] { border-color: var(--gold); transform: translateX(8px); }
+    .pick.placed { opacity: .45; }
+    .arena-msg { font-family: var(--pixel); font-size: 10px; line-height: 2; color: var(--gold); margin-top: 3vh; min-height: 3em; }
+    .reset { font-family: var(--pixel); font-size: 8px; text-decoration: underline; text-underline-offset: 4px; opacity: .7; margin-top: 1rem; }
+    .iso-stage { perspective: 1800px; display: grid; place-items: center; min-height: 64vh; }
+    .iso { --t: min(9vw, 72px); display: grid; grid-template-columns: repeat(6, var(--t)); grid-template-rows: repeat(6, var(--t)); transform: rotateZ(-45deg); transform-style: preserve-3d; }
+    .iso-tilt { transform: rotateX(58deg); transform-style: preserve-3d; }
+    .tile { position: relative; transform-style: preserve-3d; border: 1px solid rgba(0,0,0,.35); transition: transform .3s var(--ease-out), background .2s; cursor: pointer; }
+    .tile.grass { background: #3d6b2a; } .tile.grass.alt { background: #477a31; }
+    .tile.enemy { background: #5a2626; cursor: not-allowed; } .tile.enemy.alt { background: #632b2b; }
+    .tile.neutral { background: #6b5a3a; cursor: default; } .tile.neutral.alt { background: #75633f; }
+    .tile::before { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 14px; background: rgba(0,0,0,.4); transform-origin: top; transform: rotateX(-90deg); }
+    .tile::after { content: ''; position: absolute; top: 0; bottom: 0; left: 100%; width: 14px; background: rgba(0,0,0,.6); transform-origin: left; transform: rotateY(90deg); }
+    .tile.grass:hover, .tile.target { transform: translateZ(12px); background: var(--gold); }
+    .unit {
+      position: absolute; left: 50%; bottom: 50%; width: calc(var(--t) * .78); height: calc(var(--t) * 1.15);
+      transform-origin: 50% 100%; transform: translateX(-50%) rotateZ(45deg) rotateX(-58deg); pointer-events: none;
     }
+    .unit img { width: 100%; height: 100%; object-fit: cover; object-position: top; border: 3px solid var(--c, var(--gold)); box-shadow: 4px 4px 0 #000; image-rendering: pixelated; }
+    .unit .bar { position: absolute; left: 0; right: 0; top: -12px; height: 6px; background: #300; border: 1px solid #000; }
+    .unit .bar i { display: block; height: 100%; background: #4ade80; }
+    .unit.enemy img { filter: hue-rotate(160deg) saturate(.6) brightness(.7); border-color: var(--red); }
 
-    #cursor {
-      position: fixed; width: 12px; height: 12px;
-      background: var(--gold); border-radius: 0;
-      pointer-events: none; z-index: 9999;
-      top: 0; left: 0; transform: translate(-50%,-50%);
-      transition: width .1s, height .1s;
-      image-rendering: pixelated;
-    }
-    #cursor.grow { width: 20px; height: 20px; background: var(--teal); }
+    /* roster */
+    .roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; perspective: 1600px; margin-top: 6vh; max-width: 1080px; }
+    .roster .flip { min-height: 0; aspect-ratio: 3 / 4.6; }
+    .roster .flip-face { border-radius: 0; padding: 0; border: 4px solid var(--c); box-shadow: 8px 8px 0 #000; background: var(--dim); overflow: hidden; }
+    .r-front img { width: 100%; height: 78%; object-fit: cover; object-position: top; image-rendering: pixelated; }
+    .r-front .r-info { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .r-name { font-family: var(--pixel); font-size: clamp(12px, 1.4vw, 20px); text-shadow: 3px 3px 0 #000; }
+    .r-class { font-family: var(--pixel); font-size: 8px; opacity: .6; }
+    .r-back { padding: 24px !important; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; background: repeating-linear-gradient(45deg, #111 0 12px, #141414 12px 24px) !important; }
+    .r-back .r-name { color: var(--c); }
+    .statrow { font-family: var(--pixel); font-size: 9px; }
+    .statrow .pips { display: flex; gap: 4px; margin-top: .7rem; }
+    .statrow .pips i { flex: 1; height: 14px; background: #2a2a2a; box-shadow: inset -2px -2px 0 rgba(0,0,0,.4); }
+    .statrow .pips i.on { background: var(--c); }
+    .r-desc { font-size: 15px; line-height: 1.6; opacity: .85; }
 
-    /* pixel border utility */
-    .px-border {
-      border: 3px solid var(--gold);
-      box-shadow: 4px 4px 0 rgba(0,0,0,.8), inset -2px -2px 0 rgba(0,0,0,.4);
-    }
+    /* quest log */
+    .quest { list-style: none; margin-top: 5vh; max-width: 760px; border: 3px solid var(--gold); box-shadow: 8px 8px 0 #000; background: var(--black); }
+    .quest li { display: grid; grid-template-columns: 34px 1fr auto; gap: 1rem; align-items: center; padding: 1.3rem 1.4rem; border-bottom: 2px dashed rgba(200,155,24,.2); }
+    .quest li:last-child { border-bottom: 0; }
+    .qbox { width: 22px; height: 22px; border: 3px solid var(--gold); display: grid; place-items: center; font-family: var(--pixel); font-size: 10px; color: var(--black); }
+    .quest li.done .qbox { background: var(--gold); }
+    .qn { font-family: var(--pixel); font-size: clamp(10px, 1.1vw, 14px); line-height: 1.6; }
+    .qv { font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--gold); text-align: right; }
+    .q-done { font-family: var(--pixel); font-size: clamp(14px, 2vw, 26px); color: var(--gold); margin-top: 4vh; opacity: 0; text-shadow: 4px 4px 0 #000; }
+    .q-done.on { opacity: 1; animation: pop .6s steps(4); }
+    @keyframes pop { 0% { transform: scale(.4); } 100% { transform: scale(1); } }
 
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 3vw;
-      background: var(--black);
-      border-bottom: 3px solid var(--gold);
-    }
-    .nav-back {
-      font-family: var(--pixel); font-size: 7px; letter-spacing: .05em;
-      color: var(--off); text-decoration: none; opacity: .5;
-      transition: opacity .2s, color .2s; cursor: none;
-    }
-    .nav-back:hover { opacity: 1; color: var(--gold); }
-    .nav-logo { font-family: var(--pixel); font-size: 8px; opacity: .15; }
-    .nav-cta {
-      font-family: var(--pixel); font-size: 7px; letter-spacing: .05em;
-      text-decoration: none; background: var(--gold); color: var(--black);
-      padding: .55rem 1rem; cursor: none;
-      border: 2px solid #a07810;
-      box-shadow: 3px 3px 0 rgba(0,0,0,.7);
-      transition: transform .1s, box-shadow .1s;
-    }
-    .nav-cta:hover { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.7); }
+    .next .next-title { font-family: var(--pixel); font-weight: 400; font-size: clamp(26px, 6vw, 110px); line-height: 1.2; letter-spacing: 0; }
+    .next:hover .next-title { color: #c8c9a8; }
+    .next-bar::after { background: #c8c9a8; }
+    .menu-links a { font-family: var(--pixel); font-weight: 400; font-size: clamp(24px, 5.4vw, 80px); line-height: 1.35; letter-spacing: 0; }
+    .menu-links a:hover .ml { font-style: normal; }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 8rem 5vw 4rem;
-      background: var(--dim);
-      position: relative; overflow: hidden;
-      border-bottom: 3px solid var(--gold);
-    }
-    .hero::before {
-      content: 'TB';
-      position: absolute; font-family: var(--pixel);
-      font-size: 28vw; line-height: 1;
-      color: rgba(200,155,24,.04); right: -2vw; bottom: -4vh;
-      pointer-events: none; user-select: none;
-    }
-    .hero-kicker {
-      font-family: var(--pixel); font-size: 7px; letter-spacing: .08em;
-      color: var(--gold); margin-bottom: 1.8rem; display: block; line-height: 2;
-    }
-    .hero-h1 {
-      font-family: var(--pixel);
-      font-size: clamp(28px, 6vw, 80px);
-      line-height: 1.2; margin-bottom: 1.4rem;
-      text-shadow: 4px 4px 0 rgba(0,0,0,.8);
-    }
-    .hero-h1 em { font-style: normal; color: var(--gold); }
-    .hero-sub {
-      font-family: var(--mono); font-size: clamp(10px,.85vw,12px);
-      line-height: 2; opacity: .45; max-width: 420px;
-      border-left: 3px solid var(--gold); padding-left: 1rem; margin-bottom: 3rem;
-    }
-    .hero-meta { display: flex; flex-wrap: wrap; gap: 0; border-top: 2px solid rgba(200,155,24,.2); padding-top: 1.8rem; }
-    .hmi { padding-right: 2.5rem; border-right: 1px solid rgba(200,155,24,.15); margin-right: 2.5rem; }
-    .hmi:last-child { border-right: none; }
-    .hm-l { font-family: var(--pixel); font-size: 6px; color: var(--gold); opacity: .6; display: block; margin-bottom: .6rem; line-height: 2; }
-    .hm-v { font-family: var(--mono); font-size: 11px; opacity: .55; letter-spacing: .06em; }
-
-    /* TICKER */
-    .ticker { overflow: hidden; white-space: nowrap; background: var(--gold); padding: .6rem 0; border-top: 2px solid #a07810; border-bottom: 2px solid #a07810; }
-    .ticker-track { display: inline-flex; gap: 3rem; animation: tick 20s linear infinite; }
-    .tk { font-family: var(--pixel); font-size: 8px; color: var(--black); }
-    .tk.dot { opacity: .35; }
-    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-    /* SECTIONS */
-    section { padding: 5rem 5vw; border-bottom: 2px solid rgba(200,155,24,.12); }
-    section.s-dim { background: var(--dim); }
-    section.s-mid { background: var(--mid); }
-
-    .s-label { font-family: var(--pixel); font-size: 7px; color: var(--gold); opacity: .6; margin-bottom: 1.6rem; display: block; line-height: 2; }
-    .s-title { font-family: var(--pixel); font-size: clamp(18px,3.5vw,44px); line-height: 1.3; margin-bottom: 2.5rem; text-shadow: 3px 3px 0 rgba(0,0,0,.7); }
-
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: start; }
-    .body-p { font-size: clamp(11px,.9vw,13px); line-height: 2; opacity: .45; max-width: 480px; }
-    .body-p + .body-p { margin-top: .9rem; }
-
-    /* SCREEN GRID */
-    .sg {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 3px;
-      background: var(--gold);
-      margin-top: 3rem;
-      border: 3px solid var(--gold);
-      box-shadow: 6px 6px 0 rgba(0,0,0,.6);
-    }
-    .sg-block {
-      position: relative; overflow: hidden;
-      min-height: 240px;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.2rem;
-      background: var(--dim);
-    }
-    .sg-block.tall { grid-row: span 2; min-height: 480px; }
-    .sg-block.wide { grid-column: span 2; }
-    .sg-img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center top;
-      z-index: 0;
-      image-rendering: pixelated;
-    }
-    .sg-block::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 35%, transparent 100%);
-      z-index: 1;
-    }
-    .sg-block > *:not(.sg-img) { position: relative; z-index: 2; }
-    .sg-tag  { font-family: var(--pixel); font-size: 6px; color: var(--gold); opacity: .8; margin-bottom: .4rem; display: block; line-height: 2; }
-    .sg-name { font-family: var(--pixel); font-size: clamp(10px,1.4vw,16px); color: var(--off); line-height: 1.4; }
-
-    /* STAT STRIP */
-    .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; background: var(--gold); margin-top: 2.5rem; border: 3px solid var(--gold); box-shadow: 5px 5px 0 rgba(0,0,0,.5); }
-    .stat-cell { padding: 2.5rem 1.8rem; background: var(--black); }
-    .s-dim .stat-cell { background: var(--dim); }
-    .stat-n { font-family: var(--pixel); font-size: clamp(22px,4vw,44px); line-height: 1.2; color: var(--gold); display: block; margin-bottom: .7rem; text-shadow: 3px 3px 0 rgba(0,0,0,.6); }
-    .stat-l { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; opacity: .3; line-height: 1.8; }
-
-    /* HERO ROSTER */
-    .roster { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; background: var(--gold); margin-top: 2rem; border: 3px solid var(--gold); box-shadow: 5px 5px 0 rgba(0,0,0,.5); }
-    .r-card { background: var(--dim); display: flex; flex-direction: column; border-top: 4px solid transparent; overflow: hidden; }
-    .r-tank   { border-top-color: var(--gold); }
-    .r-healer { border-top-color: var(--teal); }
-    .r-mage   { border-top-color: #c084fc; }
-    .r-portrait { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; display: block; background: var(--mid); image-rendering: pixelated; }
-    .r-info { padding: 1.2rem 1.4rem; }
-    .r-class { font-family: var(--pixel); font-size: 6px; opacity: .35; display: block; margin-bottom: .6rem; line-height: 2; }
-    .r-name  { font-family: var(--pixel); font-size: clamp(14px,1.8vw,22px); display: block; margin-bottom: .9rem; line-height: 1.3; text-shadow: 2px 2px 0 rgba(0,0,0,.6); }
-    .r-stat  { font-family: var(--mono); font-size: 10px; opacity: .35; line-height: 2.2; }
-    .r-stat b { color: var(--gold); opacity: 1; font-weight: 400; }
-
-    /* PROCESS */
-    .proc { list-style: none; margin-top: 2rem; }
-    .proc li { display: grid; grid-template-columns: 48px 1fr; gap: 1.4rem; padding: 1.6rem 0; border-bottom: 1px solid rgba(200,155,24,.1); align-items: start; }
-    .p-n { font-family: var(--pixel); font-size: 14px; line-height: 1.4; color: var(--gold); opacity: .25; }
-    .p-title { font-family: var(--pixel); font-size: 8px; line-height: 1.8; margin-bottom: .6rem; }
-    .p-desc  { font-size: 11px; line-height: 1.9; opacity: .35; }
-
-    /* OUTCOMES */
-    .outcomes { max-width: 680px; margin-top: 2rem; border: 3px solid rgba(200,155,24,.2); box-shadow: 4px 4px 0 rgba(0,0,0,.5); }
-    .ot-row { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(200,155,24,.1); gap: 2rem; }
-    .ot-row:last-child { border-bottom: none; }
-    .ot-label { font-family: var(--pixel); font-size: clamp(9px,1.2vw,13px); line-height: 1.4; }
-    .ot-val   { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); opacity: .6; flex-shrink: 0; }
-
-    /* TAGS */
-    .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.6rem; }
-    .tag { font-family: var(--pixel); font-size: 6px; border: 2px solid rgba(200,155,24,.2); padding: .4rem .7rem; opacity: .45; line-height: 1.8; transition: opacity .2s, border-color .2s, color .2s; }
-    .tag:hover { opacity: 1; border-color: var(--gold); color: var(--gold); }
-
-    /* CTA */
-    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem; }
-    .btn { font-family: var(--pixel); font-size: 7px; letter-spacing: .05em; text-decoration: none; padding: .8rem 1.3rem; cursor: none; transition: transform .1s, box-shadow .1s; line-height: 1.8; }
-    .btn-gold { background: var(--gold); color: var(--black); border: 2px solid #a07810; box-shadow: 4px 4px 0 rgba(0,0,0,.6); }
-    .btn-gold:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 rgba(0,0,0,.6); }
-    .btn-out  { border: 2px solid rgba(200,155,24,.3); color: var(--off); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
-    .btn-out:hover { border-color: var(--gold); color: var(--gold); transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.4); }
-
-    /* FOOTER */
-    footer { padding: 2.5rem 5vw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 3px solid var(--gold); background: var(--black); }
-    .foot-copy { font-family: var(--pixel); font-size: 6px; opacity: .18; line-height: 2; }
-    .foot-link { font-family: var(--pixel); font-size: 8px; text-decoration: none; color: var(--off); opacity: .28; transition: opacity .2s, color .2s; cursor: none; line-height: 2; }
-    .foot-link:hover { opacity: 1; color: var(--gold); }
-
-    @media (max-width: 768px) {
-      .two-col, .roster { grid-template-columns: 1fr; }
-      .sg { grid-template-columns: 1fr; }
-      .sg-block.tall, .sg-block.wide { grid-row: span 1; grid-column: span 1; min-height: 220px; }
-      .stat-strip { grid-template-columns: 1fr; }
-      .hero-meta { flex-direction: column; gap: 1.5rem; }
-      .hmi { border-right: none; padding-right: 0; margin-right: 0; }
-      body { cursor: auto; }
-      #cursor { display: none; }
+    @media (max-width: 900px) {
+      .gal-track { flex-direction: column; width: auto; gap: 6vh; }
+      .shot { --h: 56vw; width: 100%; }
+      .arena-wrap { grid-template-columns: 1fr; }
+      .iso { --t: 10.5vw; }
+      .iso-stage { min-height: 70vw; }
+      .roster { grid-template-columns: 1fr; max-width: 420px; }
+      .hud { font-size: 8px; }
     }
   </style>
 </head>
 <body>
-<div id="cursor"></div>
 
-<nav>
-  <a class="nav-back" href="../index.html">← BACK</a>
-  <div class="nav-logo">ANGBO XIE</div>
-  <a class="nav-cta" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank">PLAY ↗</a>
-</nav>
+<svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
+  <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
+  <filter id="goo-c"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter>
+  <filter id="melt"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+<div class="curtain" aria-hidden="true"><div class="cl a"><i style="--d:0.04s"></i><i style="--d:0.07s"></i><i style="--d:0.11s"></i><i style="--d:0.24s"></i><i style="--d:0.02s"></i><i style="--d:0.13s"></i><i style="--d:0.15s"></i><i style="--d:0.25s"></i><i style="--d:0.23s"></i><i style="--d:0.24s"></i><i style="--d:0.08s"></i><i style="--d:0.12s"></i><i style="--d:0.10s"></i><i style="--d:0.25s"></i></div><div class="cl b"><i style="--d:0.27s"></i><i style="--d:0.04s"></i><i style="--d:0.05s"></i><i style="--d:0.06s"></i><i style="--d:0.07s"></i><i style="--d:0.14s"></i><i style="--d:0.16s"></i><i style="--d:0.07s"></i><i style="--d:0.00s"></i><i style="--d:0.12s"></i><i style="--d:0.10s"></i><i style="--d:0.16s"></i><i style="--d:0.27s"></i><i style="--d:0.19s"></i></div><div class="px"><i style="--d:0.22s"></i><i style="--d:0.01s"></i><i style="--d:0.05s"></i><i style="--d:0.06s"></i><i style="--d:0.19s"></i><i style="--d:0.09s"></i><i style="--d:0.10s"></i><i style="--d:0.17s"></i><i style="--d:0.03s"></i><i style="--d:0.20s"></i><i style="--d:0.03s"></i><i style="--d:0.14s"></i><i style="--d:0.07s"></i><i style="--d:0.06s"></i><i style="--d:0.15s"></i><i style="--d:0.12s"></i><i style="--d:0.11s"></i><i style="--d:0.12s"></i><i style="--d:0.15s"></i><i style="--d:0.04s"></i><i style="--d:0.06s"></i><i style="--d:0.18s"></i><i style="--d:0.18s"></i><i style="--d:0.15s"></i><i style="--d:0.24s"></i><i style="--d:0.17s"></i><i style="--d:0.24s"></i><i style="--d:0.07s"></i><i style="--d:0.21s"></i><i style="--d:0.23s"></i><i style="--d:0.25s"></i><i style="--d:0.09s"></i><i style="--d:0.09s"></i><i style="--d:0.26s"></i><i style="--d:0.06s"></i><i style="--d:0.28s"></i><i style="--d:0.25s"></i><i style="--d:0.04s"></i><i style="--d:0.07s"></i><i style="--d:0.20s"></i><i style="--d:0.07s"></i><i style="--d:0.03s"></i><i style="--d:0.23s"></i><i style="--d:0.12s"></i><i style="--d:0.22s"></i><i style="--d:0.04s"></i><i style="--d:0.11s"></i><i style="--d:0.19s"></i><i style="--d:0.00s"></i><i style="--d:0.06s"></i><i style="--d:0.19s"></i><i style="--d:0.26s"></i><i style="--d:0.27s"></i><i style="--d:0.03s"></i><i style="--d:0.14s"></i><i style="--d:0.21s"></i><i style="--d:0.14s"></i><i style="--d:0.19s"></i><i style="--d:0.05s"></i><i style="--d:0.02s"></i><i style="--d:0.03s"></i><i style="--d:0.01s"></i><i style="--d:0.15s"></i><i style="--d:0.14s"></i><i style="--d:0.16s"></i><i style="--d:0.04s"></i><i style="--d:0.05s"></i><i style="--d:0.06s"></i><i style="--d:0.24s"></i><i style="--d:0.28s"></i><i style="--d:0.26s"></i><i style="--d:0.03s"></i><i style="--d:0.02s"></i><i style="--d:0.27s"></i><i style="--d:0.13s"></i><i style="--d:0.21s"></i><i style="--d:0.09s"></i><i style="--d:0.13s"></i><i style="--d:0.14s"></i><i style="--d:0.12s"></i><i style="--d:0.17s"></i><i style="--d:0.00s"></i><i style="--d:0.20s"></i><i style="--d:0.24s"></i><i style="--d:0.05s"></i><i style="--d:0.13s"></i><i style="--d:0.21s"></i><i style="--d:0.11s"></i><i style="--d:0.05s"></i><i style="--d:0.05s"></i><i style="--d:0.14s"></i><i style="--d:0.00s"></i><i style="--d:0.25s"></i><i style="--d:0.22s"></i><i style="--d:0.20s"></i><i style="--d:0.24s"></i><i style="--d:0.18s"></i><i style="--d:0.11s"></i><i style="--d:0.17s"></i><i style="--d:0.14s"></i><i style="--d:0.28s"></i><i style="--d:0.23s"></i><i style="--d:0.07s"></i><i style="--d:0.26s"></i><i style="--d:0.21s"></i><i style="--d:0.22s"></i><i style="--d:0.23s"></i><i style="--d:0.11s"></i><i style="--d:0.25s"></i><i style="--d:0.25s"></i><i style="--d:0.19s"></i><i style="--d:0.21s"></i><i style="--d:0.21s"></i><i style="--d:0.11s"></i><i style="--d:0.20s"></i><i style="--d:0.02s"></i><i style="--d:0.10s"></i><i style="--d:0.13s"></i><i style="--d:0.00s"></i><i style="--d:0.10s"></i><i style="--d:0.18s"></i><i style="--d:0.17s"></i><i style="--d:0.06s"></i><i style="--d:0.26s"></i><i style="--d:0.19s"></i><i style="--d:0.09s"></i></div><div class="sh"><i style="--d:0.000s"></i><i style="--d:0.045s"></i><i style="--d:0.090s"></i><i style="--d:0.135s"></i><i style="--d:0.180s"></i><i style="--d:0.225s"></i><i style="--d:0.270s"></i><i style="--d:0.315s"></i></div><div class="c-eyes"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <span class="hero-kicker">CASE STUDY 03 / GAME UI / 2024</span>
-  <h1 class="hero-h1">TACTI<em>BRAWL</em></h1>
-  <p class="hero-sub">Pixel-art tactical brawler. Place your heroes. Outsmart your opponent. Claim the arena.</p>
-  <div class="hero-meta">
-    <div class="hmi"><span class="hm-l">ROLE</span><span class="hm-v">Game UI Lead</span></div>
-    <div class="hmi"><span class="hm-l">TOOLS</span><span class="hm-v">Figma + Pixel Art</span></div>
-    <div class="hmi"><span class="hm-l">TEAM</span><span class="hm-v">5 People</span></div>
-    <div class="hmi"><span class="hm-l">YEAR</span><span class="hm-v">2024</span></div>
+<header class="nav">
+  <a href="../index.html#work" class="nav-back"><span class="arr">&larr;</span> <span class="roll">Index</span></a>
+  <a href="../index.html" class="nav-logo nav-hide-sm" style="font-family:var(--f-display)">AX<sup>&reg;</sup></a>
+  <div class="nav-right">
+    <a class="roll nav-hide-sm" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank" rel="noopener">Play &#8599;</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span>Menu</span><span class="bars"></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <nav class="menu-links" aria-label="Menu">
+    <a href="../index.html"><span class="ml">Home</span><sup>00</sup></a>
+    <a href="essentially-australia.html"><span class="ml">Essentially</span><sup>01</sup></a>
+    <a href="casepop.html"><span class="ml">Casepop</span><sup>02</sup></a>
+    <a href="tactibrawl.html"><span class="ml">Tactibrawl</span><sup>03</sup></a>
+  </nav>
+  <div class="menu-foot">
+    <a href="mailto:xie109714@gmail.com">xie109714@gmail.com</a>
+    <a href="https://au.linkedin.com/in/angboxie" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="../Assets/resume.pdf" target="_blank">Resume &darr;</a>
   </div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="tk">PIXEL ART FANTASY</span><span class="tk dot">*</span>
-    <span class="tk">TURN-BASED TACTICS</span><span class="tk dot">*</span>
-    <span class="tk">HAND-DRAWN CHARACTERS</span><span class="tk dot">*</span>
-    <span class="tk">AI-GEN ENVIRONMENTS</span><span class="tk dot">*</span>
-    <span class="tk">FULL FIGMA PROTOTYPE</span><span class="tk dot">*</span>
-    <span class="tk">5-PERSON TEAM</span><span class="tk dot">*</span>
-    <span class="tk">PIXEL ART FANTASY</span><span class="tk dot">*</span>
-    <span class="tk">TURN-BASED TACTICS</span><span class="tk dot">*</span>
-    <span class="tk">HAND-DRAWN CHARACTERS</span><span class="tk dot">*</span>
-    <span class="tk">AI-GEN ENVIRONMENTS</span><span class="tk dot">*</span>
-    <span class="tk">FULL FIGMA PROTOTYPE</span><span class="tk dot">*</span>
-    <span class="tk">5-PERSON TEAM</span><span class="tk dot">*</span>
-  </div>
-</div>
+<main>
+  <section class="hero" id="top">
+    <div class="hero-bg"><img src="../Assets/tb-loading.jpg" alt="" /></div>
+    <canvas class="tb-sym" id="tbSym" aria-hidden="true"></canvas>
+    <div class="hud" aria-hidden="true">
+      <div>P1 / GAME UI LEAD<div class="hp"><i></i><i></i><i></i><i></i><i></i><i></i><i class="off"></i></div></div>
+      <div class="score" style="text-align:right">SCORE <b id="score">000000</b><br>STAGE <b id="stage">1-1</b></div>
+    </div>
+    <span class="kicker" data-reveal data-delay=".5">Case Study 03 / Game UI / 2024</span>
+    <h1><span class="glitch" id="title" data-text="TACTIBRAWL">TACTI<em>BRAWL</em></span></h1>
+    <p class="hero-sub" data-reveal data-delay=".8">Pixel-art tactical brawler. Place your heroes. Outsmart your opponent. Claim the arena.</p>
+    <a href="#overview" class="start" data-reveal data-delay="1"><span class="blink">&#9654;</span> Press start</a>
+    <dl class="c-meta" data-reveal data-delay="1.1">
+      <div><dt>Role</dt><dd>Game UI Lead</dd></div>
+      <div><dt>Tools</dt><dd>Figma + Pixel Art</dd></div>
+      <div><dt>Team</dt><dd>5 People</dd></div>
+      <div><dt>Year</dt><dd>2024</dd></div>
+    </dl>
+  </section>
 
-<!-- OVERVIEW -->
-<section>
-  <div class="two-col">
-    <div>
-      <span class="s-label">// OVERVIEW</span>
-      <h2 class="s-title">PLACE.<br>BATTLE.<br>WIN.</h2>
-      <div class="tags">
-        <span class="tag">FIGMA</span>
-        <span class="tag">GAME UI</span>
-        <span class="tag">PIXEL ART</span>
-        <span class="tag">PROTOTYPING</span>
-        <span class="tag">UX FLOW</span>
-        <span class="tag">CHARACTER DESIGN</span>
-        <span class="tag">AI ART</span>
+  <div class="marquee ticker" data-speed="1.4" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Pixel art fantasy</span><span>&#9733;</span><span>Turn-based tactics</span><span>&#9733;</span><span>Hand-drawn characters</span><span>&#9733;</span>
+      <span>AI-gen environments</span><span>&#9733;</span><span>Full Figma prototype</span><span>&#9733;</span><span>5-person team</span><span>&#9733;</span>
+    </div>
+  </div>
+
+  <section class="c-sec" id="overview">
+    <div class="c-two">
+      <div>
+        <span class="c-label">// Overview</span>
+        <h2 class="c-title" data-split>Place. Battle. <em>Win.</em></h2>
+        <div class="c-tags" data-reveal>
+          <span>Figma</span><span>Game UI</span><span>Pixel Art</span><span>Prototyping</span><span>UX Flow</span><span>Character Design</span><span>AI Art</span>
+        </div>
+      </div>
+      <div class="c-body">
+        <p data-reveal>Tactibrawl is a pixel-art tactical brawler designed in Figma. Two players place heroes on a grid and battle for arena control.</p>
+        <p data-reveal>I led the UI across a 5-person team. Splash, loading, hero select, tutorial, and battle arena. Characters were hand-drawn in pixel art. Environments were AI-generated and art-directed.</p>
+        <p data-reveal>The full game is prototyped and interactive in Figma.</p>
       </div>
     </div>
-    <div style="padding-top:.5rem">
-      <p class="body-p">Tactibrawl is a pixel-art tactical brawler designed in Figma. Two players place heroes on a grid and battle for arena control.</p>
-      <p class="body-p">I led the UI across a 5-person team. Splash, loading, hero select, tutorial, and battle arena. Characters were hand-drawn in pixel art. Environments were AI-generated and art-directed.</p>
-      <p class="body-p">The full game is prototyped and interactive in Figma.</p>
-    </div>
-  </div>
+  </section>
 
-  <!-- SCREEN GRID -->
-  <div class="sg">
-    <div class="sg-block tall">
-      <img class="sg-img" src="../Assets/tb-splash.png" alt="Tactibrawl splash screen"/>
-      <span class="sg-tag">01 / SPLASH</span>
-      <span class="sg-name">MAIN MENU</span>
-    </div>
-    <div class="sg-block">
-      <img class="sg-img" src="../Assets/tb-arena.png" alt="Battle arena"/>
-      <span class="sg-tag">02 / ARENA</span>
-      <span class="sg-name">BATTLE GRID</span>
-    </div>
-    <div class="sg-block">
-      <img class="sg-img" src="../Assets/tb-heroes.png" alt="Hero select screen"/>
-      <span class="sg-tag">03 / SELECT</span>
-      <span class="sg-name">HERO SELECT</span>
-    </div>
-    <div class="sg-block wide">
-      <img class="sg-img" src="../Assets/tb-tutorial.png" alt="Sola tutorial dialogue"/>
-      <span class="sg-tag">04 / TUTORIAL</span>
-      <span class="sg-name">SOLA'S GUIDE</span>
-    </div>
-    <div class="sg-block">
-      <img class="sg-img" src="../Assets/tb-loading.png" alt="Loading screen"/>
-      <span class="sg-tag">05 / LOAD</span>
-      <span class="sg-name">ARENA PREP</span>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section class="s-dim">
-  <span class="s-label">// NUMBERS</span>
-  <div class="stat-strip">
-    <div class="stat-cell"><span class="stat-n">5</span><span class="stat-l">Person team</span></div>
-    <div class="stat-cell"><span class="stat-n">6+</span><span class="stat-l">Screens designed</span></div>
-    <div class="stat-cell"><span class="stat-n">100%</span><span class="stat-l">Interactive prototype</span></div>
-  </div>
-</section>
-
-<!-- HERO ROSTER -->
-<section>
-  <span class="s-label">// THE ROSTER</span>
-  <h2 class="s-title">KNOW YOUR<br>WARRIORS.</h2>
-  <div class="roster">
-    <div class="r-card r-tank">
-      <img class="r-portrait" src="../Assets/tb-char-tank.png" alt="Tank"/>
-      <div class="r-info">
-        <span class="r-class">CLASS 01</span>
-        <span class="r-name">TANK</span>
-        <div class="r-stat">HP &nbsp;<b>6</b> &nbsp; DMG <b>1</b><br>Attacks + soaks damage</div>
+  <section id="screens">
+    <div class="gal-pin">
+      <div class="gal-head">
+        <div><span class="c-label">// Screens</span><h2 class="c-title">Every <em>screen.</em></h2></div>
+        <span class="c-label" style="margin:0" id="galIdx">01 / 05</span>
+      </div>
+      <div class="gal-track">
+        <figure class="shot"><div class="shot-frame"><img src="../Assets/tb-splash.jpg" alt="Tactibrawl splash screen" loading="lazy" decoding="async"/></div><figcaption class="shot-cap"><span>01 / Splash</span><span>Main menu</span></figcaption></figure>
+        <figure class="shot"><div class="shot-frame"><img src="../Assets/tb-arena.jpg" alt="Battle arena" loading="lazy" decoding="async"/></div><figcaption class="shot-cap"><span>02 / Arena</span><span>Battle grid</span></figcaption></figure>
+        <figure class="shot"><div class="shot-frame"><img src="../Assets/tb-heroes.jpg" alt="Hero select screen" loading="lazy" decoding="async"/></div><figcaption class="shot-cap"><span>03 / Select</span><span>Hero select</span></figcaption></figure>
+        <figure class="shot"><div class="shot-frame"><img src="../Assets/tb-tutorial.jpg" alt="Sola tutorial dialogue" loading="lazy" decoding="async"/></div><figcaption class="shot-cap"><span>04 / Tutorial</span><span>Sola&rsquo;s guide</span></figcaption></figure>
+        <figure class="shot"><div class="shot-frame"><img src="../Assets/tb-loading.jpg" alt="Loading screen" loading="lazy" decoding="async"/></div><figcaption class="shot-cap"><span>05 / Load</span><span>Arena prep</span></figcaption></figure>
       </div>
     </div>
-    <div class="r-card r-healer">
-      <img class="r-portrait" src="../Assets/tb-char-healer.png" alt="Healer"/>
-      <div class="r-info">
-        <span class="r-class">CLASS 02</span>
-        <span class="r-name">HEALER</span>
-        <div class="r-stat">HP &nbsp;<b>4</b> &nbsp; DMG <b>2</b><br>Supports + restores HP</div>
+  </section>
+
+  <section class="c-sec dark" id="numbers">
+    <span class="c-label">// Numbers</span>
+    <div class="c-stats" style="--cols:3">
+      <div class="c-stat"><span class="num" data-count="5">5</span><span class="lab">Person team</span></div>
+      <div class="c-stat"><span class="num" data-count="6" data-suffix="+">6+</span><span class="lab">Screens designed</span></div>
+      <div class="c-stat"><span class="num" data-count="100" data-suffix="%">100%</span><span class="lab">Interactive prototype</span></div>
+    </div>
+  </section>
+
+  <section class="c-sec" id="arena">
+    <div class="arena-wrap">
+      <div>
+        <span class="c-label">// Mini demo</span>
+        <h2 class="c-title" data-split>Place your <em>heroes.</em></h2>
+        <p class="c-body" style="margin-top:3vh"><span style="font-size:17px;line-height:1.6;opacity:.8;display:block;max-width:44ch">A tiny playable taste of the core loop. Green ground is yours. Red rows belong to the opponent.</span></p>
+        <div class="picker" role="group" aria-label="Choose a hero">
+          <button class="pick" data-unit="tank" data-c="#c89b18" aria-pressed="true"><img src="../Assets/tb-char-tank.png" alt=""/><span><b>Tank</b><small>Attacks + soaks damage</small></span><span class="st">HP6 DMG1</span></button>
+          <button class="pick" data-unit="healer" data-c="#2aa8b8" aria-pressed="false"><img src="../Assets/tb-char-healer.png" alt=""/><span><b>Healer</b><small>Supports + restores HP</small></span><span class="st">HP4 DMG2</span></button>
+          <button class="pick" data-unit="mage" data-c="#c084fc" aria-pressed="false"><img src="../Assets/tb-char-mage.png" alt=""/><span><b>Mage</b><small>High damage, fragile</small></span><span class="st">HP2 DMG4</span></button>
+        </div>
+        <p class="arena-msg" id="arenaMsg" aria-live="polite">&gt; Deploy your heroes.</p>
+        <button class="reset" id="arenaReset">Reset board</button>
+      </div>
+      <div class="iso-stage">
+        <div class="iso-tilt" id="isoTilt"><div class="iso" id="iso"></div></div>
       </div>
     </div>
-    <div class="r-card r-mage">
-      <img class="r-portrait" src="../Assets/tb-char-mage.png" alt="Mage"/>
-      <div class="r-info">
-        <span class="r-class">CLASS 03</span>
-        <span class="r-name">MAGE</span>
-        <div class="r-stat">HP &nbsp;<b>2</b> &nbsp; DMG <b>4</b><br>High damage, fragile</div>
+  </section>
+
+  <section class="c-sec alt" id="roster">
+    <span class="c-label">// The roster</span>
+    <h2 class="c-title" data-split>Know your <em>warriors.</em></h2>
+    <div class="roster flip-grid">
+      <div class="flip" style="--c:#c89b18">
+        <div class="flip-face r-front"><img src="../Assets/tb-char-tank.png" alt="Tank character portrait" loading="lazy"/><div class="r-info"><span class="r-name">Tank</span><span class="r-class">Class 01</span></div></div>
+        <div class="flip-face flip-back r-back"><span class="r-name">Tank</span>
+          <div class="statrow">HP 6<div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+          <div class="statrow">DMG 1<div class="pips"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <p class="r-desc">Attacks + soaks damage</p></div>
+      </div>
+      <div class="flip" style="--c:#2aa8b8">
+        <div class="flip-face r-front"><img src="../Assets/tb-char-healer.png" alt="Healer character portrait" loading="lazy"/><div class="r-info"><span class="r-name">Healer</span><span class="r-class">Class 02</span></div></div>
+        <div class="flip-face flip-back r-back"><span class="r-name">Healer</span>
+          <div class="statrow">HP 4<div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <div class="statrow">DMG 2<div class="pips"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+          <p class="r-desc">Supports + restores HP</p></div>
+      </div>
+      <div class="flip" style="--c:#c084fc">
+        <div class="flip-face r-front"><img src="../Assets/tb-char-mage.png" alt="Mage character portrait" loading="lazy"/><div class="r-info"><span class="r-name">Mage</span><span class="r-class">Class 03</span></div></div>
+        <div class="flip-face flip-back r-back"><span class="r-name">Mage</span>
+          <div class="statrow">HP 2<div class="pips"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="statrow">DMG 4<div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <p class="r-desc">High damage, fragile</p></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PROCESS -->
-<section class="s-mid">
-  <span class="s-label">// PROCESS</span>
-  <h2 class="s-title">HOW WE<br>BUILT IT.</h2>
-  <ul class="proc">
-    <li><span class="p-n">01</span><div><div class="p-title">GAME CONCEPT + UX FLOW</div><div class="p-desc">Mapped the full loop as a team. Splash, hero select, tutorial, grid placement, battle. Every screen defined before design started.</div></div></li>
-    <li><span class="p-n">02</span><div><div class="p-title">ART DIRECTION</div><div class="p-desc">Pixel characters on AI-generated painterly environments. Gold as the primary UI accent. Fantasy-native without going generic RPG.</div></div></li>
-    <li><span class="p-n">03</span><div><div class="p-title">CHARACTER DESIGN</div><div class="p-desc">Characters drawn pixel by pixel. Tank, Healer, Mage, and Sola. Strong silhouettes readable at small grid sizes during battle.</div></div></li>
-    <li><span class="p-n">04</span><div><div class="p-title">ENVIRONMENTS</div><div class="p-desc">AI-generated backgrounds, heavily curated. Forest arena, waterfall canyon, training room. Each refined to sit alongside pixel art without clash.</div></div></li>
-    <li><span class="p-n">05</span><div><div class="p-title">TUTORIAL SYSTEM</div><div class="p-desc">Dialogue-driven tutorial with Sola as the guide. Multiple expressions react to context. Parchment dialogue boxes match the game world.</div></div></li>
-    <li><span class="p-n">06</span><div><div class="p-title">FULL PROTOTYPE</div><div class="p-desc">Every screen wired with interactions and transitions. Fully playable from title to battle in Figma.</div></div></li>
-  </ul>
-</section>
+  <section class="c-sec" id="process">
+    <div class="c-proc">
+      <div class="c-proc-side">
+        <span class="c-label">// Process</span>
+        <h2 class="c-title" data-split>How we <em>built it.</em></h2>
+        <div class="c-proc-rail"><i></i></div>
+        <span class="c-proc-big">01</span>
+      </div>
+      <ol class="c-steps">
+        <li class="c-step"><span class="n">01</span><div><h3>Game concept + UX flow</h3><p>Mapped the full loop as a team. Splash, hero select, tutorial, grid placement, battle. Every screen defined before design started.</p></div></li>
+        <li class="c-step"><span class="n">02</span><div><h3>Art direction</h3><p>Pixel characters on AI-generated painterly environments. Gold as the primary UI accent. Fantasy-native without going generic RPG.</p></div></li>
+        <li class="c-step"><span class="n">03</span><div><h3>Character design</h3><p>Characters drawn pixel by pixel. Tank, Healer, Mage, and Sola. Strong silhouettes readable at small grid sizes during battle.</p></div></li>
+        <li class="c-step"><span class="n">04</span><div><h3>Environments</h3><p>AI-generated backgrounds, heavily curated. Forest arena, waterfall canyon, training room. Each refined to sit alongside pixel art without clash.</p></div></li>
+        <li class="c-step"><span class="n">05</span><div><h3>Tutorial system</h3><p>Dialogue-driven tutorial with Sola as the guide. Multiple expressions react to context. Parchment dialogue boxes match the game world.</p></div></li>
+        <li class="c-step"><span class="n">06</span><div><h3>Full prototype</h3><p>Every screen wired with interactions and transitions. Fully playable from title to battle in Figma.</p></div></li>
+      </ol>
+    </div>
+  </section>
 
-<!-- OUTCOMES -->
-<section class="s-dim">
-  <span class="s-label">// OUTCOMES</span>
-  <h2 class="s-title">DELIVERED.</h2>
-  <div class="outcomes">
-    <div class="ot-row"><span class="ot-label">GAME UI</span><span class="ot-val">Full screen-by-screen</span></div>
-    <div class="ot-row"><span class="ot-label">CHARACTERS</span><span class="ot-val">Hand-drawn pixel art</span></div>
-    <div class="ot-row"><span class="ot-label">ENVIRONMENTS</span><span class="ot-val">AI-gen + art directed</span></div>
-    <div class="ot-row"><span class="ot-label">TUTORIAL</span><span class="ot-val">Sola dialogue system</span></div>
-    <div class="ot-row"><span class="ot-label">PROTOTYPE</span><span class="ot-val">Fully interactive</span></div>
-  </div>
-  <div class="cta-row">
-    <a class="btn btn-gold" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank">PLAY PROTOTYPE ↗</a>
-    <a class="btn btn-out" href="../index.html">BACK TO PORTFOLIO ←</a>
-  </div>
-</section>
+  <section class="c-sec dark" id="outcomes">
+    <span class="c-label">// Outcomes</span>
+    <h2 class="c-title" data-split>Quest <em>log.</em></h2>
+    <ul class="quest" id="quest">
+      <li><span class="qbox"></span><span class="qn">Game UI</span><span class="qv">Full screen-by-screen</span></li>
+      <li><span class="qbox"></span><span class="qn">Characters</span><span class="qv">Hand-drawn pixel art</span></li>
+      <li><span class="qbox"></span><span class="qn">Environments</span><span class="qv">AI-gen + art directed</span></li>
+      <li><span class="qbox"></span><span class="qn">Tutorial</span><span class="qv">Sola dialogue system</span></li>
+      <li><span class="qbox"></span><span class="qn">Prototype</span><span class="qv">Fully interactive</span></li>
+    </ul>
+    <p class="q-done" id="qDone">&#9733; Delivered &#9733;</p>
+    <div class="c-cta">
+      <a class="pill solid" data-magnetic=".2" href="https://www.figma.com/proto/KxE7gaFjQ4RUOPTcWcLCYb/Tactibrawl?node-id=1-2&starting-point-node-id=1%3A2" target="_blank" rel="noopener">&#9654; Play prototype</a>
+      <a class="pill" data-magnetic=".2" href="../index.html#work">&larr; Back to portfolio</a>
+    </div>
+  </section>
 
-<footer>
-  <a class="foot-link" href="casepop.html">← CASEPOP AU</a>
-  <span class="foot-copy">2025 ANGBO XIE</span>
-  <a class="foot-link" href="../index.html">PORTFOLIO ↗</a>
-</footer>
+  <a class="next" href="essentially-australia.html">
+    <span class="next-label mono"><span>Back to the start / 01</span><span>UX Audit + Redesign / 2025</span></span>
+    <span class="next-title">Essentially Australia &rarr;</span>
+    <div class="next-bar"></div>
+  </a>
+  <footer class="foot-row"><a href="casepop.html" class="roll">&larr; Casepop AU</a><span>Melbourne <span data-clock>--:--:--</span></span><a href="#top" class="roll">Back to top &uarr;</a></footer>
+</main>
 
-<script>
-  var cur = document.getElementById('cursor');
-  var mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
-  document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; });
-  (function loop(){
-    cx+=(mx-cx)*.13; cy+=(my-cy)*.13;
-    cur.style.left=cx+'px'; cur.style.top=cy+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('mouseenter',function(){ cur.classList.add('grow'); });
-    a.addEventListener('mouseleave',function(){ cur.classList.remove('grow'); });
-  });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../JS/core.js" defer></script>
+<script src="../JS/infect.js" defer></script>
+<script src="../JS/liquid.js" defer></script>
+<script src="../JS/case.js" defer></script>
+<script src="../JS/tactibrawl.js" defer></script>
 </body>
 </html>

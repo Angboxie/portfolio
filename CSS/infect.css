@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Symbiote infection layer — shared by every page
+   ========================================================================== */
+:root {
+  --goo: #050507;
+}
+.goo-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- liquid cursor trail ---------- */
+.goo-cursor { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor .cursor { display: none; }
+  .goo-cursor {
+    display: block; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    filter: url(#goo-c); mix-blend-mode: difference;
+  }
+  .goo-cursor i { position: absolute; left: 0; top: 0; border-radius: 50%; background: #fff; will-change: transform; }
+}
+
+/* ---------- page transition: liquid flood ---------- */
+.curtain { display: block; }
+.curtain .cl {
+  position: absolute; inset: -12vh 0; display: grid; grid-template-columns: repeat(14, 1fr);
+  filter: url(#goo);
+}
+.curtain .cl.a { color: var(--accent); }
+.curtain .cl.b { color: var(--goo); }
+.curtain .cl i {
+  position: relative; display: block; background: currentColor; transform: translateY(0);
+  animation: goo-out 1.15s var(--ease-io) forwards; animation-delay: var(--d, 0s);
+}
+.curtain .cl.a i { animation-delay: calc(var(--d, 0s) + .1s); }
+.curtain .cl i::before, .curtain .cl i::after {
+  content: ''; position: absolute; left: 50%; width: 9vw; aspect-ratio: 1; margin-left: -4.5vw; border-radius: 50%; background: currentColor;
+}
+.curtain .cl i::before { top: -4vw; } .curtain .cl i::after { bottom: -4vw; }
+@keyframes goo-out { to { transform: translateY(130%); } }
+.curtain.is-in .cl i { transform: translateY(-130%); animation: goo-in .62s cubic-bezier(.55, 0, .25, 1) forwards; animation-delay: calc(var(--d, 0s) * .5); }
+.curtain.is-in .cl.b i { animation-delay: calc(var(--d, 0s) * .5 + .07s); }
+.curtain.is-in .cl.a i { animation-delay: calc(var(--d, 0s) * .5); }
+@keyframes goo-in { from { transform: translateY(-130%); } to { transform: translateY(0); } }
+.curtain.skip i { animation: none; transform: translateY(130%); }
+.c-eyes {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1);
+  display: flex; flex-direction: column; align-items: center; gap: 2.4vh;
+  animation: eyes-out .5s var(--ease-io) .25s forwards;
+}
+.c-eyes svg { width: min(40vw, 360px); height: auto; fill: #f2f1ec; animation: blink 3s infinite; transform-origin: 50% 50%; filter: drop-shadow(0 0 18px rgba(255,255,255,.25)); }
+@keyframes eyes-out { to { transform: translate(-50%, -50%) scale(0); opacity: 0; } }
+@keyframes eyes-in { from { transform: translate(-50%, -50%) scale(0); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } }
+.curtain.is-in .c-eyes { animation: eyes-in .45s var(--ease-out) .5s both; }
+.curtain.skip .c-eyes { display: none; }
+
+/* ---------- drips that bleed between sections ---------- */
+.drips {
+  position: absolute; left: 0; right: 0; top: -1px; z-index: 4; pointer-events: none;
+  filter: url(#goo);
+}
+.drips b { position: absolute; left: -3%; right: -3%; top: 0; height: 14px; background: currentColor; }
+.drips i {
+  position: absolute; top: 0; height: 0; background: currentColor; border-radius: 0 0 999px 999px;
+}
+.drips i::after {
+  content: ''; position: absolute; left: 50%; top: 100%; width: 190%; aspect-ratio: 1; transform: translate(-50%, -55%);
+  border-radius: 50%; background: currentColor;
+}
+
+/* ---------- click splatter ---------- */
+.splat { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 9998; pointer-events: none; filter: url(#goo-c); mix-blend-mode: difference; }
+.splat i { position: absolute; left: 0; top: 0; border-radius: 50%; background: #fff; }
+
+/* ---------- transition variants: goo (default) · pixel · shutter ---------- */
+.curtain .px, .curtain .sh { position: absolute; inset: 0; display: none; }
+html[data-tr="pixel"] .curtain .cl, html[data-tr="shutter"] .curtain .cl { display: none; }
+html[data-tr="pixel"] .curtain .px { display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(9, 1fr); }
+html[data-tr="shutter"] .curtain .sh { display: flex; flex-direction: column; }
+
+.curtain .px i { background: var(--goo); animation: px-out .01s steps(1) forwards; animation-delay: calc(var(--d) * 2.6); }
+.curtain .px i:nth-child(7n+3), .curtain .px i:nth-child(11n+5) { background: var(--accent); }
+@keyframes px-out { to { opacity: 0; } }
+.curtain.is-in .px i { opacity: 0; animation: px-in .01s steps(1) forwards; animation-delay: calc(var(--d) * 2.2); }
+@keyframes px-in { to { opacity: 1; } }
+
+.curtain .sh i { flex: 1; background: var(--goo); box-shadow: inset 0 -2px 0 var(--accent); transform-origin: 50% 0; animation: sh-out .6s var(--ease-io) forwards; animation-delay: var(--d); }
+.curtain .sh i:nth-child(even) { transform-origin: 50% 100%; box-shadow: inset 0 2px 0 var(--accent); }
+@keyframes sh-out { to { transform: scaleY(0); } }
+.curtain.is-in .sh i { transform: scaleY(0); animation: sh-in .5s var(--ease-io) forwards; animation-delay: var(--d); }
+@keyframes sh-in { to { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .goo-cursor, .drips, .splat { display: none !important; }
+}

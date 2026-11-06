@@ -2,469 +2,261 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Casepop AU — Angbo Xie</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
+  <title>Casepop AU / Angbo Xie</title>
+  <meta name="description" content="Casepop AU: an Australian phone case brand built for local artists. Co-founded and front-end built by Angbo Xie."/>
+  <meta name="theme-color" content="#ff4d8d"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4ff00'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='28' text-anchor='middle' fill='%2309090b'%3EAX%3C/text%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400&family=Inter:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../CSS/base.css"/>
+  <link rel="stylesheet" href="../CSS/infect.css"/>
+  <link rel="stylesheet" href="../CSS/case.css"/>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black: #0d0d0d;
-      --white: #f5f5f0;
-      --off:   #e8e8e3;
-      --pink:  #ff4d8d;
-      --mono:  'IBM Plex Mono', monospace;
-      --sans:  'Inter', sans-serif;
-      --disp:  'Bebas Neue', sans-serif;
+      --black: #0d0d0d; --white: #f5f5f0; --off: #e8e8e3; --pink: #ff4d8d;
+      --bg: var(--white); --fg: var(--black);
+      --accent: #ff4d8d; --accent-ink: #0d0d0d; --curtain: #ff4d8d;
+      --dark: #0d0d0d; --dark-fg: #f5f5f0; --alt: #e8e8e3;
+      --f-head: 'Archivo', system-ui, sans-serif; --head-weight: 900;
+      --line: rgba(13,13,13,.12);
     }
-    html { scroll-behavior: smooth; }
-    body { background: var(--white); color: var(--black); font-family: var(--sans); cursor: none; overflow-x: hidden; }
+    .c-title, .c-step h3, .c-out .ol, .flip-t { text-transform: uppercase; font-stretch: 112%; letter-spacing: -.045em; }
+    .c-title em { font-style: normal; }
 
-    #cursor {
-      position: fixed; width: 10px; height: 10px;
-      background: var(--black); border-radius: 50%;
-      pointer-events: none; z-index: 9999;
-      top: 0; left: 0; transform: translate(-50%,-50%);
-      transition: width .14s, height .14s, background .14s;
-    }
-    #cursor.grow { width: 48px; height: 48px; background: var(--pink); }
-
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 4vw;
-      background: var(--white);
-      border-bottom: 1px solid rgba(0,0,0,.08);
-    }
-    .nav-back {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .25em;
-      text-transform: uppercase; color: var(--black); text-decoration: none;
-      opacity: .4; transition: opacity .2s; cursor: none;
-    }
-    .nav-back:hover { opacity: 1; }
-    .nav-logo { font-family: var(--disp); font-size: 20px; letter-spacing: .08em; opacity: .25; }
-    .nav-cta {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
-      text-transform: uppercase; text-decoration: none;
-      background: var(--black); color: var(--white);
-      padding: .45rem 1rem; cursor: none;
-      transition: background .18s;
-    }
-    .nav-cta:hover { background: var(--pink); }
-
-    /* HERO — big editorial, white bg */
+    /* hero */
     .hero {
-      padding: 8rem 6vw 0;
-      border-bottom: 1px solid rgba(0,0,0,.08);
+      position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
+      padding: 100px var(--gutter) 32px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr auto; gap: 2vh 2vw;
     }
-    .hero-kicker {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .35em;
-      text-transform: uppercase; opacity: .4; margin-bottom: 1.5rem; display: block;
+    .hero-copy { align-self: center; position: relative; z-index: 2; }
+    .kicker { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; display: block; margin-bottom: 2rem; }
+    .hero h1 { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(76px, 12.5vw, 240px); line-height: .8; letter-spacing: -.06em; }
+    .hero h1 .pk { color: var(--pink); }
+    .hero h1 .ol { color: transparent; -webkit-text-stroke: 2px var(--black); }
+    .hero-sub { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.45; max-width: 34ch; margin-top: 3vh; opacity: .8; }
+    .stage { position: relative; min-height: 60vh; }
+    .disc { position: absolute; left: 50%; top: 46%; width: min(36vw, 62vh); aspect-ratio: 1; border-radius: 50%; background: var(--pink); transform: translate(-50%, -50%); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #case { position: absolute; inset: -8vh -4vw 0; width: calc(100% + 8vw); height: calc(100% + 8vh); touch-action: pan-y; }
+    .sticker {
+      position: absolute; z-index: 3; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+      background: var(--black); color: var(--white); padding: .65rem 1rem; border-radius: 100px; pointer-events: none; white-space: nowrap;
     }
-    .hero-h1 {
-      font-family: var(--disp);
-      font-size: clamp(80px, 15vw, 220px);
-      line-height: .85; letter-spacing: .01em;
-      margin-bottom: 3rem;
-    }
-    .hero-h1 em { font-style: normal; color: var(--pink); }
-    .hero-rule { width: 100%; height: 1px; background: rgba(0,0,0,.1); margin-bottom: 3rem; }
-    .hero-bottom {
-      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 0; border-top: 1px solid rgba(0,0,0,.08);
-    }
-    .hero-meta-cell {
-      padding: 1.5rem 2rem 1.5rem 0;
-      border-right: 1px solid rgba(0,0,0,.08);
-    }
-    .hero-meta-cell:last-child { border-right: none; padding-left: 2rem; }
-    .hm-label { font-family: var(--mono); font-size: 8px; letter-spacing: .25em; text-transform: uppercase; opacity: .3; display: block; margin-bottom: .4rem; }
-    .hm-val { font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+    .sticker.s1 { left: 2%; top: 12%; transform: rotate(-8deg); }
+    .sticker.s2 { right: 4%; top: 30%; transform: rotate(7deg); background: #ffd23f; color: var(--black); }
+    .sticker.s3 { left: 8%; bottom: 22%; transform: rotate(4deg); background: var(--white); color: var(--black); border: 1px solid var(--black); }
+    .swaps { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: .8rem; }
+    .swaps p { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+    .swap-row { display: flex; gap: .6rem; }
+    .swap { width: 46px; height: 64px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; transition: transform .45s var(--ease-out), border-color .3s; box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+    .swap canvas { width: 100%; height: 100%; display: block; }
+    .swap:hover { transform: translateY(-6px) rotate(-4deg); }
+    .swap[aria-pressed="true"] { border-color: var(--black); transform: translateY(-6px); }
+    .hero .c-meta { grid-column: 1 / -1; }
 
-    /* TICKER — black bar */
-    .ticker {
-      overflow: hidden; white-space: nowrap;
-      background: var(--black); padding: .75rem 0;
-    }
-    .ticker-track {
-      display: inline-flex; gap: 2.5rem;
-      animation: tick 14s linear infinite;
-    }
-    .ticker-item {
-      font-family: var(--disp); font-size: 16px;
-      letter-spacing: .1em; color: var(--white);
-    }
-    .ticker-item.dot { color: var(--pink); }
-    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    /* ticker */
+    .ticker { background: var(--black); color: var(--white); padding: 1.1rem 0; width: 104%; margin-left: -2%; }
+    .ticker .marquee-track span { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(22px, 2.6vw, 40px); letter-spacing: -.03em; padding: 0 1.2rem; }
+    .ticker .marquee-track .star { color: var(--pink); }
+    .ticker-wrap { overflow: hidden; padding: 2vh 0; }
+    .ticker.t2 { background: var(--pink); color: var(--black); margin-top: -1.2rem; rotate: -2deg; }
+    .ticker.t2 .star { color: var(--white); }
+    .ticker.t1 { rotate: 1.5deg; position: relative; z-index: 2; }
 
-    /* SECTION BASE */
-    section { padding: 6rem 6vw; border-bottom: 1px solid rgba(0,0,0,.08); }
-    section.dark { background: var(--black); color: var(--white); border-color: rgba(255,255,255,.06); }
-    section.off { background: var(--off); }
+    /* art wall */
+    .wall { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; margin-top: 8vh; perspective: 1400px; }
+    .wcard { position: relative; border-radius: 22px; overflow: hidden; min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; color: var(--white); isolation: isolate; }
+    .wcard canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; transition: transform 1.2s var(--ease-out); }
+    .wcard:hover canvas { transform: scale(1.08) rotate(1deg); }
+    .wcard::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(0,0,0,.65), transparent 55%); }
+    .wcard .wt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-bottom: .6rem; }
+    .wcard .wl { font-weight: 900; font-stretch: 120%; text-transform: uppercase; font-size: clamp(28px, 3vw, 52px); line-height: .9; letter-spacing: -.04em; }
 
-    .s-label { font-family: var(--mono); font-size: 9px; letter-spacing: .35em; text-transform: uppercase; opacity: .35; margin-bottom: 1.4rem; display: block; }
-    .dark .s-label { opacity: .35; color: var(--white); }
-    .s-title { font-family: var(--disp); font-size: clamp(44px,7vw,100px); line-height: .88; letter-spacing: .01em; margin-bottom: 2.5rem; }
+    .c-stat .num { font-stretch: 125%; font-weight: 900; }
+    .dark .c-out .ol { color: var(--white); }
+    .dark .c-out li:hover .ol { color: var(--pink); }
+    .dark .pill { --fg: #f5f5f0; }
+    .next .next-title { font-weight: 900; }
+    .next:hover .next-title { color: #c89b18; }
+    .next-bar::after { background: #c89b18; }
 
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: start; }
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
-
-    .body-p { font-size: clamp(14px,1.1vw,17px); line-height: 1.8; opacity: .6; max-width: 520px; }
-    .body-p + .body-p { margin-top: 1rem; }
-    .dark .body-p { opacity: .5; color: var(--white); }
-
-    /* STAT STRIP */
-    .stat-strip {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      border-top: 1px solid rgba(0,0,0,.08);
-      border-left: 1px solid rgba(0,0,0,.08);
-      margin-top: 3rem;
-    }
-    .dark .stat-strip { border-color: rgba(255,255,255,.08); }
-    .stat-cell {
-      padding: 2.5rem 2rem;
-      border-right: 1px solid rgba(0,0,0,.08);
-      border-bottom: 1px solid rgba(0,0,0,.08);
-    }
-    .dark .stat-cell { border-color: rgba(255,255,255,.08); }
-    .stat-n { font-family: var(--disp); font-size: clamp(52px,6vw,80px); line-height: 1; display: block; margin-bottom: .4rem; }
-    .stat-l { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .35; line-height: 1.7; }
-
-    /* IMAGE GRID — screenshots as positioned color blocks with overlaid text */
-    .img-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 2px;
-      margin-top: 3rem;
-    }
-    .img-block {
-      position: relative; overflow: hidden;
-      min-height: 320px;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 2rem;
-    }
-    .img-block.tall { grid-row: span 2; }
-    .img-block-bg {
-      position: absolute; inset: 0; z-index: 0;
-    }
-    .img-block > *:not(.img-block-bg) { position: relative; z-index: 1; }
-    .img-tag {
-      font-family: var(--mono); font-size: 8px; letter-spacing: .25em;
-      text-transform: uppercase; color: var(--white); opacity: .6;
-      margin-bottom: .4rem; display: block;
-    }
-    .img-label {
-      font-family: var(--disp); font-size: clamp(24px,3vw,40px);
-      color: var(--white); line-height: 1; letter-spacing: .02em;
-    }
-
-    /* PROCESS */
-    .proc { list-style: none; margin-top: 2rem; }
-    .proc li {
-      display: grid; grid-template-columns: 64px 1fr;
-      gap: 1.5rem; padding: 1.8rem 0;
-      border-bottom: 1px solid rgba(0,0,0,.08);
-      align-items: start;
-    }
-    .dark .proc li { border-color: rgba(255,255,255,.07); }
-    .proc-n {
-      font-family: var(--disp); font-size: 42px; line-height: 1;
-      opacity: .15; padding-top: .1rem;
-    }
-    .proc-title { font-size: 16px; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
-    .proc-desc { font-size: 13px; line-height: 1.8; opacity: .45; }
-    .dark .proc-desc { opacity: .4; color: var(--white); }
-
-    /* OUTCOME TABLE */
-    .outcome-table { margin-top: 2.5rem; }
-    .outcome-row {
-      display: flex; justify-content: space-between; align-items: baseline;
-      padding: 1.1rem 0; border-bottom: 1px solid rgba(0,0,0,.08); gap: 2rem;
-    }
-    .dark .outcome-row { border-color: rgba(255,255,255,.07); }
-    .outcome-label { font-family: var(--disp); font-size: clamp(24px,3vw,40px); letter-spacing: .01em; }
-    .outcome-val { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; opacity: .4; flex-shrink: 0; }
-
-    /* TAGS */
-    .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.6rem; }
-    .tag {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
-      text-transform: uppercase; border: 1px solid rgba(0,0,0,.14);
-      padding: .28rem .75rem; opacity: .5;
-      transition: opacity .2s, border-color .2s;
-    }
-    .tag:hover { opacity: 1; border-color: var(--pink); color: var(--pink); }
-    .dark .tag { border-color: rgba(255,255,255,.14); color: var(--white); }
-
-    /* CTA */
-    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem; }
-    .btn {
-      font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
-      text-transform: uppercase; text-decoration: none;
-      padding: .7rem 1.4rem; cursor: none; transition: all .18s;
-    }
-    .btn-solid { background: var(--white); color: var(--black); }
-    .btn-solid:hover { background: var(--pink); color: var(--white); }
-    .btn-outline { border: 1px solid rgba(255,255,255,.25); color: var(--white); }
-    .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
-
-    /* FOOTER */
-    footer {
-      padding: 3rem 6vw; display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 1rem;
-      background: var(--white); border-top: 1px solid rgba(0,0,0,.08);
-    }
-    .foot-copy { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; opacity: .2; }
-    .foot-link {
-      font-family: var(--disp); font-size: 22px; letter-spacing: .04em;
-      text-decoration: none; color: var(--black); opacity: .3;
-      transition: opacity .2s, color .2s; cursor: none;
-    }
-    .foot-link:hover { opacity: 1; color: var(--pink); }
-
-    @media (max-width: 768px) {
-      .two-col, .three-col { grid-template-columns: 1fr; }
-      .hero-bottom { grid-template-columns: 1fr 1fr; }
-      .stat-strip { grid-template-columns: 1fr; }
-      .img-grid { grid-template-columns: 1fr; }
-      .img-block.tall { grid-row: span 1; }
-      body { cursor: auto; }
-      #cursor { display: none; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 90px; }
+      .stage { min-height: 62vh; order: -1; }
+      .disc { width: 70vw; }
+      .wall { grid-template-columns: 1fr; }
+      .wcard { min-height: 46vh; }
+      .sticker.s2 { right: 0; }
     }
   </style>
 </head>
 <body>
-<div id="cursor"></div>
 
-<nav>
-  <a class="nav-back" href="../index.html">&#8592; Back</a>
-  <div class="nav-logo">ANGBO XIE</div>
-  <a class="nav-cta" href="https://casepopau.com" target="_blank">Visit Site &#8599;</a>
-</nav>
+<svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
+  <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
+  <filter id="goo-c"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter>
+  <filter id="melt"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+<div class="curtain" aria-hidden="true"><div class="cl a"><i style="--d:0.01s"></i><i style="--d:0.19s"></i><i style="--d:0.21s"></i><i style="--d:0.16s"></i><i style="--d:0.25s"></i><i style="--d:0.09s"></i><i style="--d:0.19s"></i><i style="--d:0.17s"></i><i style="--d:0.16s"></i><i style="--d:0.13s"></i><i style="--d:0.24s"></i><i style="--d:0.26s"></i><i style="--d:0.13s"></i><i style="--d:0.19s"></i></div><div class="cl b"><i style="--d:0.02s"></i><i style="--d:0.20s"></i><i style="--d:0.18s"></i><i style="--d:0.28s"></i><i style="--d:0.23s"></i><i style="--d:0.08s"></i><i style="--d:0.11s"></i><i style="--d:0.19s"></i><i style="--d:0.01s"></i><i style="--d:0.13s"></i><i style="--d:0.05s"></i><i style="--d:0.03s"></i><i style="--d:0.02s"></i><i style="--d:0.22s"></i></div><div class="px"><i style="--d:0.13s"></i><i style="--d:0.01s"></i><i style="--d:0.23s"></i><i style="--d:0.07s"></i><i style="--d:0.04s"></i><i style="--d:0.01s"></i><i style="--d:0.18s"></i><i style="--d:0.13s"></i><i style="--d:0.18s"></i><i style="--d:0.18s"></i><i style="--d:0.23s"></i><i style="--d:0.27s"></i><i style="--d:0.19s"></i><i style="--d:0.06s"></i><i style="--d:0.13s"></i><i style="--d:0.05s"></i><i style="--d:0.00s"></i><i style="--d:0.13s"></i><i style="--d:0.20s"></i><i style="--d:0.05s"></i><i style="--d:0.08s"></i><i style="--d:0.10s"></i><i style="--d:0.20s"></i><i style="--d:0.15s"></i><i style="--d:0.17s"></i><i style="--d:0.21s"></i><i style="--d:0.11s"></i><i style="--d:0.22s"></i><i style="--d:0.25s"></i><i style="--d:0.02s"></i><i style="--d:0.26s"></i><i style="--d:0.20s"></i><i style="--d:0.04s"></i><i style="--d:0.13s"></i><i style="--d:0.18s"></i><i style="--d:0.25s"></i><i style="--d:0.11s"></i><i style="--d:0.16s"></i><i style="--d:0.25s"></i><i style="--d:0.22s"></i><i style="--d:0.26s"></i><i style="--d:0.13s"></i><i style="--d:0.18s"></i><i style="--d:0.06s"></i><i style="--d:0.20s"></i><i style="--d:0.23s"></i><i style="--d:0.18s"></i><i style="--d:0.20s"></i><i style="--d:0.06s"></i><i style="--d:0.25s"></i><i style="--d:0.27s"></i><i style="--d:0.27s"></i><i style="--d:0.15s"></i><i style="--d:0.22s"></i><i style="--d:0.09s"></i><i style="--d:0.25s"></i><i style="--d:0.24s"></i><i style="--d:0.10s"></i><i style="--d:0.02s"></i><i style="--d:0.12s"></i><i style="--d:0.15s"></i><i style="--d:0.22s"></i><i style="--d:0.14s"></i><i style="--d:0.01s"></i><i style="--d:0.23s"></i><i style="--d:0.02s"></i><i style="--d:0.22s"></i><i style="--d:0.05s"></i><i style="--d:0.09s"></i><i style="--d:0.22s"></i><i style="--d:0.04s"></i><i style="--d:0.04s"></i><i style="--d:0.14s"></i><i style="--d:0.20s"></i><i style="--d:0.24s"></i><i style="--d:0.19s"></i><i style="--d:0.26s"></i><i style="--d:0.14s"></i><i style="--d:0.27s"></i><i style="--d:0.02s"></i><i style="--d:0.06s"></i><i style="--d:0.15s"></i><i style="--d:0.08s"></i><i style="--d:0.20s"></i><i style="--d:0.18s"></i><i style="--d:0.15s"></i><i style="--d:0.24s"></i><i style="--d:0.16s"></i><i style="--d:0.09s"></i><i style="--d:0.11s"></i><i style="--d:0.24s"></i><i style="--d:0.25s"></i><i style="--d:0.06s"></i><i style="--d:0.24s"></i><i style="--d:0.27s"></i><i style="--d:0.15s"></i><i style="--d:0.16s"></i><i style="--d:0.06s"></i><i style="--d:0.15s"></i><i style="--d:0.14s"></i><i style="--d:0.17s"></i><i style="--d:0.01s"></i><i style="--d:0.27s"></i><i style="--d:0.14s"></i><i style="--d:0.11s"></i><i style="--d:0.22s"></i><i style="--d:0.16s"></i><i style="--d:0.14s"></i><i style="--d:0.19s"></i><i style="--d:0.02s"></i><i style="--d:0.15s"></i><i style="--d:0.12s"></i><i style="--d:0.27s"></i><i style="--d:0.26s"></i><i style="--d:0.08s"></i><i style="--d:0.13s"></i><i style="--d:0.04s"></i><i style="--d:0.12s"></i><i style="--d:0.23s"></i><i style="--d:0.25s"></i><i style="--d:0.13s"></i><i style="--d:0.09s"></i><i style="--d:0.05s"></i><i style="--d:0.17s"></i><i style="--d:0.26s"></i><i style="--d:0.04s"></i></div><div class="sh"><i style="--d:0.000s"></i><i style="--d:0.045s"></i><i style="--d:0.090s"></i><i style="--d:0.135s"></i><i style="--d:0.180s"></i><i style="--d:0.225s"></i><i style="--d:0.270s"></i><i style="--d:0.315s"></i></div><div class="c-eyes"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <span class="hero-kicker">Case Study 02 &mdash; E-Commerce &mdash; 2024</span>
-  <h1 class="hero-h1">CASE<em>POP</em><br>AU.</h1>
-  <div class="hero-bottom">
-    <div class="hero-meta-cell">
-      <span class="hm-label">Role</span>
-      <span class="hm-val">Co-Founder + Front End</span>
-    </div>
-    <div class="hero-meta-cell">
-      <span class="hm-label">Stack</span>
-      <span class="hm-val">Shopify + Custom Code</span>
-    </div>
-    <div class="hero-meta-cell">
-      <span class="hm-label">Status</span>
-      <span class="hm-val">Live — Ongoing</span>
-    </div>
-    <div class="hero-meta-cell" style="padding-left:2rem">
-      <span class="hm-label">Community</span>
-      <span class="hm-val">1,500+ Followers</span>
-    </div>
+<header class="nav">
+  <a href="../index.html#work" class="nav-back"><span class="arr">&larr;</span> <span class="roll">Index</span></a>
+  <a href="../index.html" class="nav-logo nav-hide-sm">AX<sup>&reg;</sup></a>
+  <div class="nav-right">
+    <a class="roll nav-hide-sm" href="https://casepopau.com" target="_blank" rel="noopener">Visit site &#8599;</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span>Menu</span><span class="bars"></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <nav class="menu-links" aria-label="Menu">
+    <a href="../index.html"><span class="ml">Home</span><sup>00</sup></a>
+    <a href="essentially-australia.html"><span class="ml">Essentially</span><sup>01</sup></a>
+    <a href="casepop.html"><span class="ml">Casepop</span><sup>02</sup></a>
+    <a href="tactibrawl.html"><span class="ml">Tactibrawl</span><sup>03</sup></a>
+  </nav>
+  <div class="menu-foot">
+    <a href="mailto:xie109714@gmail.com">xie109714@gmail.com</a>
+    <a href="https://au.linkedin.com/in/angboxie" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="../Assets/resume.pdf" target="_blank">Resume &darr;</a>
   </div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="ticker-item">CRAFTED BY LOCAL ARTISTS</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">DESIGNED &amp; PRINTED IN AUSTRALIA</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">NOT YOUR BASIC CASE</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">1.5K+ COMMUNITY</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">REAL SALES. REAL PEOPLE.</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">CRAFTED BY LOCAL ARTISTS</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">DESIGNED &amp; PRINTED IN AUSTRALIA</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">NOT YOUR BASIC CASE</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">1.5K+ COMMUNITY</span>
-    <span class="ticker-item dot">&#11088;</span>
-    <span class="ticker-item">REAL SALES. REAL PEOPLE.</span>
-    <span class="ticker-item dot">&#11088;</span>
-  </div>
-</div>
-
-<!-- OVERVIEW -->
-<section>
-  <div class="two-col">
-    <div>
-      <span class="s-label">Overview</span>
-      <h2 class="s-title">ART IN<br>YOUR<br>POCKET.</h2>
-      <div class="tags">
-        <span class="tag">Shopify</span>
-        <span class="tag">Liquid</span>
-        <span class="tag">HTML/CSS/JS</span>
-        <span class="tag">Brand Design</span>
-        <span class="tag">UGC Strategy</span>
-        <span class="tag">E-Commerce</span>
+<main>
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <span class="kicker" data-reveal data-delay=".5">Case Study 02 / E-Commerce / 2024</span>
+      <h1 data-split data-delay=".55" data-stagger=".09">Case<span class="pk">pop</span><br><span class="ol">AU.</span></h1>
+      <p class="hero-sub" data-reveal data-delay=".9">An Australian phone case brand that puts independent local artists front and centre. Art in your pocket.</p>
+    </div>
+    <div class="stage">
+      <div class="disc" aria-hidden="true"></div>
+      <span class="sticker s1" data-depth="18">Not your basic case</span>
+      <span class="sticker s2" data-depth="-24">&#11088; Designed &amp; printed in AU</span>
+      <span class="sticker s3" data-depth="12">Crafted by local artists</span>
+      <canvas id="case" role="img" aria-label="Interactive 3D phone case showing artist designs."></canvas>
+      <div class="swaps" data-reveal data-delay="1.1">
+        <div class="swap-row" role="group" aria-label="Case designs"></div>
       </div>
     </div>
-    <div style="padding-top:1rem">
-      <p class="body-p">The phone case market is flooded with corporate mass-production. We saw something different, where local Australian artists making incredible work with no platform built for them at scale. So we built one.</p>
-      <p class="body-p">Casepop AU puts independent creators front and centre. Every design ships from an Australian artist. We handle the store and growth. They get the spotlight.</p>
-      <p class="body-p">I co-founded the brand and owned all front-end work: custom coding on top of Shopify to build exactly what the brand needed, not what a template offered.</p>
+    <dl class="c-meta" data-reveal data-delay="1.2">
+      <div><dt>Role</dt><dd>Co-Founder + Front End</dd></div>
+      <div><dt>Stack</dt><dd>Shopify + Custom Code</dd></div>
+      <div><dt>Status</dt><dd>Live / Ongoing</dd></div>
+      <div><dt>Community</dt><dd>1,500+ Followers</dd></div>
+    </dl>
+  </section>
+
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="marquee ticker t1" data-speed="1.6" data-skew>
+      <div class="marquee-track">
+        <span>Crafted by local artists</span><span class="star">&#10022;</span>
+        <span>Designed &amp; printed in Australia</span><span class="star">&#10022;</span>
+        <span>Not your basic case</span><span class="star">&#10022;</span>
+        <span>1.5K+ community</span><span class="star">&#10022;</span>
+        <span>Real sales. Real people.</span><span class="star">&#10022;</span>
+      </div>
+    </div>
+    <div class="marquee ticker t2" data-speed="1.2" data-dir="right" data-skew>
+      <div class="marquee-track">
+        <span>Art in your pocket</span><span class="star">&#10022;</span>
+        <span>Shopify + custom code</span><span class="star">&#10022;</span>
+        <span>Zero paid ads</span><span class="star">&#10022;</span>
+      </div>
     </div>
   </div>
 
-  <!-- IMAGE GRID with screenshots -->
-  <div class="img-grid">
-    <div class="img-block tall">
-      <div class="img-block-bg" style="background:#1a0f0f">
-        <!-- lifestyle UGC feel — artist drawing -->
-        <div style="width:100%;height:100%;background:linear-gradient(160deg,#2a1515 0%,#0d0808 100%);display:flex;align-items:center;justify-content:center">
-          <span style="font-family:var(--disp);font-size:clamp(60px,8vw,110px);color:rgba(255,255,255,.06);letter-spacing:.02em;text-align:center;line-height:.9">CRAFTED<br>BY<br>LOCAL<br>ARTISTS</span>
+  <section class="c-sec" id="overview">
+    <div class="c-two">
+      <div>
+        <span class="c-label">Overview</span>
+        <h2 class="c-title" data-split>Art in your <em>pocket.</em></h2>
+        <div class="c-tags" data-reveal>
+          <span>Shopify</span><span>Liquid</span><span>HTML/CSS/JS</span><span>Brand Design</span><span>UGC Strategy</span><span>E-Commerce</span>
         </div>
       </div>
-      <span class="img-tag">Homepage</span>
-      <span class="img-label">CRAFTED BY<br>LOCAL ARTISTS</span>
-    </div>
-    <div class="img-block" style="min-height:200px">
-      <div class="img-block-bg" style="background:linear-gradient(135deg,#7c4d8a,#3d2050)">
-        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:1rem;padding:1rem">
-          <div style="width:60px;height:100px;background:rgba(255,255,255,.12);border-radius:8px"></div>
-          <div style="width:60px;height:100px;background:rgba(255,100,150,.2);border-radius:8px"></div>
-          <div style="width:60px;height:100px;background:rgba(255,255,255,.08);border-radius:8px"></div>
-        </div>
+      <div class="c-body">
+        <p data-reveal>The phone case market is flooded with corporate mass-production. We saw something different, where local Australian artists making incredible work with no platform built for them at scale. So we built one.</p>
+        <p data-reveal>Casepop AU puts independent creators front and centre. Every design ships from an Australian artist. We handle the store and growth. They get the spotlight.</p>
+        <p data-reveal>I co-founded the brand and owned all front-end work: custom coding on top of Shopify to build exactly what the brand needed, not what a template offered.</p>
       </div>
-      <span class="img-tag">Collections</span>
-      <span class="img-label">NEW DROPS</span>
     </div>
-    <div class="img-block" style="min-height:200px">
-      <div class="img-block-bg" style="background:linear-gradient(135deg,#1a3a2a,#0d1f16)">
-        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
-          <span style="font-family:var(--disp);font-size:clamp(28px,4vw,52px);color:rgba(255,255,255,.08);letter-spacing:.02em;text-align:center">ARTISTS<br>PAGE</span>
-        </div>
-      </div>
-      <span class="img-tag">Community</span>
-      <span class="img-label">MEET THE<br>CREATORS</span>
+    <div class="wall">
+      <div class="wcard" data-tilt="6" data-art="0"><span class="wt">Homepage</span><span class="wl">Crafted by<br>local artists</span></div>
+      <div class="wcard" data-tilt="6" data-art="2"><span class="wt">Collections</span><span class="wl">New<br>drops</span></div>
+      <div class="wcard" data-tilt="6" data-art="3"><span class="wt">Community</span><span class="wl">Meet the<br>creators</span></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- NUMBERS -->
-<section class="dark">
-  <span class="s-label">By The Numbers</span>
-  <div class="stat-strip">
-    <div class="stat-cell">
-      <span class="stat-n" style="color:var(--pink)">1.5K+</span>
-      <span class="stat-l">Instagram followers — zero paid ads</span>
+  <section class="c-sec dark" id="numbers">
+    <span class="c-label">By the numbers</span>
+    <div class="c-stats" style="--cols:3">
+      <div class="c-stat"><span class="num" data-count="1.5" data-decimals="1" data-suffix="K+">1.5K+</span><span class="lab">Instagram followers, zero paid ads</span></div>
+      <div class="c-stat"><span class="num">Real</span><span class="lab">Revenue from real Australian customers</span></div>
+      <div class="c-stat"><span class="num">Local</span><span class="lab">Artists only. Every design independent</span></div>
     </div>
-    <div class="stat-cell">
-      <span class="stat-n" style="color:var(--pink)">Real</span>
-      <span class="stat-l">Revenue from real Australian customers</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-n" style="color:var(--pink)">Local</span>
-      <span class="stat-l">Artists only — every design independent</span>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- PROCESS -->
-<section class="off">
-  <span class="s-label">Process</span>
-  <h2 class="s-title">HOW WE<br>DID IT.</h2>
-  <ul class="proc">
-    <li>
-      <span class="proc-n">01</span>
-      <div>
-        <div class="proc-title">Brand Identity from Scratch</div>
-        <div class="proc-desc">Name, logo, colour system, tone of voice, all built from zero. Needed to feel youthful and community-led without overshadowing the artist work it was built to promote.</div>
+  <section class="c-sec alt" id="process">
+    <div class="c-proc">
+      <div class="c-proc-side">
+        <span class="c-label">Process</span>
+        <h2 class="c-title" data-split>How we <em>did it.</em></h2>
+        <div class="c-proc-rail"><i></i></div>
+        <span class="c-proc-big">01</span>
       </div>
-    </li>
-    <li>
-      <span class="proc-n">02</span>
-      <div>
-        <div class="proc-title">Shopify + Custom Front End</div>
-        <div class="proc-desc">Shopify as the commerce engine, then custom Liquid, HTML, CSS and JS on top. Overrode the template everywhere it got in the way: product pages, collection layouts, artist feature sections, the nav.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">03</span>
-      <div>
-        <div class="proc-title">Artist Onboarding</div>
-        <div class="proc-desc">Built a simple submission and onboarding process for local creators. Multiple artists onboarded, each with their own collection and full attribution on site.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">04</span>
-      <div>
-        <div class="proc-title">UGC + Organic Social</div>
-        <div class="proc-desc">Grew to 1.5K+ through UGC: real customers, real photos, real community. Zero paid ads. Built artist and customer relationships that fed back into product drops.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">05</span>
-      <div>
-        <div class="proc-title">Ongoing Iteration</div>
-        <div class="proc-desc">Monitored behaviour and iterated continuously: tightening product pages, streamlining checkout, making artist stories more prominent across the purchase flow.</div>
-      </div>
-    </li>
-  </ul>
-</section>
+      <ol class="c-steps">
+        <li class="c-step"><span class="n">01</span><div><h3>Brand Identity from Scratch</h3><p>Name, logo, colour system, tone of voice, all built from zero. Needed to feel youthful and community-led without overshadowing the artist work it was built to promote.</p></div></li>
+        <li class="c-step"><span class="n">02</span><div><h3>Shopify + Custom Front End</h3><p>Shopify as the commerce engine, then custom Liquid, HTML, CSS and JS on top. Overrode the template everywhere it got in the way: product pages, collection layouts, artist feature sections, the nav.</p></div></li>
+        <li class="c-step"><span class="n">03</span><div><h3>Artist Onboarding</h3><p>Built a simple submission and onboarding process for local creators. Multiple artists onboarded, each with their own collection and full attribution on site.</p></div></li>
+        <li class="c-step"><span class="n">04</span><div><h3>UGC + Organic Social</h3><p>Grew to 1.5K+ through UGC: real customers, real photos, real community. Zero paid ads. Built artist and customer relationships that fed back into product drops.</p></div></li>
+        <li class="c-step"><span class="n">05</span><div><h3>Ongoing Iteration</h3><p>Monitored behaviour and iterated continuously: tightening product pages, streamlining checkout, making artist stories more prominent across the purchase flow.</p></div></li>
+      </ol>
+    </div>
+  </section>
 
-<!-- OUTCOMES -->
-<section class="dark">
-  <span class="s-label">Outcomes</span>
-  <h2 class="s-title">WHAT WE<br>ACHIEVED.</h2>
-  <div class="outcome-table" style="max-width:680px">
-    <div class="outcome-row">
-      <span class="outcome-label">Instagram</span>
-      <span class="outcome-val">1,500+ Organic</span>
+  <section class="c-sec dark" id="outcomes">
+    <span class="c-label">Outcomes</span>
+    <h2 class="c-title" data-split>What we <em>achieved.</em></h2>
+    <ul class="c-out">
+      <li><span class="ol">Instagram</span><span class="ov">1,500+ Organic</span></li>
+      <li><span class="ol">Revenue</span><span class="ov">Live Sales</span></li>
+      <li><span class="ol">Artists</span><span class="ov">Multiple Creators</span></li>
+      <li><span class="ol">UGC</span><span class="ov">Ongoing Community</span></li>
+      <li><span class="ol">Status</span><span class="ov">Live at casepopau.com</span></li>
+    </ul>
+    <div class="c-cta">
+      <a class="pill solid" data-magnetic=".25" href="https://casepopau.com" target="_blank" rel="noopener">Visit Casepop AU &#8599;</a>
+      <a class="pill" data-magnetic=".25" href="https://www.instagram.com/casepopau/" target="_blank" rel="noopener">Instagram &#8599;</a>
     </div>
-    <div class="outcome-row">
-      <span class="outcome-label">Revenue</span>
-      <span class="outcome-val">Live Sales</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label">Artists</span>
-      <span class="outcome-val">Multiple Creators</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label">UGC</span>
-      <span class="outcome-val">Ongoing Community</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label">Status</span>
-      <span class="outcome-val">Live at casepopau.com</span>
-    </div>
-  </div>
-  <div class="cta-row">
-    <a class="btn btn-solid" href="https://casepopau.com" target="_blank">Visit Casepop AU &#8599;</a>
-    <a class="btn btn-outline" href="https://www.instagram.com/casepopau/" target="_blank">Instagram &#8599;</a>
-  </div>
-</section>
+  </section>
 
-<footer>
-  <a class="foot-link" href="essentially-australia.html">&#8592; Essentially Australia</a>
-  <span class="foot-copy">&copy; 2025 Angbo Xie</span>
-  <a class="foot-link" href="tactibrawl.html">Tactibrawl &#8594;</a>
-</footer>
+  <a class="next" href="tactibrawl.html">
+    <span class="next-label mono"><span>Next project / 03</span><span>Game UI / 2024</span></span>
+    <span class="next-title">Tactibrawl &rarr;</span>
+    <div class="next-bar"></div>
+  </a>
+  <footer class="foot-row"><a href="essentially-australia.html" class="roll">&larr; Essentially Australia</a><span>Melbourne <span data-clock>--:--:--</span></span><a href="#top" class="roll">Back to top &uarr;</a></footer>
+</main>
 
-<script>
-  var cur = document.getElementById('cursor');
-  var mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
-  document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; });
-  (function loop(){
-    cx+=(mx-cx)*.13; cy+=(my-cy)*.13;
-    cur.style.left=cx+'px'; cur.style.top=cy+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('mouseenter',function(){ cur.classList.add('grow'); });
-    a.addEventListener('mouseleave',function(){ cur.classList.remove('grow'); });
-  });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../JS/core.js" defer></script>
+<script src="../JS/infect.js" defer></script>
+<script src="../JS/liquid.js" defer></script>
+<script src="../JS/case.js" defer></script>
+<script src="../JS/casepop.js" defer></script>
 </body>
 </html>

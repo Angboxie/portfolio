@@ -2,34 +2,248 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>ANGBO XIE</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
+  <title>Angbo Xie, Interface Designer, Melbourne</title>
+  <meta name="description" content="Angbo Xie is an interface designer in Melbourne. Interfaces with instinct."/>
+  <meta name="theme-color" content="#050505"/>
+  <script>try{if(sessionStorage.getItem('ax-intro'))document.documentElement.classList.add('seen')}catch(e){}</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050505'/%3E%3Cpath d='M14 34 Q24 24 30 23 Q26 33 14 34Z M50 34 Q40 24 34 23 Q38 33 50 34Z' fill='%23ecebe6'/%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="CSS/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Dela+Gothic+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="CSS/base.css"/>
+  <link rel="stylesheet" href="CSS/infect.css"/>
+  <link rel="stylesheet" href="CSS/home.css"/>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
 </head>
 <body>
-  <div id="cursor"></div>
-  <div id="flash"></div>
-  <div id="grid-overlay"></div>
-  <div id="progress-bar"><div id="progress-fill"></div></div>
-  <div id="hud-left"><span class="hud-name">ANGBO XIE</span></div>
-  <div id="hud-right"><span id="cur-scene">01</span><span class="sep">/</span><span id="total-scenes">09</span></div>
-  <nav id="top-menu">
-    <button class="tm-item" data-goto="0">Title</button>
-    <button class="tm-item" data-goto="1">Origin</button>
-    <button class="tm-item" data-goto="4">Craft</button>
-    <button class="tm-item" data-goto="6">Works</button>
-    <button class="tm-item" data-goto="7">About</button>
-    <button class="tm-item" data-goto="8">Contact</button>
+
+<svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
+  <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
+  <filter id="goo-c"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter>
+</defs></svg>
+
+<div class="curtain" aria-hidden="true">
+  <div class="cl a"><i style="--d:.09s"></i><i style="--d:.04s"></i><i style="--d:.18s"></i><i style="--d:.02s"></i><i style="--d:.15s"></i><i style="--d:.22s"></i><i style="--d:.07s"></i><i style="--d:.12s"></i><i style="--d:0s"></i><i style="--d:.2s"></i><i style="--d:.1s"></i><i style="--d:.05s"></i><i style="--d:.16s"></i><i style="--d:.25s"></i></div>
+  <div class="cl b"><i style="--d:.12s"></i><i style="--d:.03s"></i><i style="--d:.2s"></i><i style="--d:.08s"></i><i style="--d:.14s"></i><i style="--d:.01s"></i><i style="--d:.24s"></i><i style="--d:.1s"></i><i style="--d:.06s"></i><i style="--d:.17s"></i><i style="--d:.02s"></i><i style="--d:.21s"></i><i style="--d:.09s"></i><i style="--d:.13s"></i></div>
+  <div class="px"><i style="--d:0.13s"></i><i style="--d:0.16s"></i><i style="--d:0.26s"></i><i style="--d:0.13s"></i><i style="--d:0.14s"></i><i style="--d:0.16s"></i><i style="--d:0.05s"></i><i style="--d:0.14s"></i><i style="--d:0.18s"></i><i style="--d:0.22s"></i><i style="--d:0.03s"></i><i style="--d:0.08s"></i><i style="--d:0.03s"></i><i style="--d:0.23s"></i><i style="--d:0.19s"></i><i style="--d:0.01s"></i><i style="--d:0.28s"></i><i style="--d:0.27s"></i><i style="--d:0.18s"></i><i style="--d:0.17s"></i><i style="--d:0.04s"></i><i style="--d:0.00s"></i><i style="--d:0.15s"></i><i style="--d:0.02s"></i><i style="--d:0.05s"></i><i style="--d:0.07s"></i><i style="--d:0.01s"></i><i style="--d:0.13s"></i><i style="--d:0.12s"></i><i style="--d:0.24s"></i><i style="--d:0.15s"></i><i style="--d:0.18s"></i><i style="--d:0.14s"></i><i style="--d:0.19s"></i><i style="--d:0.13s"></i><i style="--d:0.08s"></i><i style="--d:0.28s"></i><i style="--d:0.28s"></i><i style="--d:0.24s"></i><i style="--d:0.20s"></i><i style="--d:0.09s"></i><i style="--d:0.06s"></i><i style="--d:0.08s"></i><i style="--d:0.02s"></i><i style="--d:0.21s"></i><i style="--d:0.11s"></i><i style="--d:0.24s"></i><i style="--d:0.11s"></i><i style="--d:0.27s"></i><i style="--d:0.24s"></i><i style="--d:0.00s"></i><i style="--d:0.06s"></i><i style="--d:0.25s"></i><i style="--d:0.13s"></i><i style="--d:0.27s"></i><i style="--d:0.11s"></i><i style="--d:0.02s"></i><i style="--d:0.18s"></i><i style="--d:0.22s"></i><i style="--d:0.08s"></i><i style="--d:0.02s"></i><i style="--d:0.09s"></i><i style="--d:0.27s"></i><i style="--d:0.21s"></i><i style="--d:0.03s"></i><i style="--d:0.07s"></i><i style="--d:0.03s"></i><i style="--d:0.02s"></i><i style="--d:0.22s"></i><i style="--d:0.05s"></i><i style="--d:0.16s"></i><i style="--d:0.13s"></i><i style="--d:0.05s"></i><i style="--d:0.20s"></i><i style="--d:0.04s"></i><i style="--d:0.18s"></i><i style="--d:0.03s"></i><i style="--d:0.12s"></i><i style="--d:0.06s"></i><i style="--d:0.08s"></i><i style="--d:0.27s"></i><i style="--d:0.22s"></i><i style="--d:0.09s"></i><i style="--d:0.25s"></i><i style="--d:0.06s"></i><i style="--d:0.11s"></i><i style="--d:0.24s"></i><i style="--d:0.18s"></i><i style="--d:0.03s"></i><i style="--d:0.28s"></i><i style="--d:0.06s"></i><i style="--d:0.07s"></i><i style="--d:0.22s"></i><i style="--d:0.09s"></i><i style="--d:0.08s"></i><i style="--d:0.02s"></i><i style="--d:0.03s"></i><i style="--d:0.16s"></i><i style="--d:0.07s"></i><i style="--d:0.17s"></i><i style="--d:0.10s"></i><i style="--d:0.13s"></i><i style="--d:0.27s"></i><i style="--d:0.14s"></i><i style="--d:0.16s"></i><i style="--d:0.24s"></i><i style="--d:0.05s"></i><i style="--d:0.04s"></i><i style="--d:0.25s"></i><i style="--d:0.23s"></i><i style="--d:0.07s"></i><i style="--d:0.05s"></i><i style="--d:0.21s"></i><i style="--d:0.26s"></i><i style="--d:0.06s"></i><i style="--d:0.27s"></i><i style="--d:0.25s"></i><i style="--d:0.17s"></i><i style="--d:0.12s"></i><i style="--d:0.03s"></i><i style="--d:0.01s"></i><i style="--d:0.27s"></i><i style="--d:0.07s"></i><i style="--d:0.20s"></i><i style="--d:0.07s"></i><i style="--d:0.23s"></i></div><div class="sh"><i style="--d:0.000s"></i><i style="--d:0.045s"></i><i style="--d:0.090s"></i><i style="--d:0.135s"></i><i style="--d:0.180s"></i><i style="--d:0.225s"></i><i style="--d:0.270s"></i><i style="--d:0.315s"></i></div><div class="c-eyes"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div>
+</div>
+
+<div class="preloader" aria-hidden="true">
+  <div class="pl-eyes"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div>
+  <p class="pl-cap">It started with a pixel.</p>
+  <div class="pl-meta mono"><span>Angbo Xie</span><span><span id="plNum">000</span> / 100</span></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"></div>
+<div id="halo" aria-hidden="true"></div>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div id="dim" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+<canvas id="glf" aria-hidden="true"></canvas>
+<svg id="teeth" aria-hidden="true"><defs>
+  <linearGradient id="enUp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1f19"/><stop offset=".14" stop-color="#9d917f"/><stop offset=".42" stop-color="#e8e1d1"/><stop offset=".82" stop-color="#f6f2e8"/><stop offset="1" stop-color="#cfd8db"/></linearGradient>
+  <linearGradient id="enLo" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2b1f19"/><stop offset=".14" stop-color="#9d917f"/><stop offset=".42" stop-color="#e8e1d1"/><stop offset=".82" stop-color="#f6f2e8"/><stop offset="1" stop-color="#cfd8db"/></linearGradient>
+  <linearGradient id="thUp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset=".55" stop-color="#1a0204" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <linearGradient id="thLo" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset=".55" stop-color="#1a0204" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <filter id="hiBlur" x="-50%" y="-10%" width="200%" height="120%"><feGaussianBlur stdDeviation="1.4"/></filter>
+</defs>
+<rect id="throatUp" fill="url(#thUp)"/><rect id="throatLo" fill="url(#thLo)"/>
+<path id="gumUp" fill="#050505"/><path id="gumLo" fill="#050505"/>
+<g id="rowUp"></g><g id="rowLo"></g><g id="hiUp" filter="url(#hiBlur)"></g><g id="hiLo" filter="url(#hiBlur)"></g>
+</svg>
+<div id="eyes" aria-hidden="true"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div>
+
+<header class="nav">
+  <a href="#top" class="nav-logo">Angbo Xie</a>
+  <nav class="nav-mid" aria-label="Sections">
+    <a class="roll" href="#work">Work</a>
+    <a class="roll" href="#about">About</a>
+    <a class="roll" href="#contact">Contact</a>
   </nav>
-  <button id="btn-prev">&#8592; PREV</button>
-  <button id="btn-next">NEXT &#8594;</button>
-  <button id="btn-top">&#8593; TOP</button>
-  <div id="hint">SPACE / CLICK TO ADVANCE</div>
-  <div id="stage"></div>
-  <script src="JS/scenes.js"></script>
-  <script src="JS/engine.js"></script>
+  <div class="nav-right">
+    <span class="nav-hide-sm">Melbourne <span data-clock>--:--:--</span></span>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span>Menu</span><span class="bars"></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <nav class="menu-links" aria-label="Menu">
+    <a href="#top"><span class="ml">Index</span><sup>00</sup></a>
+    <a href="#work"><span class="ml">Work</span><sup>04</sup></a>
+    <a href="#about"><span class="ml">About</span><sup>05</sup></a>
+    <a href="#contact"><span class="ml">Contact</span><sup>06</sup></a>
+  </nav>
+  <div class="menu-foot">
+    <a href="projects/essentially-australia.html">Essentially Australia</a>
+    <a href="projects/casepop.html">Casepop AU</a>
+    <a href="projects/tactibrawl.html">Tactibrawl</a>
+    <a href="Assets/resume.pdf" target="_blank">Resume &darr;</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- 00 / HERO -->
+  <section class="panel hero" id="top">
+    <div class="hero-top mono">
+      <span>Interface designer</span>
+      <span class="nav-hide-sm">Portfolio, 2026</span>
+      <span>Melbourne, AU</span>
+    </div>
+    <h1 class="hero-name" aria-label="Angbo Xie">
+      <span class="hn hn-1">Angbo</span>
+      <span class="hn hn-2">Xie</span>
+    </h1>
+    <p class="caption hero-cap">Interfaces with instinct.</p>
+    <div class="hero-foot mono">
+      <span>Specimen no. 001</span>
+      <a href="#origin" class="scroll-cue" aria-label="Next section"><span class="cue-line"></span></a>
+    </div>
+  </section>
+
+  <!-- 01 / ORIGIN -->
+  <section class="panel origin" id="origin">
+    <div class="origin-pin">
+      <span class="tc mono">01 / Origin</span>
+      <p class="origin-text" data-words>It started with a single pixel. Then it evolved. It learned to move, to react, and to <em>look back at you.</em></p>
+      <p class="origin-foot mono">Fancy, never gratuitous &nbsp;/&nbsp; One pixel always matters</p>
+    </div>
+  </section>
+
+  <!-- 02 / DIET -->
+  <section class="panel diet" id="diet">
+    <div class="panel-head">
+      <span class="tc mono">02 / Diet</span>
+      <h2 class="h2" data-split>What it <em>feeds on.</em></h2>
+    </div>
+    <ol class="diet-list">
+      <li><span class="mono">i.</span><span class="dl-t">God of War UI</span><span class="mono dl-k">Game interface</span></li>
+      <li><span class="mono">ii.</span><span class="dl-t">Elden Ring menus</span><span class="mono dl-k">Game interface</span></li>
+      <li><span class="mono">iii.</span><span class="dl-t">The Book of Revelation</span><span class="mono dl-k">Ancient text</span></li>
+      <li><span class="mono">iv.</span><span class="dl-t">Dieter Rams</span><span class="mono dl-k">Industrial design</span></li>
+      <li><span class="mono">v.</span><span class="dl-t">Awwwards, at 3am</span><span class="mono dl-k">The web</span></li>
+    </ol>
+    <p class="diet-out caption">What comes out: things that feel alive.</p>
+  </section>
+
+  <!-- 03 / INSTINCTS -->
+  <section class="panel instincts" id="instincts">
+    <div class="panel-head">
+      <span class="tc mono">03 / Instincts</span>
+      <h2 class="h2" data-split>Six <em>instincts.</em></h2>
+    </div>
+    <div class="inst-grid">
+      <article class="inst"><span class="mono">01</span><h3>Interface design</h3><p>Pixel-level precision. One pixel always matters.</p></article>
+      <article class="inst"><span class="mono">02</span><h3>Motion</h3><p>Fancy but never gratuitous. Game-engine energy.</p></article>
+      <article class="inst"><span class="mono">03</span><h3>UX strategy</h3><p>Empathy first. Obsessive iteration. Ship.</p></article>
+      <article class="inst"><span class="mono">04</span><h3>Design systems</h3><p>Consistency is a love language.</p></article>
+      <article class="inst"><span class="mono">05</span><h3>Prototyping</h3><p>Show, don&rsquo;t tell. Interactive, always.</p></article>
+      <article class="inst"><span class="mono">06</span><h3>User research</h3><p>Real humans, real pain. I listen first.</p></article>
+    </div>
+  </section>
+
+  <!-- 04 / WORK -->
+  <section class="work" id="work">
+    <div class="work-pin">
+      <div class="work-head">
+        <span class="tc mono">04 / Specimens</span>
+        <span class="mono work-count"><b id="wIdx">01</b> / 03</span>
+      </div>
+      <div class="work-stage">
+        <div class="work-titles">
+          <a class="wt" data-i="0" href="projects/essentially-australia.html">
+            <span class="mono">UX audit + full redesign / 2025</span>
+            <h3>Essentially Australia</h3>
+            <span class="wt-cta">View case study &rarr;</span>
+          </a>
+          <a class="wt" data-i="1" href="projects/casepop.html">
+            <span class="mono">E-commerce, co-founder / 2024</span>
+            <h3>Casepop AU</h3>
+            <span class="wt-cta">View case study &rarr;</span>
+          </a>
+          <a class="wt" data-i="2" href="projects/tactibrawl.html">
+            <span class="mono">Game UI lead / 2024</span>
+            <h3>Tactibrawl</h3>
+            <span class="wt-cta">View case study &rarr;</span>
+          </a>
+        </div>
+        <div class="work-frames">
+          <a class="wf" data-i="0" href="projects/essentially-australia.html" aria-label="Essentially Australia case study">
+            <div class="cover cover-ea">
+              <div class="ea-rings"><i></i><i></i><i></i></div>
+              <div class="ea-orbs"><span style="--a:0deg">Uplift</span><span style="--a:90deg">Calm</span><span style="--a:180deg">Restore</span><span style="--a:270deg">Ground</span></div>
+            </div>
+          </a>
+          <a class="wf" data-i="1" href="projects/casepop.html" aria-label="Casepop AU case study">
+            <div class="cover cover-cp"><div class="cp-cases"><span class="cs c1"></span><span class="cs c2"></span><span class="cs c3"></span></div></div>
+          </a>
+          <a class="wf" data-i="2" href="projects/tactibrawl.html" aria-label="Tactibrawl case study">
+            <div class="cover cover-tb"><img src="Assets/tb-splash.jpg" alt="" loading="lazy" decoding="async"/></div>
+          </a>
+        </div>
+      </div>
+      <div class="work-bar"><i id="wBar"></i></div>
+    </div>
+  </section>
+
+  <!-- 05 / ABOUT -->
+  <section class="panel about" id="about">
+    <figure class="about-photo">
+      <div class="ap-inner"><img src="Assets/angbo.png" alt="Angbo Xie sitting on a rocky summit above the clouds" loading="lazy" decoding="async"/></div>
+      <figcaption class="mono">Subject, observed above the clouds</figcaption>
+    </figure>
+    <div class="about-copy">
+      <span class="tc mono">05 / The observer</span>
+      <h2 class="h2" data-split>Precise. Weird. <em>Alive.</em></h2>
+      <p class="about-bio" data-reveal>UI/UX designer obsessing over game cutscenes, ancient texts, and the one-pixel decisions that separate good from unforgettable.</p>
+      <p class="about-bio" data-reveal data-delay=".1">My design language sits somewhere between a boss-fight HUD and a scripture verse. I make interfaces that feel like they breathe.</p>
+      <dl class="about-stats" data-reveal>
+        <div><dt class="mono">Habitat</dt><dd>Melbourne, AU</dd></div>
+        <div><dt class="mono">Role</dt><dd>UI/UX designer</dd></div>
+        <div><dt class="mono">Status</dt><dd>Open to work</dd></div>
+      </dl>
+      <p class="about-tools mono" data-reveal>Figma / Protopie / After Effects / Framer / Webflow / HTML &amp; CSS / Game UI / Typography</p>
+      <div class="about-cta" data-reveal>
+        <a class="pill solid" href="Assets/resume.pdf" target="_blank" data-magnetic=".2">Resume &darr;</a>
+        <a class="pill" href="https://au.linkedin.com/in/angboxie" target="_blank" rel="noopener" data-magnetic=".2">LinkedIn &#8599;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 / CONTACT -->
+  <section class="panel contact" id="contact">
+    <span class="tc mono">06 / Contact</span>
+    <h2 class="contact-title" data-split="manual">Approach <em>carefully.</em></h2>
+    <p class="caption contact-cap">Got a project that needs to feel alive? I&rsquo;m open to work.</p>
+    <a class="ct-mail" href="mailto:xie109714@gmail.com" data-magnetic=".12">xie109714@gmail.com</a>
+    <ul class="ct-links">
+      <li><a href="https://au.linkedin.com/in/angboxie" target="_blank" rel="noopener" class="roll">LinkedIn &#8599;</a></li>
+      <li><a href="https://instagram.com/xieangbo" target="_blank" rel="noopener" class="roll">Instagram &#8599;</a></li>
+      <li><a href="Assets/resume.pdf" target="_blank" class="roll">Resume &darr;</a></li>
+    </ul>
+    <footer class="foot-row">
+      <span>&copy; 2026 Angbo Xie</span>
+      <span>Melbourne <span data-clock>--:--:--</span></span>
+      <a href="#top" class="roll">Back to top &uarr;</a>
+    </footer>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="JS/core.js" defer></script>
+<script src="JS/infect.js" defer></script>
+<script src="JS/swarm.js" defer></script>
+<script src="JS/home.js" defer></script>
 </body>
 </html>

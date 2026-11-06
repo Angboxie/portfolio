@@ -2,589 +2,363 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Essentially Australia — Angbo Xie</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script>try{document.documentElement.dataset.tr=sessionStorage.getItem('ax-tr')||'goo'}catch(e){}</script>
+  <title>Essentially Australia / Angbo Xie</title>
+  <meta name="description" content="UX audit and full redesign of Essentially Australia, a Byron Bay essential oils brand. Case study by Angbo Xie."/>
+  <meta name="theme-color" content="#233a23"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4ff00'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='28' text-anchor='middle' fill='%2309090b'%3EAX%3C/text%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../CSS/base.css"/>
+  <link rel="stylesheet" href="../CSS/infect.css"/>
+  <link rel="stylesheet" href="../CSS/case.css"/>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --porcelain: #FDFDF5;
-      --evergreen: #233A23;
-      --sage:      #C8C9A8;
-      --carbon:    #232323;
-      --warm:      #f5f0e8;
-      --serif:     'Crimson Text', Georgia, serif;
-      --ui:        'Outfit', sans-serif;
-      --disp:      'Bebas Neue', sans-serif;
+      --porcelain: #fdfdf5; --evergreen: #233a23; --sage: #c8c9a8; --carbon: #232323; --warm: #f5f0e8;
+      --bg: var(--porcelain); --fg: var(--carbon);
+      --accent: #c8c9a8; --accent-ink: #232323; --curtain: #233a23;
+      --dark: #233a23; --dark-fg: #fdfdf5; --alt: #f5f0e8;
+      --f-head: 'Instrument Serif', Georgia, serif; --f-display: 'Outfit', system-ui, sans-serif;
+      --line: rgba(35,35,35,.12);
+      --tint: #233a23;
     }
+    .c-sec:not(.dark) { --accent: #233a23; --accent-ink: #fdfdf5; }
+    .c-sec:not(.dark) .c-title em { color: #4f7a4f; }
 
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--porcelain);
-      color: var(--carbon);
-      font-family: var(--ui);
-      cursor: none;
-      overflow-x: hidden;
-    }
-
-    #cursor {
-      position: fixed; width: 10px; height: 10px;
-      background: var(--evergreen); border-radius: 50%;
-      pointer-events: none; z-index: 9999;
-      top: 0; left: 0; transform: translate(-50%,-50%);
-      transition: width .16s, height .16s;
-    }
-    #cursor.grow { width: 48px; height: 48px; background: var(--sage); }
-
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 5vw;
-      background: rgba(253,253,245,.95);
-      border-bottom: 1px solid rgba(35,58,35,.1);
-      backdrop-filter: blur(8px);
-    }
-    .nav-back {
-      font-family: var(--ui); font-size: 10px; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--carbon); text-decoration: none;
-      opacity: .4; transition: opacity .2s; cursor: none;
-    }
-    .nav-back:hover { opacity: 1; }
-    .nav-logo {
-      font-family: var(--serif); font-size: 18px; font-style: italic;
-      letter-spacing: .05em; opacity: .3; color: var(--evergreen);
-    }
-    .nav-cta {
-      font-family: var(--ui); font-size: 10px; letter-spacing: .18em;
-      text-transform: uppercase; text-decoration: none;
-      background: var(--evergreen); color: var(--porcelain);
-      padding: .45rem 1.1rem; cursor: none;
-      transition: opacity .2s; opacity: .9;
-    }
-    .nav-cta:hover { opacity: 1; }
-
-    /* HERO */
+    /* hero */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 8rem 6vw 5rem;
-      background: var(--evergreen);
-      position: relative; overflow: hidden;
+      position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
+      background: radial-gradient(90% 80% at 72% 45%, color-mix(in srgb, var(--tint) 55%, #233a23), #172617 75%);
+      color: var(--porcelain); padding: 110px var(--gutter) 36px;
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); grid-template-rows: 1fr auto; gap: 3vh 4vw;
+      --line: rgba(200,201,168,.2);
     }
-    .hero-circle {
-      position: absolute;
-      width: clamp(300px, 50vw, 700px);
-      height: clamp(300px, 50vw, 700px);
-      border-radius: 50%;
-      border: 1px solid rgba(200,201,168,.15);
-      top: 50%; right: 8vw;
-      transform: translateY(-50%);
-      pointer-events: none;
+    .hero-copy { align-self: end; position: relative; z-index: 2; }
+    .kicker { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); opacity: .85; margin-bottom: 2rem; display: block; }
+    .hero h1 { font-family: var(--f-head); font-weight: 400; font-size: clamp(64px, 10.5vw, 196px); line-height: .86; letter-spacing: -.035em; }
+    .hero h1 em { color: var(--sage); }
+    .hero-sub { font-family: var(--f-head); font-style: italic; font-size: clamp(20px, 2vw, 30px); line-height: 1.3; color: var(--sage); max-width: 26ch; margin-top: 2.4rem; }
+    .stage { position: relative; min-height: 50vh; }
+    #drop { position: absolute; inset: -12vh -6vw -6vh -6vw; width: calc(100% + 12vw); height: calc(100% + 18vh); touch-action: pan-y; }
+    .feel { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; text-align: center; }
+    .feel-q { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-bottom: 1rem; }
+    .feel-chips { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+    .chip {
+      display: inline-flex; align-items: center; gap: .55rem; padding: .7rem 1.1rem; border-radius: 100px;
+      border: 1px solid rgba(253,253,245,.25); font-size: 14px; letter-spacing: .02em;
+      transition: background .4s, color .4s, border-color .4s, transform .4s var(--ease-out);
     }
-    .hero-circle-inner {
-      position: absolute; inset: 15%;
-      border-radius: 50%;
-      border: 1px solid rgba(200,201,168,.1);
-    }
-    .hero-kicker {
-      font-family: var(--ui); font-size: 10px; letter-spacing: .3em;
-      text-transform: uppercase; color: var(--sage); opacity: .7;
-      margin-bottom: 1.5rem; display: block;
-    }
-    .hero-title {
-      font-family: var(--serif);
-      font-size: clamp(52px, 9vw, 130px);
-      line-height: 1; letter-spacing: -.01em;
-      color: var(--porcelain);
-      margin-bottom: 1rem;
-    }
-    .hero-title em { font-style: italic; color: var(--sage); }
-    .hero-sub {
-      font-family: var(--serif); font-size: clamp(18px, 2vw, 26px);
-      font-style: italic; color: var(--sage); opacity: .7;
-      margin-bottom: 3rem; max-width: 500px; line-height: 1.5;
-    }
-    .hero-meta {
-      display: flex; gap: 0;
-      border-top: 1px solid rgba(200,201,168,.2);
-      padding-top: 2rem;
-    }
-    .hero-meta-item {
-      padding-right: 3rem;
-      border-right: 1px solid rgba(200,201,168,.15);
-      margin-right: 3rem;
-    }
-    .hero-meta-item:last-child { border-right: none; }
-    .hm-label {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .25em;
-      text-transform: uppercase; color: var(--sage); opacity: .5;
-      display: block; margin-bottom: .4rem;
-    }
-    .hm-val { font-family: var(--ui); font-size: 12px; color: var(--porcelain); opacity: .75; letter-spacing: .03em; }
+    .chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 14px var(--c); }
+    .chip:hover { transform: translateY(-3px); }
+    .chip[aria-pressed="true"] { background: var(--porcelain); color: var(--carbon); border-color: var(--porcelain); }
+    .hero .c-meta { grid-column: 1 / -1; position: relative; z-index: 2; }
 
-    /* SECTIONS */
-    section { padding: 6rem 6vw; border-bottom: 1px solid rgba(35,58,35,.08); }
-    section.bg-warm   { background: var(--warm); }
-    section.bg-green  { background: var(--evergreen); color: var(--porcelain); border-color: rgba(200,201,168,.1); }
-    section.bg-sage   { background: var(--sage); color: var(--carbon); border-color: rgba(35,35,35,.1); }
-    section.bg-carbon { background: var(--carbon); color: var(--porcelain); border-color: rgba(255,255,255,.06); }
+    /* quote */
+    .quote { font-family: var(--f-head); font-style: italic; font-size: clamp(36px, 4.6vw, 80px); line-height: 1; letter-spacing: -.02em; margin-top: 5vh; color: #4f7a4f; }
+    .quote small { display: block; font-family: var(--f-mono); font-style: normal; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--carbon); opacity: .55; margin-top: 1.2rem; }
 
-    .s-label {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .3em;
-      text-transform: uppercase; color: var(--evergreen); opacity: .5;
-      margin-bottom: 1.4rem; display: block;
+    /* purchase path */
+    #path { background: var(--dark); color: var(--dark-fg); --line: rgba(200,201,168,.2); }
+    .path { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 var(--gutter); overflow: hidden; }
+    .path-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 8vh; }
+    .path-count { font-family: var(--f-head); font-size: clamp(80px, 14vw, 260px); line-height: .8; letter-spacing: -.05em; color: var(--sage); font-variant-numeric: tabular-nums; }
+    .path-count small { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; color: var(--porcelain); opacity: .6; display: block; text-transform: uppercase; margin-top: 1rem; }
+    .path-row { position: relative; height: 92px; }
+    .pstep {
+      position: absolute; top: 0; height: 92px; display: flex; flex-direction: column; justify-content: space-between;
+      padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(200,201,168,.3); background: rgba(253,253,245,.04);
+      font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
     }
-    .bg-green .s-label, .bg-carbon .s-label { color: var(--sage); opacity: .6; }
-    .bg-sage .s-label { color: var(--carbon); opacity: .45; }
+    .pstep b { font-family: var(--f-head); font-weight: 400; font-size: 30px; letter-spacing: 0; text-transform: none; }
+    .pstep.keep { border-color: var(--sage); }
+    .path-note { margin-top: 6vh; font-size: 18px; opacity: .75; max-width: 54ch; }
 
-    .s-title {
-      font-family: var(--serif);
-      font-size: clamp(40px, 6vw, 80px);
-      line-height: 1; letter-spacing: -.01em;
-      margin-bottom: 2.5rem;
-    }
-    .s-title em { font-style: italic; }
-
-    /* LAYOUT */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: start; }
-    .three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(35,58,35,.08); }
-    .bg-green .three-col { background: rgba(200,201,168,.1); }
-    .four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(35,58,35,.08); margin-top: 2.5rem; }
-
-    /* BODY TEXT */
-    .body-p {
-      font-family: var(--serif); font-size: clamp(15px,1.3vw,19px);
-      line-height: 1.85; opacity: .65; max-width: 540px;
-    }
-    .body-p + .body-p { margin-top: 1rem; }
-    .bg-green .body-p, .bg-carbon .body-p { color: var(--porcelain); opacity: .55; }
-
-    /* STAT CELLS */
-    .stat-cell { background: var(--porcelain); padding: 2.5rem 2rem; }
-    .bg-green .stat-cell { background: rgba(255,255,255,.04); }
-    .bg-warm .stat-cell  { background: var(--warm); }
-    .stat-n {
-      font-family: var(--serif); font-size: clamp(44px, 5.5vw, 68px);
-      font-weight: 600; color: var(--evergreen); line-height: 1;
-      display: block; margin-bottom: .4rem;
-    }
-    .bg-green .stat-n { color: var(--sage); }
-    .stat-l {
-      font-family: var(--ui); font-size: 10px; letter-spacing: .12em;
-      text-transform: uppercase; opacity: .38; line-height: 1.7;
+    /* contrast slider */
+    .contrast { position: relative; border-radius: 24px; overflow: hidden; height: min(62vh, 560px); user-select: none; touch-action: pan-y; margin-top: 6vh; border: 1px solid var(--line); }
+    .cside { position: absolute; inset: 0; background: #fdfdf5; padding: 5vh 4vw; display: flex; flex-direction: column; justify-content: space-between; }
+    .cside .ct { font-family: var(--f-head); font-size: clamp(40px, 6vw, 110px); line-height: .9; letter-spacing: -.03em; }
+    .cside p { font-size: clamp(16px, 1.3vw, 20px); line-height: 1.55; max-width: 44ch; }
+    .cside .badge-r { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: .5rem .8rem; border-radius: 100px; align-self: flex-start; }
+    .c-old { color: #979797; }
+    .c-old .badge-r { background: #b83232; color: #fff; }
+    .c-new { color: #232323; clip-path: inset(0 0 0 var(--split, 50%)); align-items: flex-end; text-align: right; }
+    .c-new .badge-r { background: #233a23; color: #fdfdf5; align-self: flex-end; }
+    .c-handle { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 2px; background: #233a23; transform: translateX(-1px); }
+    .c-handle span {
+      position: absolute; top: 50%; left: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%;
+      background: #233a23; color: #fdfdf5; display: grid; place-items: center; font-size: 18px; letter-spacing: -.1em;
     }
 
-    /* QUOTE */
-    .pull-quote {
-      font-family: var(--serif); font-size: clamp(22px, 3vw, 36px);
-      font-style: italic; line-height: 1.35;
-      border-left: 2px solid var(--evergreen);
-      padding-left: 1.5rem; margin: 2.5rem 0;
-      max-width: 500px;
-    }
-    .bg-green .pull-quote { border-left-color: var(--sage); color: var(--porcelain); }
-    .bg-sage .pull-quote  { border-left-color: var(--carbon); }
-    .pull-src {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .2em;
-      text-transform: uppercase; opacity: .4; margin-top: .7rem; display: block;
-    }
+    /* flip faces */
+    .flip-front { background: #fdfdf5; border: 1px solid var(--line); border-top: 3px solid #b83232; }
+    .flip-front .flip-h { color: #b83232; }
+    .flip-back { background: #233a23; color: #fdfdf5; }
+    .flip-back .flip-h { color: var(--sage); }
 
-    /* FINDING CARDS */
-    .finding-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: rgba(35,58,35,.08); margin-top: 2rem;
-    }
-    .finding-card { background: var(--porcelain); padding: 1.8rem 1.6rem; }
-    .bg-warm .finding-card { background: var(--warm); }
-    .finding-card.bad  { border-top: 2px solid #b83232; }
-    .finding-card.good { border-top: 2px solid var(--evergreen); }
-    .finding-h {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
-      text-transform: uppercase; color: var(--evergreen); opacity: .6;
-      margin-bottom: .5rem; display: block;
-    }
-    .finding-card.bad .finding-h { color: #b83232; }
-    .finding-title {
-      font-family: var(--serif); font-size: clamp(17px,1.8vw,22px);
-      font-weight: 600; margin-bottom: .5rem;
-    }
-    .finding-desc { font-family: var(--ui); font-size: 11px; opacity: .38; line-height: 1.7; }
+    /* prototype device */
+    .device-wrap { perspective: 1800px; margin-top: 6vh; }
+    .device { border-radius: 22px; overflow: hidden; background: #172617; aspect-ratio: 16 / 9; box-shadow: 0 60px 120px -30px rgba(35,58,35,.55); transform-origin: 50% 100%; border: 10px solid #172617; }
+    .device iframe { width: 100%; height: 100%; border: 0; display: block; background: #172617; }
 
-    /* PROCESS */
-    .proc { list-style: none; margin-top: 2rem; }
-    .proc li {
-      display: grid; grid-template-columns: 52px 1fr;
-      gap: 1.5rem; padding: 1.8rem 0;
-      border-bottom: 1px solid rgba(35,58,35,.08);
-      align-items: start;
-    }
-    .bg-green .proc li { border-color: rgba(200,201,168,.1); }
-    .proc-n {
-      font-family: var(--serif); font-size: 36px; font-style: italic;
-      color: var(--evergreen); opacity: .25; line-height: 1;
-    }
-    .bg-green .proc-n { color: var(--sage); opacity: .35; }
-    .proc-title {
-      font-family: var(--serif); font-size: clamp(17px,1.8vw,22px);
-      font-weight: 600; margin-bottom: .4rem;
-    }
-    .proc-desc { font-family: var(--ui); font-size: 12px; opacity: .45; line-height: 1.8; }
+    .pill { --fg: var(--carbon); }
+    .dark .pill { --fg: #fdfdf5; }
+    .next { background: var(--porcelain); }
+    .next .next-title { font-family: var(--f-head); font-weight: 400; text-transform: none; letter-spacing: -.03em; }
+    .next:hover .next-title { color: #ff4d8d; font-style: italic; }
+    .next-bar::after { background: #ff4d8d; }
+    .menu { --accent: #c8c9a8; --accent-ink: #232323; }
 
-    /* OUTCOME */
-    .outcome-table { max-width: 680px; margin-top: 2rem; }
-    .outcome-row {
-      display: flex; justify-content: space-between; align-items: baseline;
-      padding: 1rem 0; border-bottom: 1px solid rgba(200,201,168,.25); gap: 2rem;
-    }
-    .outcome-label {
-      font-family: var(--serif); font-size: clamp(20px,2.5vw,32px); font-weight: 600;
-    }
-    .outcome-val {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
-      text-transform: uppercase; opacity: .45; flex-shrink: 0;
-      color: var(--sage);
-    }
-
-    /* TAGS */
-    .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.6rem; }
-    .tag {
-      font-family: var(--ui); font-size: 9px; letter-spacing: .1em;
-      text-transform: uppercase; border: 1px solid rgba(35,58,35,.18);
-      padding: .28rem .75rem; opacity: .5;
-      transition: opacity .2s, border-color .2s;
-    }
-    .tag:hover { opacity: 1; border-color: var(--evergreen); }
-    .bg-green .tag { border-color: rgba(200,201,168,.2); color: var(--porcelain); }
-
-    /* FIGMA EMBED */
-    .figma-wrap {
-      width: 100%; aspect-ratio: 16/9;
-      border: 1px solid rgba(35,58,35,.1);
-      margin-top: 2rem; overflow: hidden;
-    }
-    .figma-wrap iframe { width: 100%; height: 100%; border: none; }
-
-    /* CTA */
-    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem; }
-    .btn {
-      font-family: var(--ui); font-size: 10px; letter-spacing: .2em;
-      text-transform: uppercase; text-decoration: none;
-      padding: .7rem 1.4rem; cursor: none; transition: all .18s;
-    }
-    .btn-green { background: var(--evergreen); color: var(--porcelain); }
-    .btn-green:hover { opacity: .85; }
-    .btn-outline-green { border: 1px solid rgba(35,58,35,.25); color: var(--carbon); }
-    .btn-outline-green:hover { border-color: var(--evergreen); }
-    .btn-outline-light { border: 1px solid rgba(200,201,168,.3); color: var(--porcelain); }
-    .btn-outline-light:hover { border-color: var(--sage); color: var(--sage); }
-
-    /* FOOTER */
-    footer {
-      padding: 3rem 6vw; display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 1rem;
-      background: var(--porcelain); border-top: 1px solid rgba(35,58,35,.08);
-    }
-    .foot-copy { font-family: var(--ui); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; opacity: .2; }
-    .foot-link {
-      font-family: var(--serif); font-size: 20px; font-style: italic;
-      text-decoration: none; color: var(--carbon); opacity: .35;
-      transition: opacity .2s, color .2s; cursor: none;
-    }
-    .foot-link:hover { opacity: 1; color: var(--evergreen); }
-
-    @media (max-width: 768px) {
-      .two-col, .finding-grid { grid-template-columns: 1fr; }
-      .three-col, .four-col { grid-template-columns: repeat(2,1fr); }
-      .hero-meta { flex-direction: column; gap: 1.5rem; }
-      .hero-meta-item { border-right: none; padding-right: 0; margin-right: 0; }
-      body { cursor: auto; }
-      #cursor { display: none; }
-    }
-    @media (max-width: 480px) {
-      .three-col, .four-col { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: 96px; }
+      .stage { min-height: 56vh; order: -1; }
+      .hero-copy { align-self: start; }
+      .path { height: auto; padding: 14vh var(--gutter); }
+      .path-row { display: flex; flex-wrap: wrap; gap: 8px; height: auto; }
+      .pstep { position: relative; width: calc(25% - 6px) !important; left: auto !important; height: 80px; }
     }
   </style>
 </head>
 <body>
-<div id="cursor"></div>
 
-<nav>
-  <a class="nav-back" href="../index.html">&#8592; Back</a>
-  <div class="nav-logo">Angbo Xie</div>
-  <a class="nav-cta" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">View Prototype &#8599;</a>
-</nav>
+<svg class="goo-defs" aria-hidden="true" focusable="false"><defs>
+  <filter id="goo" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter>
+  <filter id="goo-c"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"/></filter>
+  <filter id="melt"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+<div class="curtain" aria-hidden="true"><div class="cl a"><i style="--d:0.05s"></i><i style="--d:0.16s"></i><i style="--d:0.18s"></i><i style="--d:0.10s"></i><i style="--d:0.15s"></i><i style="--d:0.02s"></i><i style="--d:0.02s"></i><i style="--d:0.06s"></i><i style="--d:0.19s"></i><i style="--d:0.12s"></i><i style="--d:0.09s"></i><i style="--d:0.16s"></i><i style="--d:0.13s"></i><i style="--d:0.08s"></i></div><div class="cl b"><i style="--d:0.22s"></i><i style="--d:0.20s"></i><i style="--d:0.07s"></i><i style="--d:0.16s"></i><i style="--d:0.15s"></i><i style="--d:0.25s"></i><i style="--d:0.20s"></i><i style="--d:0.08s"></i><i style="--d:0.27s"></i><i style="--d:0.03s"></i><i style="--d:0.12s"></i><i style="--d:0.21s"></i><i style="--d:0.04s"></i><i style="--d:0.14s"></i></div><div class="px"><i style="--d:0.17s"></i><i style="--d:0.08s"></i><i style="--d:0.05s"></i><i style="--d:0.20s"></i><i style="--d:0.02s"></i><i style="--d:0.06s"></i><i style="--d:0.16s"></i><i style="--d:0.24s"></i><i style="--d:0.17s"></i><i style="--d:0.08s"></i><i style="--d:0.26s"></i><i style="--d:0.06s"></i><i style="--d:0.00s"></i><i style="--d:0.08s"></i><i style="--d:0.12s"></i><i style="--d:0.02s"></i><i style="--d:0.05s"></i><i style="--d:0.10s"></i><i style="--d:0.16s"></i><i style="--d:0.04s"></i><i style="--d:0.10s"></i><i style="--d:0.25s"></i><i style="--d:0.27s"></i><i style="--d:0.18s"></i><i style="--d:0.19s"></i><i style="--d:0.16s"></i><i style="--d:0.04s"></i><i style="--d:0.01s"></i><i style="--d:0.01s"></i><i style="--d:0.25s"></i><i style="--d:0.20s"></i><i style="--d:0.27s"></i><i style="--d:0.01s"></i><i style="--d:0.18s"></i><i style="--d:0.14s"></i><i style="--d:0.20s"></i><i style="--d:0.09s"></i><i style="--d:0.28s"></i><i style="--d:0.02s"></i><i style="--d:0.15s"></i><i style="--d:0.21s"></i><i style="--d:0.25s"></i><i style="--d:0.21s"></i><i style="--d:0.20s"></i><i style="--d:0.22s"></i><i style="--d:0.26s"></i><i style="--d:0.10s"></i><i style="--d:0.19s"></i><i style="--d:0.25s"></i><i style="--d:0.24s"></i><i style="--d:0.12s"></i><i style="--d:0.22s"></i><i style="--d:0.24s"></i><i style="--d:0.16s"></i><i style="--d:0.17s"></i><i style="--d:0.11s"></i><i style="--d:0.16s"></i><i style="--d:0.17s"></i><i style="--d:0.02s"></i><i style="--d:0.18s"></i><i style="--d:0.28s"></i><i style="--d:0.25s"></i><i style="--d:0.20s"></i><i style="--d:0.11s"></i><i style="--d:0.21s"></i><i style="--d:0.16s"></i><i style="--d:0.12s"></i><i style="--d:0.23s"></i><i style="--d:0.02s"></i><i style="--d:0.21s"></i><i style="--d:0.01s"></i><i style="--d:0.17s"></i><i style="--d:0.13s"></i><i style="--d:0.06s"></i><i style="--d:0.20s"></i><i style="--d:0.14s"></i><i style="--d:0.17s"></i><i style="--d:0.26s"></i><i style="--d:0.07s"></i><i style="--d:0.00s"></i><i style="--d:0.08s"></i><i style="--d:0.19s"></i><i style="--d:0.06s"></i><i style="--d:0.05s"></i><i style="--d:0.25s"></i><i style="--d:0.18s"></i><i style="--d:0.12s"></i><i style="--d:0.25s"></i><i style="--d:0.09s"></i><i style="--d:0.19s"></i><i style="--d:0.06s"></i><i style="--d:0.12s"></i><i style="--d:0.23s"></i><i style="--d:0.26s"></i><i style="--d:0.25s"></i><i style="--d:0.11s"></i><i style="--d:0.16s"></i><i style="--d:0.09s"></i><i style="--d:0.04s"></i><i style="--d:0.14s"></i><i style="--d:0.23s"></i><i style="--d:0.24s"></i><i style="--d:0.20s"></i><i style="--d:0.27s"></i><i style="--d:0.08s"></i><i style="--d:0.05s"></i><i style="--d:0.13s"></i><i style="--d:0.08s"></i><i style="--d:0.06s"></i><i style="--d:0.12s"></i><i style="--d:0.18s"></i><i style="--d:0.14s"></i><i style="--d:0.09s"></i><i style="--d:0.23s"></i><i style="--d:0.27s"></i><i style="--d:0.13s"></i><i style="--d:0.02s"></i><i style="--d:0.01s"></i><i style="--d:0.24s"></i><i style="--d:0.01s"></i><i style="--d:0.20s"></i><i style="--d:0.16s"></i><i style="--d:0.09s"></i><i style="--d:0.22s"></i><i style="--d:0.01s"></i><i style="--d:0.04s"></i></div><div class="sh"><i style="--d:0.000s"></i><i style="--d:0.045s"></i><i style="--d:0.090s"></i><i style="--d:0.135s"></i><i style="--d:0.180s"></i><i style="--d:0.225s"></i><i style="--d:0.270s"></i><i style="--d:0.315s"></i></div><div class="c-eyes"><svg viewBox="0 0 220 60"><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z"/><path d="M122 46 Q160 18 214 10 Q178 44 122 46Z" transform="translate(220 0) scale(-1 1)"/></svg></div></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-circle"><div class="hero-circle-inner"></div></div>
-  <span class="hero-kicker">Case Study 01 &mdash; UX Audit + Full Redesign &mdash; 2026</span>
-  <h1 class="hero-title">Essentially<br><em>Australia.</em></h1>
-  <p class="hero-sub">From friction to guided experience. Byron Bay's native essential oils, redesigned from the ground up.</p>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="hm-label">Role</span>
-      <span class="hm-val">UX Researcher + Designer</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="hm-label">Tools</span>
-      <span class="hm-val">Figma · WCAG · Nielsen's</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="hm-label">Type</span>
-      <span class="hm-val">UX Audit + Full Redesign</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="hm-label">Year</span>
-      <span class="hm-val">2025</span>
-    </div>
+<header class="nav">
+  <a href="../index.html#work" class="nav-back"><span class="arr">&larr;</span> <span class="roll">Index</span></a>
+  <a href="../index.html" class="nav-logo nav-hide-sm">AX<sup>&reg;</sup></a>
+  <div class="nav-right">
+    <a class="roll nav-hide-sm" href="#prototype">Prototype</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span>Menu</span><span class="bars"></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <nav class="menu-links" aria-label="Menu">
+    <a href="../index.html"><span class="ml">Home</span><sup>00</sup></a>
+    <a href="essentially-australia.html"><span class="ml">Essentially</span><sup>01</sup></a>
+    <a href="casepop.html"><span class="ml">Casepop</span><sup>02</sup></a>
+    <a href="tactibrawl.html"><span class="ml">Tactibrawl</span><sup>03</sup></a>
+  </nav>
+  <div class="menu-foot">
+    <a href="mailto:xie109714@gmail.com">xie109714@gmail.com</a>
+    <a href="https://au.linkedin.com/in/angboxie" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="../Assets/resume.pdf" target="_blank">Resume &darr;</a>
   </div>
 </div>
 
-<!-- OVERVIEW -->
-<section>
-  <div class="two-col">
-    <div>
-      <span class="s-label">Overview</span>
-      <h2 class="s-title">From friction<br>to <em>guided<br>experience.</em></h2>
-      <div class="tags">
-        <span class="tag">UX Audit</span>
-        <span class="tag">Visual Forensics</span>
-        <span class="tag">Nielsen's Heuristics</span>
-        <span class="tag">WCAG AA</span>
-        <span class="tag">Wireframing</span>
-        <span class="tag">Hi-Fi Prototype</span>
-        <span class="tag">Usability Testing</span>
-      </div>
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <span class="kicker" data-reveal data-delay=".5">Case Study 01 / UX Audit + Full Redesign / 2025</span>
+      <h1 data-split data-delay=".55" data-stagger=".08">Essentially <em>Australia.</em></h1>
+      <p class="hero-sub" data-reveal data-delay=".9">From friction to guided experience. Byron Bay&rsquo;s native essential oils, redesigned from the ground up.</p>
     </div>
-    <div style="padding-top:.5rem">
-      <p class="body-p">Essentially Australia is a Byron Bay native essential oils brand, Est. 2012, with 38+ oils sourced from Australian botanical ingredients. Their WordPress e-commerce site had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers say — "I'm actually gonna suffer."</p>
-      <p class="body-p">I conducted a full UX audit across four competing Australian essential oil sites, identified Essentially Australia as the highest-friction villain, and redesigned the entire purchase experience from the ground up — mobile and desktop.</p>
-      <div class="pull-quote">
-        "I'm actually gonna suffer."
-        <span class="pull-src">User quote — Cognitive Walkthrough</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- STATS -->
-<section class="bg-warm">
-  <span class="s-label">By The Numbers</span>
-  <div class="four-col">
-    <div class="stat-cell">
-      <span class="stat-n">4</span>
-      <span class="stat-l">Sites audited across visual forensics & Nielsen's</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-n">8→4</span>
-      <span class="stat-l">Purchase path steps — cut in half</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-n">2.85:1</span>
-      <span class="stat-l">Original contrast ratio — fails WCAG AA entirely</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-n">AAA</span>
-      <span class="stat-l">Redesign contrast — Carbon on Porcelain verified</span>
-    </div>
-  </div>
-</section>
-
-<!-- PROBLEM -->
-<section>
-  <span class="s-label">The Problem</span>
-  <div class="two-col">
-    <div>
-      <h2 class="s-title">Friction<br><em>every<br>step.</em></h2>
-      <p class="body-p">The original site failed at every stage of the purchase journey — from the hero that showed a lighthouse instead of a product, to a cart that silently accepted wrong orders without any feedback.</p>
-    </div>
-    <div>
-      <div class="finding-grid">
-        <div class="finding-card bad">
-          <span class="finding-h">H2 — Real World Match</span>
-          <div class="finding-title">Broken IA</div>
-          <div class="finding-desc">Oils, gift vouchers, oracle cards — all equal weight. No hierarchy, no logic.</div>
-        </div>
-        <div class="finding-card bad">
-          <span class="finding-h">H1 — System Status</span>
-          <div class="finding-title">Silent Cart</div>
-          <div class="finding-desc">Cart accepted items with zero feedback. Users repeated actions assuming failure.</div>
-        </div>
-        <div class="finding-card bad">
-          <span class="finding-h">H5 — Error Prevention</span>
-          <div class="finding-title">Manual Cart Update</div>
-          <div class="finding-desc">Quantity changes required a manual click. Users checked out wrong orders.</div>
-        </div>
-        <div class="finding-card bad">
-          <span class="finding-h">H8 — Aesthetic</span>
-          <div class="finding-title">Zero Hero Intent</div>
-          <div class="finding-desc">Hero showed a lighthouse. No product, no CTA, no value. Immediate mismatch.</div>
+    <div class="stage">
+      <canvas id="drop" aria-label="Interactive 3D oil droplet coloured by feeling." role="img"></canvas>
+      <div class="feel" data-reveal data-delay="1.1">
+        <p class="feel-q">How do you want to feel?</p>
+        <div class="feel-chips" role="group" aria-label="Feelings">
+          <button class="chip" style="--c:#e9b949" data-feel="#e9b949" aria-pressed="false"><i></i>Uplift</button>
+          <button class="chip" style="--c:#8fb3c9" data-feel="#8fb3c9" aria-pressed="true"><i></i>Calm</button>
+          <button class="chip" style="--c:#9bb88a" data-feel="#9bb88a" aria-pressed="false"><i></i>Restore</button>
+          <button class="chip" style="--c:#b07a5c" data-feel="#b07a5c" aria-pressed="false"><i></i>Ground</button>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- PROCESS -->
-<section class="bg-green">
-  <span class="s-label">Process</span>
-  <h2 class="s-title" style="color:var(--porcelain)">How I<br><em>got there.</em></h2>
-  <ul class="proc">
-    <li>
-      <span class="proc-n">01</span>
+    <dl class="c-meta" data-reveal data-delay="1.2">
+      <div><dt>Role</dt><dd>UX Researcher + Designer</dd></div>
+      <div><dt>Tools</dt><dd>Figma &middot; WCAG &middot; Nielsen&rsquo;s</dd></div>
+      <div><dt>Type</dt><dd>UX Audit + Full Redesign</dd></div>
+      <div><dt>Year</dt><dd>2025</dd></div>
+    </dl>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="c-sec" id="overview">
+    <div class="c-two">
       <div>
-        <div class="proc-title" style="color:var(--porcelain)">UX Audit — Visual Forensics</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Analysed 4 Australian essential oil sites across 7 elements — typography, grid, visual hierarchy, colour, WCAG, dark patterns, responsive breaks. Verified contrast ratios in DevTools.</div>
+        <span class="c-label">Overview</span>
+        <h2 class="c-title" data-split>From friction to <em>guided experience.</em></h2>
+        <div class="c-tags" data-reveal>
+          <span>UX Audit</span><span>Visual Forensics</span><span>Nielsen&rsquo;s Heuristics</span><span>WCAG AA</span>
+          <span>Wireframing</span><span>Hi-Fi Prototype</span><span>Usability Testing</span>
+        </div>
       </div>
-    </li>
-    <li>
-      <span class="proc-n">02</span>
-      <div>
-        <div class="proc-title" style="color:var(--porcelain)">Nielsen's Heuristics + Cognitive Walkthrough</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Applied 6 heuristics across all 4 sites. Ran a think-aloud cognitive walkthrough — "Find a food grade pepper oil, check sizes, add to cart." 5 key friction moments recorded.</div>
+      <div class="c-body">
+        <p data-reveal>Essentially Australia is a Byron Bay native essential oils brand, Est. 2012, with 38+ oils sourced from Australian botanical ingredients. Their WordPress e-commerce site had broken information architecture, invisible CTAs, a blank hero, and a purchase path that made testers say: &ldquo;I&rsquo;m actually gonna suffer.&rdquo;</p>
+        <p data-reveal>I conducted a full UX audit across four competing Australian essential oil sites, identified Essentially Australia as the highest-friction villain, and redesigned the entire purchase experience from the ground up, on mobile and desktop.</p>
+        <p class="quote" data-split>&ldquo;I&rsquo;m actually gonna suffer.&rdquo;</p>
+        <p class="quote" style="margin-top:0"><small>User quote / Cognitive Walkthrough</small></p>
       </div>
-    </li>
-    <li>
-      <span class="proc-n">03</span>
-      <div>
-        <div class="proc-title" style="color:var(--porcelain)">Moodboard + Art Direction</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Developed 3 art directions — Botanical (chosen), Brutalist (rejected), Swiss Grid (rejected). Palette extracted from Byron Bay's volcanic hinterland. Colour does navigation work: Uplift, Calm, Restore, Ground.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">04</span>
-      <div>
-        <div class="proc-title" style="color:var(--porcelain)">Wireframes — Dual Path IA</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Designed two purchase paths — Browse (feeling-first) and Search (keyword). 5 layout directions sketched before committing. Full flow: Hero → Product List → Filter → Product Detail → Cart → Checkout.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">05</span>
-      <div>
-        <div class="proc-title" style="color:var(--porcelain)">Hi-Fi Prototype — Mobile + Desktop</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Fully interactive Figma prototypes at 390×844 (mobile) and 1440×1024 (desktop). Complete purchase flow with system feedback, feeling-category navigation, WCAG AA typography.</div>
-      </div>
-    </li>
-    <li>
-      <span class="proc-n">06</span>
-      <div>
-        <div class="proc-title" style="color:var(--porcelain)">Usability Testing + Iteration</div>
-        <div class="proc-desc" style="color:var(--porcelain)">Think-aloud with a UX Designer (3+ years). 3 tasks completed. 1 friction found — Food Grade filter buried. Iterated: promoted to standalone chip. Design validated.</div>
-      </div>
-    </li>
-  </ul>
-</section>
-
-<!-- SOLUTION -->
-<section class="bg-warm">
-  <span class="s-label">The Solution</span>
-  <div class="two-col">
-    <div>
-      <h2 class="s-title">Emotion<br><em>first<br>design.</em></h2>
-      <p class="body-p">The redesign centres on feeling-first navigation — users shop by how they want to feel, not botanical names they don't know. Four categories: Uplift, Calm, Restore, Ground.</p>
-      <p class="body-p">Colour does the navigational work before the label is read. Purchase path reduced from 8 to 4 steps. Cart gives immediate visual feedback. Size selection updates price in real time.</p>
     </div>
-    <div>
-      <div class="finding-grid">
-        <div class="finding-card good">
-          <span class="finding-h">H6 — Recognition</span>
-          <div class="finding-title">Feeling-First IA</div>
-          <div class="finding-desc">Colour dots read before labels. Expert user defaulted to feeling nav over search. No vocabulary gap.</div>
+  </section>
+
+  <!-- NUMBERS -->
+  <section class="c-sec alt" id="numbers">
+    <span class="c-label">By the numbers</span>
+    <div class="c-stats">
+      <div class="c-stat"><span class="num" data-count="4">4</span><span class="lab">Sites audited across visual forensics &amp; Nielsen&rsquo;s</span></div>
+      <div class="c-stat"><span class="num"><span id="pathNum">8</span>&rarr;4</span><span class="lab">Purchase path steps, cut in half</span></div>
+      <div class="c-stat"><span class="num" data-count="2.85" data-decimals="2" data-suffix=":1">2.85:1</span><span class="lab">Original contrast ratio. Fails WCAG AA entirely</span></div>
+      <div class="c-stat"><span class="num" data-scramble="AAA">AAA</span><span class="lab">Redesign contrast. Carbon on Porcelain, verified</span></div>
+    </div>
+  </section>
+
+  <!-- PURCHASE PATH (pinned) -->
+  <section class="dark" id="path">
+    <div class="path">
+      <div class="path-head">
+        <div>
+          <span class="c-label">The purchase path</span>
+          <h2 class="c-title" style="font-size:clamp(44px,6vw,110px)">Eight steps, <em>then four.</em></h2>
         </div>
-        <div class="finding-card good">
-          <span class="finding-h">H1 — System Status</span>
-          <div class="finding-title">"Successfully Added!"</div>
-          <div class="finding-desc">CTA replaces button on add. Cart increments. Duplicates prevented.</div>
+        <div class="path-count"><span id="pathBig">8</span><small>steps to checkout</small></div>
+      </div>
+      <div class="path-row" id="pathRow"></div>
+      <p class="path-note">The redesign collapses the original purchase path to half its length, with feedback on every action along the way.</p>
+    </div>
+  </section>
+
+  <!-- PROBLEM → SOLUTION -->
+  <section class="c-sec" id="problem">
+    <div class="c-two">
+      <div>
+        <span class="c-label">The problem &rarr; the solution</span>
+        <h2 class="c-title" data-split>Friction every step. <em>Emotion-first design.</em></h2>
+        <div class="c-body" style="margin-top:4vh">
+          <p data-reveal>The original site failed at every stage of the purchase journey, from the hero that showed a lighthouse instead of a product, to a cart that silently accepted wrong orders without any feedback.</p>
+          <p data-reveal>The redesign centres on feeling-first navigation. Users shop by how they want to feel, not botanical names they don&rsquo;t know. Four categories: Uplift, Calm, Restore, Ground. Colour does the navigational work before the label is read.</p>
         </div>
-        <div class="finding-card good">
-          <span class="finding-h">H5 — Error Prevention</span>
-          <div class="finding-title">Live Price Sync</div>
-          <div class="finding-desc">25ml selected → button reads $38.95. Selection and cost always in sync.</div>
+      </div>
+      <div class="flip-grid">
+        <div class="flip">
+          <div class="flip-face flip-front"><div class="flip-h"><span>H2 / Real World Match</span><span>Problem</span></div><div><div class="flip-t">Broken IA</div><div class="flip-d">Oils, gift vouchers, oracle cards: all equal weight. No hierarchy, no logic.</div></div></div>
+          <div class="flip-face flip-back"><div class="flip-h"><span>H6 / Recognition</span><span>Redesign</span></div><div><div class="flip-t">Feeling-First IA</div><div class="flip-d">Colour dots read before labels. Expert user defaulted to feeling nav over search. No vocabulary gap.</div></div></div>
         </div>
-        <div class="finding-card good">
-          <span class="finding-h">GenAI Feature</span>
-          <div class="finding-title">Scent Memory</div>
-          <div class="finding-desc">Conversational AI maps emotional input to product. No botanical knowledge required.</div>
+        <div class="flip">
+          <div class="flip-face flip-front"><div class="flip-h"><span>H1 / System Status</span><span>Problem</span></div><div><div class="flip-t">Silent Cart</div><div class="flip-d">Cart accepted items with zero feedback. Users repeated actions assuming failure.</div></div></div>
+          <div class="flip-face flip-back"><div class="flip-h"><span>H1 / System Status</span><span>Redesign</span></div><div><div class="flip-t">&ldquo;Successfully Added!&rdquo;</div><div class="flip-d">CTA replaces button on add. Cart increments. Duplicates prevented.</div></div></div>
+        </div>
+        <div class="flip">
+          <div class="flip-face flip-front"><div class="flip-h"><span>H5 / Error Prevention</span><span>Problem</span></div><div><div class="flip-t">Manual Cart Update</div><div class="flip-d">Quantity changes required a manual click. Users checked out wrong orders.</div></div></div>
+          <div class="flip-face flip-back"><div class="flip-h"><span>H5 / Error Prevention</span><span>Redesign</span></div><div><div class="flip-t">Live Price Sync</div><div class="flip-d">25ml selected &rarr; button reads $38.95. Selection and cost always in sync.</div></div></div>
+        </div>
+        <div class="flip">
+          <div class="flip-face flip-front"><div class="flip-h"><span>H8 / Aesthetic</span><span>Problem</span></div><div><div class="flip-t">Zero Hero Intent</div><div class="flip-d">Hero showed a lighthouse. No product, no CTA, no value. Immediate mismatch.</div></div></div>
+          <div class="flip-face flip-back"><div class="flip-h"><span>GenAI Feature</span><span>Redesign</span></div><div><div class="flip-t">Scent Memory</div><div class="flip-d">Conversational AI maps emotional input to product. No botanical knowledge required.</div></div></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PROTOTYPE -->
-<section>
-  <span class="s-label">Prototype</span>
-  <h2 class="s-title">See it<br><em>in action.</em></h2>
-  <div class="figma-wrap">
-    <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456" allowfullscreen></iframe>
-  </div>
-  <div class="cta-row">
-    <a class="btn btn-green" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank">Mobile Prototype &#8599;</a>
-    <a class="btn btn-outline-green" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank">Desktop Prototype &#8599;</a>
-  </div>
-</section>
+  <!-- CONTRAST -->
+  <section class="c-sec alt" id="contrast">
+    <div class="c-two" style="align-items:end">
+      <div>
+        <span class="c-label">Accessibility</span>
+        <h2 class="c-title" data-split>From 2.85:1 <em>to AAA.</em></h2>
+      </div>
+      <div class="c-body"><p data-reveal>The left side simulates the original 2.85:1 contrast ratio, which fails WCAG AA entirely. The right is the redesign: Carbon on Porcelain, verified AAA.</p></div>
+    </div>
+    <div class="contrast" id="contrastBox" aria-label="Before and after contrast comparison">
+      <div class="cside c-old">
+        <span class="badge-r">Before / 2.85:1 &middot; Fails AA</span>
+        <div><div class="ct">Find your<br>scent.</div><p>Native Australian essential oils, sourced from botanical ingredients in Byron Bay.</p></div>
+      </div>
+      <div class="cside c-new">
+        <span class="badge-r">After / Carbon on Porcelain &middot; AAA</span>
+        <div><div class="ct">Find your<br>scent.</div><p style="margin-left:auto">Native Australian essential oils, sourced from botanical ingredients in Byron Bay.</p></div>
+      </div>
+      <div class="c-handle"><span>&#8249;&#8250;</span></div>
+    </div>
+  </section>
 
-<!-- OUTCOMES -->
-<section class="bg-green">
-  <span class="s-label">Outcomes</span>
-  <h2 class="s-title" style="color:var(--porcelain)">What<br><em>changed.</em></h2>
-  <div class="outcome-table">
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">Purchase Path</span>
-      <span class="outcome-val">8 steps → 4 steps</span>
+  <!-- PROCESS -->
+  <section class="c-sec dark" id="process">
+    <div class="c-proc">
+      <div class="c-proc-side">
+        <span class="c-label">Process</span>
+        <h2 class="c-title" data-split>How I <em>got there.</em></h2>
+        <div class="c-proc-rail"><i></i></div>
+        <span class="c-proc-big">01</span>
+      </div>
+      <ol class="c-steps">
+        <li class="c-step"><span class="n">01</span><div><h3>UX Audit / Visual Forensics</h3><p>Analysed 4 Australian essential oil sites across 7 elements: typography, grid, visual hierarchy, colour, WCAG, dark patterns, responsive breaks. Verified contrast ratios in DevTools.</p></div></li>
+        <li class="c-step"><span class="n">02</span><div><h3>Nielsen&rsquo;s Heuristics + Cognitive Walkthrough</h3><p>Applied 6 heuristics across all 4 sites. Ran a think-aloud cognitive walkthrough: &ldquo;Find a food grade pepper oil, check sizes, add to cart.&rdquo; 5 key friction moments recorded.</p></div></li>
+        <li class="c-step"><span class="n">03</span><div><h3>Moodboard + Art Direction</h3><p>Developed 3 art directions: Botanical (chosen), Brutalist (rejected), Swiss Grid (rejected). Palette extracted from Byron Bay&rsquo;s volcanic hinterland. Colour does navigation work: Uplift, Calm, Restore, Ground.</p></div></li>
+        <li class="c-step"><span class="n">04</span><div><h3>Wireframes / Dual Path IA</h3><p>Designed two purchase paths: Browse (feeling-first) and Search (keyword). 5 layout directions sketched before committing. Full flow: Hero &rarr; Product List &rarr; Filter &rarr; Product Detail &rarr; Cart &rarr; Checkout.</p></div></li>
+        <li class="c-step"><span class="n">05</span><div><h3>Hi-Fi Prototype / Mobile + Desktop</h3><p>Fully interactive Figma prototypes at 390&times;844 (mobile) and 1440&times;1024 (desktop). Complete purchase flow with system feedback, feeling-category navigation, WCAG AA typography.</p></div></li>
+        <li class="c-step"><span class="n">06</span><div><h3>Usability Testing + Iteration</h3><p>Think-aloud with a UX Designer (3+ years). 3 tasks completed. 1 friction found: Food Grade filter buried. Iterated: promoted to standalone chip. Design validated.</p></div></li>
+      </ol>
     </div>
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">WCAG Compliance</span>
-      <span class="outcome-val">Fail → AA Verified</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">Usability Testing</span>
-      <span class="outcome-val">3/3 Tasks Completed</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">Friction Points</span>
-      <span class="outcome-val">1 Found + Resolved</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">Feeling-First IA</span>
-      <span class="outcome-val">Validated by Expert</span>
-    </div>
-    <div class="outcome-row">
-      <span class="outcome-label" style="color:var(--porcelain)">GenAI Feature</span>
-      <span class="outcome-val">Scent Memory Proposed</span>
-    </div>
-  </div>
-  <div class="pull-quote" style="margin-top:3rem">
-    "Emotion-first IA proved more effective than initially anticipated."
-    <span class="pull-src">Critical Analysis — Reflection</span>
-  </div>
-  <div class="cta-row">
-    <a class="btn btn-outline-light" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank">View Prototype &#8599;</a>
-  </div>
-</section>
+  </section>
 
-<footer>
-  <span class="foot-copy">&copy; 2025 Angbo Xie</span>
-  <a class="foot-link" href="casepop.html">Next: Casepop AU &#8594;</a>
-</footer>
+  <!-- PROTOTYPE -->
+  <section class="c-sec" id="prototype">
+    <span class="c-label">Prototype</span>
+    <h2 class="c-title" data-split>See it <em>in action.</em></h2>
+    <div class="device-wrap">
+      <div class="device">
+        <iframe title="Essentially Australia Figma prototype" loading="lazy" src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3%26p=f%26t=0IEqw9jOpiIwUbNq-0%26scaling=scale-down%26content-scaling=fixed%26page-id=1%3A3%26starting-point-node-id=565%3A2456" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="c-cta">
+      <a class="pill solid" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank" rel="noopener">Mobile prototype &#8599;</a>
+      <a class="pill" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=17-22&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">Desktop prototype &#8599;</a>
+    </div>
+  </section>
 
-<script>
-  var cur = document.getElementById('cursor');
-  var mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
-  document.addEventListener('mousemove', function(e){ mx=e.clientX; my=e.clientY; });
-  (function loop(){
-    cx+=(mx-cx)*.13; cy+=(my-cy)*.13;
-    cur.style.left=cx+'px'; cur.style.top=cy+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('mouseenter',function(){ cur.classList.add('grow'); });
-    a.addEventListener('mouseleave',function(){ cur.classList.remove('grow'); });
-  });
-</script>
+  <!-- OUTCOMES -->
+  <section class="c-sec dark" id="outcomes">
+    <span class="c-label">Outcomes</span>
+    <h2 class="c-title" data-split>What <em>changed.</em></h2>
+    <ul class="c-out">
+      <li><span class="ol">Purchase Path</span><span class="ov">8 steps &rarr; 4 steps</span></li>
+      <li><span class="ol">WCAG Compliance</span><span class="ov">Fail &rarr; AA Verified</span></li>
+      <li><span class="ol">Usability Testing</span><span class="ov">3/3 Tasks Completed</span></li>
+      <li><span class="ol">Friction Points</span><span class="ov">1 Found + Resolved</span></li>
+      <li><span class="ol">Feeling-First IA</span><span class="ov">Validated by Expert</span></li>
+      <li><span class="ol">GenAI Feature</span><span class="ov">Scent Memory Proposed</span></li>
+    </ul>
+    <p class="quote" style="color:var(--sage);max-width:22ch" data-split>&ldquo;Emotion-first IA proved more effective than initially anticipated.&rdquo;</p>
+    <p class="quote" style="margin-top:0"><small style="color:var(--porcelain)">Critical Analysis / Reflection</small></p>
+    <div class="c-cta">
+      <a class="pill" data-magnetic=".25" href="https://www.figma.com/proto/q44IKnbLKVYZNFIYC1xr0V/UID-Assignment-2?node-id=1-3&p=f&t=0IEqw9jOpiIwUbNq-0&scaling=scale-down&content-scaling=fixed&page-id=1%3A3&starting-point-node-id=565%3A2456" target="_blank" rel="noopener">View prototype &#8599;</a>
+    </div>
+  </section>
+
+  <a class="next" href="casepop.html">
+    <span class="next-label mono"><span>Next project / 02</span><span>E-Commerce / 2024</span></span>
+    <span class="next-title">Casepop AU &rarr;</span>
+    <div class="next-bar"></div>
+  </a>
+  <footer class="foot-row"><span>&copy; 2026 Angbo Xie</span><span>Melbourne <span data-clock>--:--:--</span></span><a href="#top" class="roll">Back to top &uarr;</a></footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="../JS/core.js" defer></script>
+<script src="../JS/infect.js" defer></script>
+<script src="../JS/liquid.js" defer></script>
+<script src="../JS/case.js" defer></script>
+<script src="../JS/ea.js" defer></script>
 </body>
 </html>
