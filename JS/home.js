@@ -144,7 +144,7 @@
   if (!reduce) gsap.set('.ch', { yPercent: 115 });
   let heroVisible = true;
   new IntersectionObserver((e) => { heroVisible = e[0].isIntersecting; }).observe($('.hero'));
-  if (!reduce) {
+  if (!reduce && AX.fine) {
     gsap.ticker.add(() => {
       if (!heroVisible) return;
       const rad = Math.max(innerWidth * 0.22, 220);
@@ -407,6 +407,8 @@
   const setText = (el, v) => { if (el && el.dataset.v !== v) { el.dataset.v = v; delete el.dataset.final; el.textContent = v; decode(el, 380); } };
   const eyesEl = $('#eyes'), halo = $('#halo'), dimEl = $('#dim');
   const desk = () => innerWidth > 900;
+  // per-frame style writes only touch the DOM when the value actually changes
+  const setS = (el, prop, v) => { const c = el._sc || (el._sc = {}); if (c[prop] !== v) { c[prop] = v; el.style[prop] = v; } };
   const rectOf = (el, padPx = 0) => { const r = el.getBoundingClientRect(); return { l: r.left - padPx, t: r.top - padPx, w: r.width + padPx * 2, h: r.height + padPx * 2 }; };
   // whichever of `els` sits closest to the middle of the screen
   const nearest = (els, at = 0.5) => {
@@ -441,7 +443,7 @@
     const A = sw.buf(), B = sw.buf(), T = sw.buf(), X = sw.buf(), G = sw.buf(), I = sw.buf(), Y = sw.buf();
     const THREE = sw.THREE;
     const mood = new THREE.Color(MOODS.top), mTarget = new THREE.Color();
-    let lastMood = '';
+    let lastMood = '', lastMoodT = -1;
 
     // the serpent's body is the head's recent path
     const TL = 64, trail = new Float32Array(TL * 2);
@@ -720,7 +722,7 @@
         if (!bitten) bite();
         if (snap.state !== 'closed') { if (snapTl) snapTl.kill(); snap.k = 1; snap.state = 'closed'; teethFade.v = 0; }
       }
-      gulpA.style.opacity = snap.state !== 'open' && pg > 0.55 ? 0 : 1;
+      setS(gulpA, 'opacity', snap.state !== 'open' && pg > 0.55 ? '0' : '1');
 
       if (pc > 0) {                                           // 06 RELEASED: the jaws open from the inside
         F.ring(A, t, Object.assign(rectOf($('.about-photo')), { pad: D ? 22 : 12, speed: 0.5, thick: D ? 22 : 14 }));
@@ -859,9 +861,9 @@
           let rv;
           if (D) rv = clamp((p - 0.8 - i * 0.02) / 0.14);
           else { const r = b.getBoundingClientRect(); rv = boxReveal === null ? 1 : clamp((H * 0.92 - r.top) / (H * 0.4)); }
-          b.style.clipPath = rv >= 1 ? '' : `circle(${(rv * 170).toFixed(1)}% at calc(100% - ${D ? 34 : 26}px) ${D ? 34 : 26}px)`;
+          setS(b, 'clipPath', rv >= 1 ? '' : `circle(${(rv * 170).toFixed(1)}% at calc(100% - ${D ? 34 : 26}px) ${D ? 34 : 26}px)`);
         });
-      } else boxes.forEach((b) => { b.style.clipPath = `circle(0% at calc(100% - ${D ? 34 : 26}px) ${D ? 34 : 26}px)`; });
+      } else boxes.forEach((b) => setS(b, 'clipPath', `circle(0% at calc(100% - ${D ? 34 : 26}px) ${D ? 34 : 26}px)`));
 
       // hold anywhere: it rushes your cursor and bristles
       if (st.rage > 0.001) { F.spikes(X, t, { cx: mx, cy: my, R: D ? 120 : 90 }); sw.mix(T, T, X, st.rage); }
@@ -884,14 +886,14 @@
       moodIds.forEach((el) => { if (el.getBoundingClientRect().top <= H / 2) id = el.id; });
       mTarget.set(MOODS[id]); mood.lerp(mTarget, 1 - Math.exp(-dt * 3));
       const hex = '#' + mood.getHexString();
-      if (hex !== lastMood) { html.style.setProperty('--mood', hex); lastMood = hex; }
+      if (hex !== lastMood && t - lastMoodT > 0.12) { html.style.setProperty('--mood', hex); lastMood = hex; lastMoodT = t; }
 
       shake.v *= Math.exp(-dt * 7);
       const sx = (Math.random() - 0.5) * shake.v, sy = (Math.random() - 0.5) * shake.v;
-      shakeEls.forEach((el) => { el.style.translate = shake.v > 0.3 ? `${sx.toFixed(1)}px ${sy.toFixed(1)}px` : ''; });
+      shakeEls.forEach((el) => setS(el, 'translate', shake.v > 0.3 ? `${sx.toFixed(1)}px ${sy.toFixed(1)}px` : ''));
       drawTeeth(teeth, W, H, dt);
       sw.render(occ, mood, dt);
-      dimEl.style.opacity = (dim * 0.82).toFixed(3);
+      setS(dimEl, 'opacity', (dim * 0.82).toFixed(3));
       story(storyK, storyV);
       const status = id === 'top' ? (ph > 0.3 ? 'Collapsing' : st.sleep > 0.5 ? 'Dormant' : 'Observing') : id === 'origin' ? 'Evolving' : id === 'diet' ? 'Feeding'
         : id === 'gulp' ? (snap.state === 'open' ? 'Hunting' : 'Breach') : id === 'contact' ? (pc > 0.6 ? 'Released' : 'Digesting') : 'Digesting';
@@ -915,13 +917,14 @@
       if (exprNext && blink < -0.07) { eyePaths.forEach((p) => p.setAttribute('d', EXPR[exprNext])); expr = exprNext; exprNext = null; }
       const open = Math.max(0.05, (blink < 0 ? Math.max(0.06, Math.abs(blink / 0.08 - 1)) : 1) * (1 - 0.94 * st.sleep));
       const look = clamp((mx - eye.x) / W, -0.5, 0.5) * eye.s * 60, lookY = clamp((my - eye.y) / H, -0.5, 0.5) * eye.s * 30;
-      eyesEl.style.opacity = eye.o.toFixed(3);
+      setS(eyesEl, 'opacity', eye.o.toFixed(2));
       eyesEl.style.transform = `translate(${(eye.x - 100 + look).toFixed(1)}px, ${(eye.y - 27 + lookY).toFixed(1)}px) scale(${eye.s.toFixed(3)}, ${(eye.s * open).toFixed(3)})`;
 
       // coloured backlight behind the eyes; the vortex glows like an accretion disc
       const R = eye.s * 200 * 1.4 + 120 + glow * mn * 0.7, hk = Math.max(eye.o, 0.25) * (1 + glow * 1.4);
-      const r8 = (mood.r * 255) | 0, g8 = (mood.g * 255) | 0, b8 = (mood.b * 255) | 0;
-      halo.style.background = `radial-gradient(circle at ${eye.x.toFixed(0)}px ${eye.y.toFixed(0)}px, rgba(${r8},${g8},${b8},${Math.min(0.85, 0.42 * hk).toFixed(3)}) 0, rgba(${r8},${g8},${b8},${(0.12 * hk).toFixed(3)}) ${(R * 0.5).toFixed(0)}px, transparent ${R.toFixed(0)}px)`;
+      // a fixed 1000px glow, moved and scaled on the compositor: no full-screen repaint per frame
+      halo.style.transform = `translate3d(${(eye.x - 500).toFixed(0)}px, ${(eye.y - 500).toFixed(0)}px, 0) scale(${(R / 500).toFixed(3)})`;
+      setS(halo, 'opacity', Math.min(1, hk * 0.9).toFixed(2));
     });
   }
 

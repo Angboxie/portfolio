@@ -16,10 +16,10 @@
   AX.liquid = async function (o = {}) {
     const THREE = o.host ? o.host.THREE : await import('three');
     const { MarchingCubes } = await import('three/addons/objects/MarchingCubes.js');
-    const small = innerWidth < 760;
+    const small = innerWidth < 760 || matchMedia('(pointer: coarse)').matches;
     const opts = Object.assign({
       color: '#050507', rim: '#ffffff',
-      resolution: small ? 32 : 48,
+      resolution: small ? 24 : 48,          // the grid is rebuilt on the CPU every frame
       count: small ? 14 : 22,
       tendrils: small ? 1 : 3,
       drips: small ? 1 : 2,
@@ -37,7 +37,7 @@
     } else {
       const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
       renderer = new THREE.WebGLRenderer({ canvas: opts.canvas, antialias: !opts.pixel, alpha: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(opts.pixel || Math.min(devicePixelRatio, 1.75));
+      renderer.setPixelRatio(opts.pixel || Math.min(devicePixelRatio, small ? 1.25 : 1.75));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       scene = new THREE.Scene();
       scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(renderer), 0.04).texture;

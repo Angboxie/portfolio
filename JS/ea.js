@@ -119,8 +119,10 @@
     const small = () => innerWidth < 760;
     let visible = true;
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(hero);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    // phones: lighter everything. Real refraction (transmission) costs a second full render pass
+    const lite = small() || matchMedia('(pointer: coarse)').matches;
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, lite ? 1.25 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
     const scene = new THREE.Scene();
@@ -130,7 +132,7 @@
     camera.position.set(0, 0, 8);
 
     // teardrop: sphere remapped with the teardrop curve r = sin(φ)·sin(φ/2)^m
-    let geo = new THREE.SphereGeometry(1, 160, 120);
+    let geo = new THREE.SphereGeometry(1, lite ? 72 : 160, lite ? 54 : 120);
     geo.deleteAttribute('uv'); geo.deleteAttribute('normal');
     geo = mergeVertices(geo);
     const pos = geo.attributes.position, v = new THREE.Vector3();
@@ -144,7 +146,9 @@
     geo.computeVertexNormals();
 
     const col = new THREE.Color('#8fb3c9');
-    const mat = new THREE.MeshPhysicalMaterial({
+    const mat = lite
+      ? new THREE.MeshPhysicalMaterial({ color: col.clone(), attenuationColor: col.clone(), transparent: true, opacity: 0.62, roughness: 0.05, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.6 })
+      : new THREE.MeshPhysicalMaterial({
       color: col.clone(), transmission: 1, thickness: 1.6, roughness: 0.04, ior: 1.45,
       attenuationColor: col.clone(), attenuationDistance: 1.2, clearcoat: 1, clearcoatRoughness: 0.04,
       iridescence: 0.4, iridescenceIOR: 1.3, envMapIntensity: 1.3,

@@ -461,3 +461,19 @@ html.hero-free .hn { overflow: visible; }
 /* project covers are real screenshots of the work */
 .cover-shot { background: #111; }
 .cover-shot img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; }
+
+/* ---------- performance ---------- */
+/* the glow is one fixed-size gradient that JS moves and scales on the compositor */
+#halo {
+  inset: auto; left: 0; top: 0; width: 1000px; height: 1000px; will-change: transform, opacity; transform-origin: 50% 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--mood) 46%, transparent) 0, color-mix(in srgb, var(--mood) 13%, transparent) 250px, transparent 500px);
+}
+/* phones: the grain layer is nine screens of texture; drop it */
+@media (pointer: coarse), (max-width: 760px) {
+  .grain { display: none; }
+}
+/* phones: name letters hold one weight (thin before the bite, heavy after) instead of animating */
+@media (hover: none), (pointer: coarse) {
+  .ch { font-variation-settings: 'wght' 300, 'opsz' 72; }
+  html.bitten .ch { font-variation-settings: 'wght' 800, 'opsz' 72; }
+}

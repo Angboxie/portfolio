@@ -21,13 +21,18 @@
 
     /* ---------- GL ---------- */
     const renderer = new THREE.WebGLRenderer({ canvas: back, alpha: true, antialias: false, premultipliedAlpha: true });
-    const dpr = Math.min(devicePixelRatio, 1.75);
+    // phones: render at 1x and a coarser field; the liquid is soft, the extra pixels only cost frames
+    const small = innerWidth < 760 || matchMedia('(pointer: coarse)').matches;
+    const dpr = small ? 1 : Math.min(devicePixelRatio, 1.75);
     renderer.setPixelRatio(dpr);
     renderer.setClearColor(0x000000, 0);
     renderer.autoClear = false;
     const floatOK = renderer.capabilities.isWebGL2 &&
       (renderer.extensions.has('EXT_color_buffer_float') || renderer.extensions.has('EXT_color_buffer_half_float'));
-    const FS = innerWidth < 760 ? 0.5 : 0.4; // field resolution vs CSS px
+    const FS = small ? 0.3 : 0.4; // field resolution vs CSS px
+    // phones: cap droplet size. Huge droplets (the jaws, the flood) multiply pixel work;
+    // 560 droplets of this size still merge into one solid mass
+    const maxR = small ? 80 : Infinity;
     const field = new THREE.WebGLRenderTarget(4, 4, {
       type: floatOK ? THREE.HalfFloatType : THREE.UnsignedByteType,
       minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false,
@@ -403,20 +408,25 @@
         vx[i] += ax * dt; vy[i] += ay * dt;
         x[i] += vx[i] * dt; y[i] += vy[i] * dt;
         r[i] += (T.r[i] - r[i]) * rk;
-        inst[i * 3] = x[i]; inst[i * 3 + 1] = y[i]; inst[i * 3 + 2] = Math.max(0.5, r[i]);
+        inst[i * 3] = x[i]; inst[i * 3 + 1] = y[i]; inst[i * 3 + 2] = Math.min(maxR, Math.max(0.5, r[i]));
       }
       instAttr.needsUpdate = true;
     }
     function snap(T) { x.set(T.x); y.set(T.y); r.set(T.r); vx.fill(0); vy.fill(0); }
 
-    let frontDirty = false, time = 0;
+    let frontDirty = false, time = 0, backUp = false;
     function render(occlude, moodColor, dt) {
       time += dt;
       shadeMat.uniforms.uTime.value = time;
       if (moodColor) mood.copy(moodColor);
       renderer.setRenderTarget(field); renderer.clear(); renderer.render(fScene, cam);
       renderer.setRenderTarget(null); renderer.clear(); renderer.render(sScene, cam);
-      if (occlude > 0.004) {
+      // phones: copying the GL canvas into a 2D canvas every frame stalls the GPU,
+      // so the liquid canvas itself steps in front of the page instead
+      if (small) {
+        const up = occlude > 0.5;
+        if (up !== backUp) { back.style.zIndex = up ? 3 : ''; backUp = up; }
+      } else if (occlude > 0.004) {
         fctx.clearRect(0, 0, front.width, front.height);
         fctx.globalAlpha = Math.min(1, occlude);
         fctx.drawImage(back, 0, 0);

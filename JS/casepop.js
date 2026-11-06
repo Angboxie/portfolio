@@ -74,8 +74,9 @@
     const { RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js');
     const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
     const canvas = $('#case');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    const lite = innerWidth < 760 || matchMedia('(pointer: coarse)').matches;   // phones: lighter rendering
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, lite ? 1.25 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     const scene = new THREE.Scene();
     scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(renderer), 0.04).texture;
