@@ -23,14 +23,23 @@
   AX.hoverEl = null;
 
   /* ---------- smooth scroll ---------- */
+  // Touch devices keep native scrolling: it runs off the main thread, so a busy frame never
+  // holds up a swipe. Lenis listens to touch events itself, which ties scrolling to the page's JS.
   var lenis = null;
-  if (!reduce && window.Lenis) {
+  if (!reduce && window.Lenis && fine) {
     lenis = new Lenis({ lerp: 0.07, wheelMultiplier: 0.8, touchMultiplier: 1.2 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
   }
   AX.lenis = lenis;
+  // freeze scrolling (story holds, open menu): Lenis when it's running, otherwise native overflow
+  var nativeLocks = 0;
+  AX.lockScroll = function (on) {
+    if (lenis) { if (on) lenis.stop(); else if (!AX._menuLocked) lenis.start(); return; }
+    nativeLocks = Math.max(0, nativeLocks + (on ? 1 : -1));
+    html.style.overflow = nativeLocks ? 'hidden' : '';
+  };
 
   var lastY = scrollY, nativeVel = 0;
   gsap.ticker.add(function () {
@@ -58,11 +67,10 @@
         var s = stopYs[i].y, hold = stopYs[i].hold;
         if ((prevStopY < s && y >= s) || (prevStopY > s && y <= s)) {
           holdUntil = now + hold;
-          if (lenis) {
-            lenis.scrollTo(s, { immediate: true, force: true });
-            lenis.stop();
-            setTimeout(function () { if (!html.classList.contains('menu-open')) lenis.start(); }, hold);
-          } else scrollTo(0, s);
+          if (lenis) lenis.scrollTo(s, { immediate: true, force: true });
+          else scrollTo(0, s);
+          AX.lockScroll(true);
+          setTimeout(function () { AX.lockScroll(false); }, hold);
           y = s;
           break;
         }
@@ -76,10 +84,10 @@
     var el = typeof target === 'string' ? document.querySelector(target) : target;
     if (lenis) {
       lenis.scrollTo(el != null ? el : target, Object.assign({ duration: 1.8, easing: function (t) { return 1 - Math.pow(1 - t, 4); } }, opts || {}));
-    } else if (typeof target === 'number') {
-      scrollTo({ top: target, behavior: reduce ? 'auto' : 'smooth' });
-    } else if (el) {
-      el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    } else {
+      var behavior = reduce || (opts && opts.immediate) ? 'auto' : 'smooth';
+      if (typeof target === 'number') scrollTo({ top: target, behavior: behavior });
+      else if (el) el.scrollIntoView({ behavior: behavior });
     }
   };
 
@@ -304,7 +312,7 @@
   /* ---------- menu ---------- */
   AX.menu = function (open) {
     html.classList.toggle('menu-open', open);
-    if (lenis) open ? lenis.stop() : lenis.start();
+    if (open !== !!AX._menuLocked) { AX._menuLocked = open; AX.lockScroll(open); }
     document.querySelectorAll('.menu-btn').forEach(function (b) { b.setAttribute('aria-expanded', open); });
   };
   document.querySelectorAll('.menu-btn').forEach(function (b) {
@@ -341,6 +349,8 @@
     curtain.classList.add('is-in');
     setTimeout(function () { location.href = a.href; }, 1050);
   });
+  // once the arrival reveal has played, park the curtain so it's never composited again
+  if (curtain) setTimeout(function () { if (!curtain.classList.contains('is-in')) curtain.classList.add('skip'); }, 1800);
   addEventListener('pageshow', function (e) {
     if (e.persisted && curtain) { curtain.classList.remove('is-in'); curtain.classList.add('skip'); AX.menu(false); }
   });

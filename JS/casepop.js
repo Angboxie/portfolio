@@ -107,11 +107,12 @@
     let visible = true;
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe($('.hero'));
     // black liquid that pours out from behind the case and circles it
-    const sym = await AX.liquid({
+    // phones: the product only; the symbiote around it is rebuilt on the CPU every frame
+    const sym = lite ? null : await AX.liquid({
       host: { THREE, scene, camera }, core: 0, spread: 0.4, scale: 2.7, strength: 0.32, count: innerWidth < 760 ? 6 : 11,
       tendrils: innerWidth < 760 ? 1 : 2, drips: 2, rim: '#ff4d8d', visible: () => visible,
     });
-    sym.group.rotation.set(0.25, 0, -0.15);
+    if (sym) sym.group.rotation.set(0.25, 0, -0.15);
     const key = new THREE.DirectionalLight(0xffffff, 2); key.position.set(4, 5, 6); scene.add(key);
     const rim = new THREE.DirectionalLight(0xff4d8d, 3); rim.position.set(-5, 0, -3); scene.add(rim);
 
@@ -128,7 +129,7 @@
     swapTo = (i) => {
       if (i === current) return;
       current = i;
-      sym.pulse(0.8);
+      if (sym) sym.pulse(0.8);
       gsap.killTweensOf(spinState);
       let swapped = false;
       gsap.fromTo(spinState, { extra: 0 }, {

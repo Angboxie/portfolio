@@ -477,3 +477,14 @@ html.hero-free .hn { overflow: visible; }
   .ch { font-variation-settings: 'wght' 300, 'opsz' 72; }
   html.bitten .ch { font-variation-settings: 'wght' 800, 'opsz' 72; }
 }
+
+/* layers that only exist for a moment are fully hidden the rest of the time,
+   so the browser never has to blend them over the moving canvas */
+#flash, #shock i { visibility: hidden; }
+.curtain.skip { visibility: hidden; }
+/* phones and touch: no blend modes or filters over the animated canvas */
+@media (hover: none), (pointer: coarse), (max-width: 760px) {
+  .nav { mix-blend-mode: normal; color: #fff; }
+  #eyes svg, #teeth { filter: none !important; }
+  #glf { display: none; }
+}

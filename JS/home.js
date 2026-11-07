@@ -208,7 +208,7 @@
   /* ---------- intro ---------- */
   const introState = { v: reduce ? 1 : 0 };
   function intro() {
-    if (AX.lenis) AX.lenis.start();
+    AX.lockScroll(false);
     gsap.timeline()
       .to(introState, { v: 1, duration: 2.2, ease: 'expo.out' }, 0)
       .to('.ch', { yPercent: 0, duration: 1.6, stagger: { each: 0.07, from: 'random' }, ease: 'expo.out' }, 0.25)
@@ -221,7 +221,7 @@
   } else if (html.classList.contains('seen')) {
     gsap.delayedCall(0.35, intro);
   } else {
-    if (AX.lenis) AX.lenis.stop();
+    AX.lockScroll(true);
     const num = $('#plNum'), o = { v: 0 };
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
     gsap.timeline()
@@ -403,10 +403,15 @@
 
   const MOODS = { top: '#ff3b1f', origin: '#3d6bff', diet: '#00d68f', gulp: '#ff1f3d', instincts: '#ffb000', work: '#a46bff', about: '#ff2d87', contact: '#ff3b1f' };
   const moodIds = Object.keys(MOODS).map((id) => document.getElementById(id));
+  // section tops measured once per layout change, not read back every frame
+  let moodTops = [];
+  const measureMoods = () => { const sy = scrollY; moodTops = moodIds.map((el) => el.getBoundingClientRect().top + sy); };
+  ScrollTrigger.addEventListener('refresh', measureMoods); measureMoods();
   const statusEl = $('[data-status]'), formEl = $('[data-form]'), cellsEl = $('[data-cells]');
   const setText = (el, v) => { if (el && el.dataset.v !== v) { el.dataset.v = v; delete el.dataset.final; el.textContent = v; decode(el, 380); } };
   const eyesEl = $('#eyes'), halo = $('#halo'), dimEl = $('#dim');
   const desk = () => innerWidth > 900;
+  const lite = !AX.fine || innerWidth < 760;   // phones and tablets: skip the costly extras
   // per-frame style writes only touch the DOM when the value actually changes
   const setS = (el, prop, v) => { const c = el._sc || (el._sc = {}); if (c[prop] !== v) { c[prop] = v; el.style[prop] = v; } };
   const rectOf = (el, padPx = 0) => { const r = el.getBoundingClientRect(); return { l: r.left - padPx, t: r.top - padPx, w: r.width + padPx * 2, h: r.height + padPx * 2 }; };
@@ -437,7 +442,7 @@
 
   async function init() {
     if (document.fonts) await document.fonts.load('900 120px "Big Shoulders"').catch(() => {});
-    const N = innerWidth < 760 ? 560 : 950;
+    const N = lite ? 440 : 950;
     const sw = await AX.swarm({ back: $('#gl'), front: $('#glf'), n: N });
     const { F } = sw;
     const A = sw.buf(), B = sw.buf(), T = sw.buf(), X = sw.buf(), G = sw.buf(), I = sw.buf(), Y = sw.buf();
@@ -519,9 +524,9 @@
       const d = Math.hypot(innerWidth, innerHeight) * 1.25;
       shockEls.forEach((el, i) => {
         el.style.width = el.style.height = d + 'px'; el.style.margin = `${-d / 2}px 0 0 ${-d / 2}px`;
-        gsap.fromTo(el, { scale: 0.005, opacity: 1 }, { scale: 1, opacity: 0, duration: 1.2 + i * 0.4, delay: i * 0.07, ease: 'expo.out', overwrite: true });
+        gsap.fromTo(el, { scale: 0.005, autoAlpha: 1 }, { scale: 1, autoAlpha: 0, duration: 1.2 + i * 0.4, delay: i * 0.07, ease: 'expo.out', overwrite: true });
       });
-      gsap.fromTo('#flash', { opacity: 0.95 }, { opacity: 0, duration: 0.8, ease: 'power2.out', overwrite: true });
+      gsap.fromTo('#flash', { autoAlpha: 0.95 }, { autoAlpha: 0, duration: 0.8, ease: 'power2.out', overwrite: true });
     }
     function doCollapse() {
       sing.state = 'closing';
@@ -648,7 +653,7 @@
       const kNow = m.k == null ? snap.k : m.k;
       const vel = Math.abs(kNow - lastK) / Math.max(dt, 0.001); lastK = kNow;
       const blur = Math.min(5, vel * 0.5);
-      teethEl.style.filter = `drop-shadow(0 6px 10px rgba(0,0,0,.55))${blur > 0.3 ? ` blur(${blur.toFixed(1)}px)` : ''}`;
+      if (!lite) teethEl.style.filter = `drop-shadow(0 6px 10px rgba(0,0,0,.55))${blur > 0.3 ? ` blur(${blur.toFixed(1)}px)` : ''}`;
       teethEl.style.opacity = m.o.toFixed(3);
     }
     const eye = { x: innerWidth / 2, y: innerHeight / 2, s: 0, o: 0 };
@@ -722,7 +727,6 @@
         if (!bitten) bite();
         if (snap.state !== 'closed') { if (snapTl) snapTl.kill(); snap.k = 1; snap.state = 'closed'; teethFade.v = 0; }
       }
-      setS(gulpA, 'opacity', snap.state !== 'open' && pg > 0.55 ? '0' : '1');
 
       if (pc > 0) {                                           // 06 RELEASED: the jaws open from the inside
         F.ring(A, t, Object.assign(rectOf($('.about-photo')), { pad: D ? 22 : 12, speed: 0.5, thick: D ? 22 : 14 }));
@@ -883,14 +887,17 @@
 
       // mood colour follows the section in view
       let id = 'top';
-      moodIds.forEach((el) => { if (el.getBoundingClientRect().top <= H / 2) id = el.id; });
+      const scrY = scrollY;
+      moodIds.forEach((el, i) => { if (moodTops[i] - scrY <= H / 2) id = el.id; });
       mTarget.set(MOODS[id]); mood.lerp(mTarget, 1 - Math.exp(-dt * 3));
       const hex = '#' + mood.getHexString();
-      if (hex !== lastMood && t - lastMoodT > 0.12) { html.style.setProperty('--mood', hex); lastMood = hex; lastMoodT = t; }
+      if (hex !== lastMood && t - lastMoodT > (lite ? 0.3 : 0.12)) { html.style.setProperty('--mood', hex); lastMood = hex; lastMoodT = t; }
 
       shake.v *= Math.exp(-dt * 7);
       const sx = (Math.random() - 0.5) * shake.v, sy = (Math.random() - 0.5) * shake.v;
       shakeEls.forEach((el) => setS(el, 'translate', shake.v > 0.3 ? `${sx.toFixed(1)}px ${sy.toFixed(1)}px` : ''));
+      // DOM writes are batched at the end of the frame, after every position read
+      setS(gulpA, 'opacity', snap.state !== 'open' && pg > 0.55 ? '0' : '1');
       drawTeeth(teeth, W, H, dt);
       sw.render(occ, mood, dt);
       setS(dimEl, 'opacity', (dim * 0.82).toFixed(3));

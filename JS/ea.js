@@ -182,14 +182,15 @@
     scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 
     // the symbiote: a hollow ring of black liquid circling the drop, tendrils seeping out through the glass
-    const sym = await AX.liquid({
+    // phones: the product only; the symbiote around it is rebuilt on the CPU every frame
+    const sym = lite ? null : await AX.liquid({
       host: { THREE, scene, camera }, core: 0, spread: 0.4, scale: 2.6, strength: 0.32, count: small() ? 6 : 10,
       tendrils: small() ? 1 : 2, drips: 2, rim: '#8fb3c9', visible: () => visible,
     });
-    sym.group.rotation.x = 0.35;
+    if (sym) sym.group.rotation.x = 0.35;
 
     setFeel = (hex) => {
-      sym.setRim(hex); sym.pulse(0.6);
+      if (sym) { sym.setRim(hex); sym.pulse(0.6); }
       const c = new THREE.Color(hex);
       [mat.color, mat.attenuationColor, coreMat.color, coreMat.emissive].forEach((target) => gsap.to(target, { r: c.r, g: c.g, b: c.b, duration: 1.2, ease: 'power2.out' }));
       gsap.fromTo(group.scale, { x: 1.12, y: 0.86, z: 1.12 }, { x: 1, y: 1, z: 1, duration: 1.4, ease: 'elastic.out(1, .35)' });
